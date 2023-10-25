@@ -17,10 +17,9 @@ class LoginFrame(tk.Frame):
         # self.master.geometry(f"{width}x{height}")
 
         # Logo image for the login page
-        login_canvas = tk.Canvas(master=self, width=360, height=360)
+        login_canvas = tk.Canvas(master=self, width=128, height=128)
         login_canvas.grid(row=0, columnspan=2, sticky=tk.S, padx=10, pady=10)
 
-        # DO LATER
         image_path = "images/python_logo.png"
         self.login_logo = tk.PhotoImage(file=image_path)
         login_canvas.create_image(0, 0,
@@ -51,6 +50,58 @@ class LoginFrame(tk.Frame):
         self.password_entry = tk.Entry(master=self, textvariable=self.password,
                                        show="●")
         self.password_entry.grid(row=3, column=1, sticky=tk.W, padx=10, pady=10)
+
+        # Button to login
+        login_button = tk.Button(master=self, text="Login")
+        # login_button = tk.Button(master=self, text="Login",
+        #                          command=self.authenticate_login)
+        login_button.grid(row=4, columnspan=2, padx=10, pady=10)
+
+        # Button to reset password
+        login_button = tk.Button(master=self, text="Forgot Password")
+        # login_button = tk.Button(master=self, text="Login",
+        #                          command=self.authenticate_login)
+        login_button.grid(row=5, columnspan=2, padx=10, pady=10)
+
+        # Button to register new account
+        login_button = tk.Button(master=self, text="Register New Account")
+        # login_button = tk.Button(master=self, text="Login",
+        #                          command=self.authenticate_login)
+        login_button.grid(row=6, columnspan=2, padx=10, pady=10)
+
+    # def authenticate_login(self):
+    #     """
+    #     Frontend function for the authentication procedure.
+    #     This is invoked when the login button is clicked.
+    #     :return: None
+    #     """
+    #     authenticator = Authenticator()
+    #     auth_res = authenticator.authenticate(self.username.get(),
+    #                                           self.password.get())
+    #
+    #     if isinstance(auth_res, User):
+    #
+    #         # Removes login successful text when logging out
+    #         self.login_text.set("")
+    #
+    #         if auth_res.get_role() == "PA":  # patient login
+    #
+    #             # Clears password and username input from index 0 to the end of index upon successful login
+    #             # Not visible until user logs out
+    #             self.password_entry.delete(0, 'end')
+    #             self.username_entry.delete(0, 'end')
+    #
+    #             # Remove login page from display
+    #             self.place_forget()
+    #
+    #             # Create and display the Patient login frame
+    #             patient_frame = youngLearner(self.master, self, auth_res)
+    #             patient_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+        #     elif auth_res.get_role() in ["AD", "RE"]:
+        #         self.login_text.set("Login successfully!")
+        # else:
+        #     self.login_text.set("Failed to login")
 
 
 def main():
