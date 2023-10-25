@@ -1,0 +1,4 @@
+John,Doe,johndoe,pw,2001-07-28,john@gmail.com,0123456789,10
+Jimmy,Hopp,jimmy,pw2,2003-07-28,jimmy@gmail.com,0123456788
+Sam,Li,admin,admin,1890-02-16,admin@codeventure.com,011111111
+Jane,Smith,js,pw2,1985-08-20,jane@example.com,9876543210,10
