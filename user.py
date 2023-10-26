@@ -4,7 +4,7 @@ from datetime import date
 class User:
 
     def __init__(self, first_name: str, last_name: str, username: str, password: str, dob: date,
-                 email: str | None = None, ph_num: str | None = None) -> None:
+                 email: str | None = None, ph_num: str | None = None, role=None) -> None:
         """
         Initialize a User object with the given attributes.
 
@@ -17,71 +17,38 @@ class User:
             email (str|None, optional): The email address of the user. Defaults to None.
             ph_num (str|None, optional): The phone number of the user. Defaults to None.
         """
-        self.first_name = first_name
-        self.last_name = last_name
-        self.username = username
-        self.password = password
-        self.dob = dob
-        self.email = email
-        self.ph_num = ph_num
+        self.__first_name = first_name
+        self.__last_name = last_name
+        self.__username = username
+        self.__password = password
+        self.__dob = dob
+        self.__email = email
+        self.__ph_num = ph_num
+        self.__role = role
 
-    @staticmethod
-    def register(users_dict: dict, first_name: str, last_name: str, username: str, password: str, dob: date,
-                 email: str | None = None, ph_num: str | None = None):
+    def get_username(self):
         """
-        Registers the user according to the parameters provided.
-        Returns true if the registration is successful, and false if otherwise
-
-        Args:
-            users_dict (dict): The dictionary of users where the new user will be registered.
-            first_name (str): The first name of the user.
-            last_name (str): The last name of the user.
-            username (str): The username of the user.
-            password (str): The password the user.
-            dob (date): The date of user.
-            email (str|None, optional): The email address of the user. Defaults to None.
-            ph_num (str|None, optional): The phone number of the user. Defaults to None.
-
-        Returns:
-            bool: A boolean that represents whether the registration was successful or not.
+        Getter for the username attribute.
+        :return: str
         """
-        if username not in users_dict:  # if username not found in dictionary, add it in
-            users_dict[username] = User(first_name, last_name, username, password, dob, email, ph_num)
-            return True
-        return False
+        return self.__username
 
-    @staticmethod
-    def authenticate(users_dict: dict, username: str, password: str) -> bool:
+    def get_password(self):
         """
-        Authenticates the user based on their username and password
-
-        Arguments:
-            users_dict (dict): The dictionary of users to authenticate against.
-            username (str): A string that represents the username of the user.
-            password (str): A string that represents the password of the user.
-
-        Returns:
-            bool: A boolean that states whether the user has been authenticated successfully
+        Getter for the password attribute.
+        :return: str
         """
-        if username not in users_dict or users_dict[username].password != password:
-            return False
-        return True
+        return self.__password
 
-    def get_details(self) -> str:
+    def get_role(self):
         """
-        Retrieves all user details in a formatted string.
-
-        Returns:
-            str: A formatted string containing user details.
+        Getter for the role attribute.
+        :return: str
         """
-        return f"User: {self.first_name} {self.last_name}\n" \
-               f"Username: {self.username}\n" \
-               f"Date of Birth: {self.dob}\n" \
-               f"Email: {self.email}\n" \
-               f"Phone Number: {self.ph_num}\n"
+        return self.__role
 
     def set_password(self, new_password) -> None:
-        self.password = new_password
+        self.__password = new_password
 
 
 class YoungLearner(User):
@@ -91,19 +58,15 @@ class YoungLearner(User):
 
     def __init__(self, first_name: str, last_name: str, username: str, password: str, dob: date,
                  email: str, ph_num: str, grade: int):
-        super().__init__(first_name, last_name, username, password, dob, email, ph_num)
-        self.grade = grade
-
-    @staticmethod
-    def register(users_dict: dict, first_name: str, last_name: str, username: str, password: str, dob: date,
-                 email: str, ph_num: str, grade: int) -> dict:
-        """
-        Registers a new young learner account in the system and add them to the user dictionary.
-        """
-
-        # Adds the newly registered user's information into the dictionary
-        users_dict[username] = YoungLearner(first_name, last_name, username, password, dob, email, ph_num, grade)
-        return users_dict
+        super().__init__(first_name=first_name,
+                         last_name=last_name,
+                         username=username,
+                         password=password,
+                         dob=dob,
+                         email=email,
+                         ph_num=ph_num,
+                         role="YL")
+        self.__grade = grade
 
     def get_details(self) -> str:
         """
@@ -112,12 +75,12 @@ class YoungLearner(User):
         Returns:
             str: A string that contains the young learner's details.
         """
-        return f"User: {self.first_name} {self.last_name}\n" \
-               f"Username: {self.username}\n" \
-               f"Date of Birth: {self.dob}\n" \
-               f"Email: {self.email}\n" \
-               f"Phone Number: {self.ph_num}\n" \
-               f"Grade: {self.grade}\n"
+        return f"User: {self.__first_name} {self.__last_name}\n" \
+               f"Username: {self.__username}\n" \
+               f"Date of Birth: {self.__dob}\n" \
+               f"Email: {self.__email}\n" \
+               f"Phone Number: {self.__ph_num}\n" \
+               f"Grade: {self.__grade}\n"
 
 
 class Admin(User):
@@ -126,29 +89,14 @@ class Admin(User):
     """
     def __init__(self, first_name: str, last_name: str, username: str, password: str, dob: date,
                  email: str, ph_num: str):
-        super().__init__(first_name, last_name, username, password, dob, email, ph_num)
-
-    @staticmethod
-    def register(users_dict: dict, first_name: str, last_name: str, username: str, password: str, dob: date,
-                 email: str, ph_num: str) -> dict:
-        """
-        Registers a new admin in the system and add them to the user dictionary.
-
-        Args:
-            users_dict (dict): The dictionary users where the new admin will be registered.
-            first_name (str): The first name of the admin.
-            last_name (str): The last name of the admin.
-            username (str): The username of the admin.
-            password (str): The password of the.
-            dob (date): The date of birth of the admin.
-            email (str): The email of the admin.
-            ph_num (str): The phone number of the admin.
-
-        Returns:
-            user dictionary.
-        """
-        users_dict[username] = Admin(first_name, last_name, username, password, dob, email, ph_num)
-        return users_dict
+        super().__init__(first_name=first_name,
+                         last_name=last_name,
+                         username=username,
+                         password=password,
+                         dob=dob,
+                         email=email,
+                         ph_num=ph_num,
+                         role="AD")
 
     def get_details(self) -> str:
         """
@@ -157,8 +105,8 @@ class Admin(User):
         Returns:
             str: A string that contains the admin's details.
         """
-        return f"User: {self.first_name} {self.last_name}\n" \
-               f"Username: {self.username}\n" \
-               f"Date of Birth: {self.dob}\n" \
-               f"Email: {self.email}\n" \
-               f"Phone Number: {self.ph_num}\n"
+        return f"User: {self.__first_name} {self.__last_name}\n" \
+               f"Username: {self.__username}\n" \
+               f"Date of Birth: {self.__dob}\n" \
+               f"Email: {self.__email}\n" \
+               f"Phone Number: {self.__ph_num}\n"
