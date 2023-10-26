@@ -26,7 +26,7 @@ class Authenticator:
                      ph_num,
                      role,
                      grade) = line.strip().split(",")
-                    if role == "PA":
+                    if role == "YL":
                         user_obj = YoungLearner(first_name=first_name,
                                                 last_name=last_name,
                                                 username=username,

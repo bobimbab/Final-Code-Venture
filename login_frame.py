@@ -1,6 +1,7 @@
 import tkinter as tk
 from user import User, YoungLearner, Admin
 from authenticator import Authenticator
+from register_frame import RegisterFrame
 
 class LoginFrame(tk.Frame):
     """
@@ -46,7 +47,7 @@ class LoginFrame(tk.Frame):
         password_label = tk.Label(master=self, text="Password:")
         password_label.grid(row=3, column=0, sticky=tk.E, padx=10, pady=10)
 
-        # Variable and entry to password
+        # Variable and entry to password, password entry will be hidden
         self.password = tk.StringVar()
         self.password_entry = tk.Entry(master=self, textvariable=self.password,
                                        show="●")
@@ -56,29 +57,27 @@ class LoginFrame(tk.Frame):
         # login_button = tk.Button(master=self, text="Login")
         login_button = tk.Button(master=self, text="Login",
                                  command=self.authenticate_login)
-        login_button.grid(row=4, columnspan=2, padx=10, pady=10)
+        login_button.grid(row=3, column=1, padx=100)
+        # login_button.grid(row=4, columnspan=2, padx=10, pady=10)
 
         # Variable and label to inform user of login outcome
         self.login_text = tk.StringVar()
         login_message = tk.Label(master=self, textvariable=self.login_text)
-        # Alternatively, you may use Message widget,
-        # but width must be wide enough
-        # login_message = tk.Message(master=self,
-        #                            textvariable=self.login_text,
-        #                            width=150)
         login_message.grid(row=5, columnspan=2, padx=10, pady=10)
 
         # Button to reset password
-        login_button = tk.Button(master=self, text="Forgot Password")
-        # login_button = tk.Button(master=self, text="Login",
-        #                          command=self.authenticate_login)
-        login_button.grid(row=5, columnspan=2, padx=10, pady=10)
+        pw_reset_button = tk.Button(master=self, text="Forgot Password")
+        pw_reset_button.grid(row=6, columnspan=2, padx=10, pady=10)
 
         # Button to register new account
-        login_button = tk.Button(master=self, text="Register New Account")
-        # login_button = tk.Button(master=self, text="Login",
-        #                          command=self.authenticate_login)
-        login_button.grid(row=6, columnspan=2, padx=10, pady=10)
+        register_button = tk.Button(master=self, text="Register New Account", command=self.switch_to_register)
+        register_button.grid(row=7, columnspan=2, padx=10, pady=10)
+
+    def switch_to_register(self):
+        self.place_forget()
+        register_frame = RegisterFrame(self.master)
+        # register_frame = RegisterFrame(master=self)
+        register_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)  # Display the register frame
 
     def authenticate_login(self):
         """
@@ -109,10 +108,16 @@ class LoginFrame(tk.Frame):
                 login_frame = YoungLearner(self.master, self, auth_res)
                 login_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
-            elif auth_res.get_role() in ["AD", "RE"]:
+            elif auth_res.get_role() in ["YL", "AD"]:
                 self.login_text.set("Login successfully!")
+                # TESTING USAGE
+                print("auth_res:", auth_res)
+                # print("Role:", auth_res.get_role())
         else:
             self.login_text.set("Failed to login")
+            # TESTING USAGE
+            print("auth_res:", auth_res)
+            # print("Role:", auth_res.get_role())
 
 
 def main():
