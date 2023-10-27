@@ -7,6 +7,7 @@ class GameFrame:
     def __init__(self, root, game):
         self.root = root
         self.game = game
+        self.viewing_started = False  # Track if viewing has started
 
         self.root.title("Game")
 
@@ -44,8 +45,10 @@ class GameFrame:
         self.prev_button.grid(row=0, column=0, sticky="nsew")
         self.next_button.grid(row=0, column=1, sticky="nsew")
 
+        self.prev_button.grid_remove()  # Initially hide the previous button
+        self.next_button.grid_remove()  # Initially hide the next button
+
         self.answer_frame = tk.Frame(root)
-        self.answer_frame.pack()
 
         self.answer_label = tk.Label(self.answer_frame, text="Your Answer:")
         self.answer_label.pack(side=tk.LEFT)
@@ -58,15 +61,25 @@ class GameFrame:
         self.submit_button.pack(side=tk.LEFT)
         self.submit_button.config(state=tk.DISABLED)
 
+        self.answer_frame.pack_forget()  # Initially hide the answer frame
+
     def start_viewing(self):
         album_name = self.album_var.get()
         self.game.set_current_album(album_name)
         self.show_image()
+        self.viewing_started = True  # Set viewing flag to true
 
         # Remove the "Select a module" and "Start" buttons
         self.label.pack_forget()
         self.album_menu.pack_forget()
         self.start_button.pack_forget()
+
+        # Show the previous and next buttons
+        self.prev_button.grid()
+        self.next_button.grid()
+
+        # Show the answer frame
+        self.answer_frame.pack()
 
     def show_image(self):
         current_image = self.game.get_current_image()
@@ -112,8 +125,9 @@ class GameFrame:
         result = self.game.check_answer(user_answer)
         messagebox.showinfo("Result", result)
         self.answer_entry.delete(0, tk.END)
-        self.answer_entry.config(state=tk.DISABLED)
-        self.submit_button.config(state=tk.DISABLED)
+
+        if result == "Correct!":
+            self.submit_button.config(state=tk.DISABLED)
 
 
 if __name__ == "__main__":
