@@ -21,11 +21,11 @@ class GameFrame(tk.Frame):
         self.navigation_frame.grid(row=0, column=0, columnspan=2)
 
         self.difficulty_label = tk.Label(self, text="Choose Difficulty:")
-        self.difficulty_label.grid(row=1, column=0)
+        self.difficulty_label.grid(row=1, column=0, sticky=tk.E)
 
-        difficulty_options = ["basic syntax", "medium", "hard"]
+        difficulty_options = ["basic syntax", "variables and types", "operators", "loops", "functions"]
         self.difficulty_menu = tk.OptionMenu(self, self.difficulty_var, *difficulty_options)
-        self.difficulty_menu.grid(row=1, column=1)
+        self.difficulty_menu.grid(row=1, column=1, sticky=tk.W)
 
         self.start_button = tk.Button(self, text="Start Game", command=self.start_game)
         self.start_button.grid(row=2, column=0, columnspan=2)
