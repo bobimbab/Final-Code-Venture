@@ -3,7 +3,7 @@ from user import User, YoungLearner, Admin
 
 class Authenticator:
 
-    def __init__(self, file_path="./user_data.txt"):
+    def __init__(self, file_path="./data/user_data.txt"):
         self.file_path = file_path
         self.users = []
         self.load_users()
