@@ -166,14 +166,21 @@ class ChooseDifficultyFrame(tk.Frame):
         self.title = ttk.Label(self, text="PLEASE SELECT YOUR DIFFICULTY", font=("Arial", 30, "bold"))
         self.title.grid(row=0, column=0, columnspan=8, pady=10)  # Add vertical padding
 
-        self.easy_button = ttk.Button(self, text="Easy", style="Easy.TButton", command="")
+        self.easy_button = ttk.Button(self, text="Easy", style="Easy.TButton", command=lambda: self.set_difficulty(1))
         self.easy_button.grid(row=1, column=1, padx=(10, 5), pady=15, sticky="w")
 
-        self.medium_button = ttk.Button(self, text="Medium", style="Medium.TButton", command="")
+        self.medium_button = ttk.Button(self, text="Medium", style="Medium.TButton", command=lambda: self.set_difficulty(2))
         self.medium_button.grid(row=1, column=3, padx=5, pady=15)
 
-        self.hard_button = ttk.Button(self, text="Hard", style="Hard.TButton", command="")
+        self.hard_button = ttk.Button(self, text="Hard", style="Hard.TButton", command=lambda: self.set_difficulty(3))
         self.hard_button.grid(row=1, column=5, padx=(5, 10), pady=15, sticky="e")
+
+    def set_difficulty(self,choice):
+        self.selected_quiz.reset_quiz()
+        self.selected_quiz.set_difficulty(choice)
+        self.place_forget()
+        play_quiz_frame = PlayQuizFrame(self.parent, self.selected_quiz)
+        play_quiz_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
 
 class PlayQuizFrame (tk.Frame):
@@ -182,16 +189,17 @@ class PlayQuizFrame (tk.Frame):
     """
     def __init__(self, parent, selected_quiz):
         super().__init__(parent)
-
         self.selected_quiz = selected_quiz
 
         # Set up the frame title
-        quiz_title = tk.Label(self, text=f"Quiz: {selected_quiz.title}", font=("Arial", 20, "bold"))
+        quiz_title = tk.Label(self, text=self.selected_quiz.get_quiz_title(), font=("Arial", 20, "bold"))
         quiz_title.pack(pady=10)
 
         # Display quiz instructions or information
-        quiz_instructions = tk.Label(self, text="Quiz instructions go here", font=("Arial", 14))
-        quiz_instructions.pack(pady=10)
+        self.quiz_question = tk.StringVar()
+        self.quiz_question.set(self.selected_quiz.current_question)
+        self.question = tk.Label(self, textvariable=self.quiz_question, font=("Arial", 14))
+        self.question.pack(pady=10)
 
         # Create question widgets
         for question in selected_quiz.questions:
@@ -205,22 +213,25 @@ class PlayQuizFrame (tk.Frame):
             # ...
 
         # Create a "Submit" button
-        submit_button = tk.Button(self, text="Submit", font=("Arial", 14), command=self.submit_quiz)
+        submit_button = tk.Button(self, text="Submit", font=("Arial", 14), command=self.update_questions)
         submit_button.pack(pady=20)
 
         # Back button to return to the quiz selection menu
-        back_button = tk.Button(self, text="Return to Menu", font=("Arial", 14), command=self.return_to_menu)
+        back_button = tk.Button(self, text="Return to Menu", font=("Arial", 14), command="")
         back_button.pack(pady=10)
 
+    def update_questions(self):
+        # Implement logic to update the questions in the same frame
+        self.selected_quiz.next_question()
+        self.quiz_question.set(f"{self.selected_quiz.current_question}")
 
-        def submit_quiz(self):
-            # Implement quiz submission logic
-            pass
+    def submit_quiz(self):
+        # Implement quiz submission logic
+        pass
 
-
-        def return_to_menu(self):
-            # Implement the logic to return to the quiz selection menu
-            pass
+    def return_to_menu(self):
+        # Implement the logic to return to the quiz selection menu
+        pass
 
 
 if __name__ == "__main__":
