@@ -158,3 +158,6 @@ cython_debug/
 *.iml
 .idea/Final Code Venture.iml
 .idea/misc.xml
+.idea/Final Code Venture.iml
+*.xml
+*.iml
