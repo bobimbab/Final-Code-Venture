@@ -1,6 +1,7 @@
 import tkinter as tk
 from detail_frame import detailframe
 
+
 class Admin(tk.Frame):
 
     def __init__(self, master,login_frame,shutdown_frame, user_obj):

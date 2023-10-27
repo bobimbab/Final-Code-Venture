@@ -1,5 +1,4 @@
 import tkinter as tk
-
 class detailframe(tk.Frame):
     def __init__(self,master,younglearner_frame,user_obj):
         super().__init__(master)

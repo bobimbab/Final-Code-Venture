@@ -48,7 +48,6 @@ class YoungLearner(tk.Frame):
         dets_frame = detailframe(self.master, self)
         dets_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
-
     def logout(self):
         self.place_forget()
         self.login_frame.place(relx=0.5,rely=0.5,anchor=tk.CENTER)
