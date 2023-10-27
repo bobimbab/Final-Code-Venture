@@ -61,5 +61,5 @@ class GameLogic:
 
     def answer_question(self, answer):
         # Handle the user's answer to the question
-        
+        # You can implement your own logic here
         pass

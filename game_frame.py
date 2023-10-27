@@ -11,7 +11,7 @@ class GameFrame(tk.Frame):
         self.current_image = None  # Store the current image as an attribute
 
         self.difficulty_var = tk.StringVar()
-        self.difficulty_var.set("easy")  # Default difficulty
+        self.difficulty_var.set("basic syntax")  # Default difficulty
 
         self.create_widgets()
 
@@ -23,7 +23,7 @@ class GameFrame(tk.Frame):
         self.difficulty_label = tk.Label(self, text="Choose Difficulty:")
         self.difficulty_label.grid(row=1, column=0)
 
-        difficulty_options = ["easy", "medium", "hard"]
+        difficulty_options = ["basic syntax", "medium", "hard"]
         self.difficulty_menu = tk.OptionMenu(self, self.difficulty_var, *difficulty_options)
         self.difficulty_menu.grid(row=1, column=1)
 
