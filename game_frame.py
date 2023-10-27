@@ -7,37 +7,38 @@ class GameFrame:
     def __init__(self, root, game):
         self.root = root
         self.game = game
-        self.viewing_started = False  # Track if viewing has started
 
         self.root.title("Game")
+        self.root.geometry("800x600")  # Set the window size
 
-        self.album_selection_frame = tk.Frame(root)
-        self.album_selection_frame.pack(pady=10)
+        # Create a frame to center the content vertically
+        center_frame = tk.Frame(root)
+        center_frame.pack(expand=True, fill="both")
 
-        self.label = tk.Label(self.album_selection_frame, text="Select a module:")
-        self.label.pack(side=tk.LEFT)
+        self.label = tk.Label(center_frame, text="Select a module:")
+        self.label.pack()
 
         self.album_var = tk.StringVar()
         self.album_var.set(game.albums[0])
 
-        self.album_menu = tk.OptionMenu(self.album_selection_frame, self.album_var, *game.albums)
-        self.album_menu.pack(side=tk.LEFT)
+        self.album_menu = tk.OptionMenu(center_frame, self.album_var, *game.albums)
+        self.album_menu.pack()
 
-        self.start_button = tk.Button(self.album_selection_frame, text="Start", command=self.start_viewing)
-        self.start_button.pack(side=tk.LEFT)
+        self.start_button = tk.Button(center_frame, text="Start", command=self.start_viewing)
+        self.start_button.pack()
 
         self.exit_button = tk.Button(root, text="Exit", command=root.quit)
-        self.exit_button.pack(side=tk.BOTTOM)
+        self.exit_button.pack(side="bottom")
 
         self.image_frame = tk.Frame(root)
         self.image_frame.pack()
 
         self.image_label = tk.Label(self.image_frame)
-        self.image_label.grid(row=0, column=0, columnspan=2)  # Span two columns
+        self.image_label.grid(row=0, column=0, columnspan=2)
 
         # Create a nested frame for previous and next buttons and use grid within it
         button_frame = tk.Frame(self.image_frame)
-        button_frame.grid(row=1, column=0, columnspan=2)  # Span two columns
+        button_frame.grid(row=1, column=0, columnspan=2)
 
         self.prev_button = tk.Button(button_frame, text="Previous", command=self.show_previous_image)
         self.next_button = tk.Button(button_frame, text="Next", command=self.show_next_image)
@@ -80,7 +81,6 @@ class GameFrame:
 
         # Show the answer frame
         self.answer_frame.pack()
-
     def show_image(self):
         current_image = self.game.get_current_image()
         current_challenge, _ = self.game.get_current_challenge()
