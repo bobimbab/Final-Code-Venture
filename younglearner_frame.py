@@ -1,6 +1,6 @@
 import tkinter as tk
-from game import Game
-from quizzes import Quiz
+from game_frame import GameFrame
+# from quizzes_frame import QuizFrame
 from detail_frame import detailframe
 class YoungLearner(tk.Frame):
     """
@@ -23,7 +23,7 @@ class YoungLearner(tk.Frame):
         quiz = tk.Button(self, text="Do Quiz ✍️", command=self.do_quiz)
         quiz.grid(row=1, column=0, padx=10, pady=10)
 
-        view_profile = tk.Button(self, text="View Profile 📃", command=self.get_details)
+        view_profile = tk.Button(self, text="View Profile 📃", command=self.get_det)
         view_profile.grid(row=2, column=0, padx=10, pady=10)
 
         logout = tk.Button(self, text="Logout", command=self.logout)
@@ -34,13 +34,14 @@ class YoungLearner(tk.Frame):
 
     def play_game(self):
         self.place_forget()
-        game_frame = Game(self.master,self)
+        game_frame = GameFrame(self.master,self)
         game_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
     def do_quiz(self):
-        self.place_forget()
-        quiz_frame = Quiz(self.master,self)
-        quiz_frame.place(relx=0.5,rely=0.5,anchor=tk.CENTER)
+        # self.place_forget()
+        # quiz_frame = QuizFrame(self.master,self)
+        # quiz_frame.place(relx=0.5,rely=0.5,anchor=tk.CENTER)
+        pass
 
     def get_det(self):
         self.place_forget()
@@ -52,3 +53,8 @@ class YoungLearner(tk.Frame):
         self.place_forget()
         self.login_frame.place(relx=0.5,rely=0.5,anchor=tk.CENTER)
 
+if __name__ == "__main__":
+    # DO NOT MODIFY THIS
+    login = YoungLearner(tk.Tk(),None,None)
+    login.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+    login.mainloop()
