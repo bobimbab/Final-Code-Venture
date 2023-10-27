@@ -9,9 +9,9 @@ class RegisterFrame(tk.Frame):
 
     def __init__(self, master, login_frame):
         """
-        Constructor for the LoginFrame class.
+        Constructor for the RegisterFrame class.
         :param master: Tk object; the main window that the
-                       login frame is to be contained.
+                       register frame is to be contained.
         """
         super().__init__(master=master)
         self.master = master
@@ -103,7 +103,7 @@ class RegisterFrame(tk.Frame):
 
     def return_menu(self):
         """
-        Returns to previous menu which is patient's main menu
+        Returns to previous menu
         """
         self.place_forget() # forget a widget from the parent widget or screen
         self.login_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER) # Positions the frame and is anchored in the
