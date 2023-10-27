@@ -123,7 +123,7 @@ class QuizzesMenuFrame(tk.Frame):
             self.radio_buttons.append(radio_button)
 
         # Play button
-        self.play_button = tk.Button(self, text="Play", font=("Arial", 15), command=self.play_quiz)
+        self.play_button = tk.Button(self, text="Play!", font=("Arial", 15), command=self.play_quiz)
         self.play_button.pack(pady=20)  # Add vertical padding
 
         # no quiz selected label
@@ -144,12 +144,37 @@ class QuizzesMenuFrame(tk.Frame):
 
         print(selected_quiz)
         self.place_forget()
-        play_quiz_frame = PlayQuizFrame(self.parent, selected_quiz)
-        play_quiz_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        choose_difficulty_frame = ChooseDifficultyFrame(self.parent, selected_quiz)
+        choose_difficulty_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
 
 class ChooseDifficultyFrame(tk.Frame):
-    pass
+    """
+    Frame to choose difficulty level
+    """
+    def __init__(self,parent,selected_quiz):
+        super().__init__(parent)
+        self.selected_quiz = selected_quiz
+        self.parent = parent
+
+        style = ttk.Style()
+        style.configure("Easy.TButton", background="green", font=("Arial", 15, "bold"))
+        style.configure("Medium.TButton", background="yellow", font=("Arial", 15, "bold"))
+        style.configure("Hard.TButton", background="red", font=("Arial", 15, "bold"))
+
+        # Main Title
+        self.title = ttk.Label(self, text="PLEASE SELECT YOUR DIFFICULTY", font=("Arial", 30, "bold"))
+        self.title.grid(row=0, column=0, columnspan=8, pady=10)  # Add vertical padding
+
+        self.easy_button = ttk.Button(self, text="Easy", style="Easy.TButton", command="")
+        self.easy_button.grid(row=1, column=1, padx=(10, 5), pady=15, sticky="w")
+
+        self.medium_button = ttk.Button(self, text="Medium", style="Medium.TButton", command="")
+        self.medium_button.grid(row=1, column=3, padx=5, pady=15)
+
+        self.hard_button = ttk.Button(self, text="Hard", style="Hard.TButton", command="")
+        self.hard_button.grid(row=1, column=5, padx=(5, 10), pady=15, sticky="e")
+
 
 class PlayQuizFrame (tk.Frame):
     """
