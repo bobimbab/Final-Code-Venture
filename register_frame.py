@@ -1,12 +1,13 @@
 import tkinter as tk
 from tkcalendar import Calendar
 from tkcalendar import DateEntry
+
 from user import User, YoungLearner, Admin
 from authenticator import Authenticator
 
 class RegisterFrame(tk.Frame):
 
-    def __init__(self, master):
+    def __init__(self, master, login_frame):
         """
         Constructor for the LoginFrame class.
         :param master: Tk object; the main window that the
@@ -14,23 +15,23 @@ class RegisterFrame(tk.Frame):
         """
         super().__init__(master=master)
         self.master = master
+        self.login_frame = login_frame
+        # self.master.geometry(f"{width}x{height}")
 
         # Logo image for the login page
         canvas = tk.Canvas(master=self, width=128, height=128)
-        canvas.grid(row=0, columnspan=2, sticky=tk.S, padx=10, pady=10)
+        canvas.grid(row=0, columnspan=2, padx=10, pady=10)
 
         image_path = "images/python_logo.png"
         self.logo = tk.PhotoImage(file=image_path)
-        canvas.create_image(0, 0,
-                                  anchor=tk.NW,
-                                  image=self.logo)
+        canvas.create_image(0, 0, anchor=tk.NW, image=self.logo)
 
         # Label containing heading indicating the current frame is a account registration page
         regis_title = tk.Label(master=self,
                                text="Welcome to CodeVenture!",
                                font=("Arial Bold", 30))
         # regis_title.grid()
-        regis_title.grid(row=1, columnspan=2, padx=10, pady=10)
+        regis_title.grid(row=1,columnspan=2, padx=10, pady=10)
 
         # Label to ask user for Username
         username_label = tk.Label(master=self, text="Username:")
@@ -95,13 +96,29 @@ class RegisterFrame(tk.Frame):
         #                          command=self.authenticate_login)
         register_button.grid(row=8,column=0, columnspan=2, padx=10, pady=10)
 
+        # Back to login page button
+        # back_button = tk.Button(self, text="Back", command=lambda: login_frame.place())
+        back_button = tk.Button(master=self, text="Back", command=self.return_menu)
+        back_button.grid(row=0, column=0, sticky=tk.NW)
 
+    def return_menu(self):
+        """
+        Returns to previous menu which is patient's main menu
+        """
+        self.place_forget() # forget a widget from the parent widget or screen
+        self.login_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER) # Positions the frame and is anchored in the
+                                                                       # \middle
+        # DEBUGGING USE
+        print("Currently in login frame")
 
 def main():
     root = tk.Tk()
     root.title("Register Example")
 
-    register_frame = RegisterFrame(root)
+    login_frame = tk.Frame(root)  # Create a login frame
+    login_frame.grid(row=0, padx=10, pady=10)
+
+    register_frame = RegisterFrame(root, login_frame)
     register_frame.grid(row=0, padx=10, pady=10)
 
     root.mainloop()

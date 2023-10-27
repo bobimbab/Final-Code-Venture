@@ -75,9 +75,11 @@ class LoginFrame(tk.Frame):
 
     def switch_to_register(self):
         self.place_forget()
-        register_frame = RegisterFrame(self.master)
+        register_frame = RegisterFrame(self.master, login_frame=self)
         # register_frame = RegisterFrame(master=self)
         register_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)  # Display the register frame
+        # DEBUGGING USE
+        print("Currently in register frame")
 
     def authenticate_login(self):
         """
