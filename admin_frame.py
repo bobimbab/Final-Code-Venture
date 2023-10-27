@@ -66,4 +66,3 @@ class Admin(tk.Frame):
     def shut_down(self):
         self.place_forget()
         self.shutdown_frame.place(relx=0.5,rely=0.5,anchor=tk.CENTER)
-
