@@ -54,7 +54,8 @@ class YoungLearner(tk.Frame):
         self.login_frame.place(relx=0.5,rely=0.5,anchor=tk.CENTER)
 
 if __name__ == "__main__":
-    # DO NOT MODIFY THIS
+
     login = YoungLearner(tk.Tk(),None,None)
     login.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
     login.mainloop()
+
