@@ -25,10 +25,11 @@ class GameFrame:
         self.album_menu = tk.OptionMenu(self.center_frame, self.album_var, *game.albums)
         self.album_menu.pack()
 
-        self.start_button = tk.Button(self.center_frame, text="Start", command=self.start_viewing)
+        self.start_button = tk.Button(self.center_frame, text="Start", command=self.start_viewing, bg='#d3f2e0',
+                                      foreground='#087513')
         self.start_button.pack()
 
-        self.exit_button = tk.Button(root, text="Exit", command=root.quit)
+        self.exit_button = tk.Button(root, text="Exit", command=root.quit, bg='#f2dad3', foreground='red')
         self.exit_button.pack(side=tk.BOTTOM)
 
         self.image_frame = tk.Frame(root)
@@ -40,8 +41,8 @@ class GameFrame:
         self.button_frame = tk.Frame(self.image_frame)
         self.button_frame.pack(fill=tk.BOTH, expand=True)
 
-        self.prev_button = tk.Button(self.button_frame, text="Previous", command=self.show_previous_image)
-        self.next_button = tk.Button(self.button_frame, text="Next", command=self.show_next_image)
+        self.prev_button = tk.Button(self.button_frame, text="Previous", command=self.show_previous_image, bg='#d3e3c5')
+        self.next_button = tk.Button(self.button_frame, text="Next", command=self.show_next_image, bg='#d3e3c5')
 
         self.prev_button.pack(side=tk.LEFT)
         self.next_button.pack(side=tk.RIGHT)
@@ -52,13 +53,13 @@ class GameFrame:
         self.answer_frame = tk.Frame(root)
 
         self.answer_label = tk.Label(self.answer_frame, text="Challenge:")
-        self.answer_label.grid(row=0, column=0)
+        self.answer_label.grid(row=0, column=0, pady=300)
 
         self.answer_entry = tk.Entry(self.answer_frame)
         self.answer_entry.grid(row=0, column=1)
         self.answer_entry.config(state=tk.DISABLED)
 
-        self.submit_button = tk.Button(self.answer_frame, text="Submit", command=self.submit_answer)
+        self.submit_button = tk.Button(self.answer_frame, text="Submit", command=self.submit_answer, bg='#f5f3b3')
         self.submit_button.grid(row=0, column=2)
         self.submit_button.config(state=tk.DISABLED)
 
@@ -157,12 +158,14 @@ class GameFrame:
             self.submit_button.config(state=tk.DISABLED)
 
     def show_result(self, result):
-        if hasattr(self, "result_label"):
-            self.result_label.destroy()
+        if hasattr(self, "result_frame"):
+            self.result_frame.destroy()
 
-        self.result_label = tk.Label(self.answer_frame, text=result)
-        self.result_label.grid(row=1, column=0, columnspan=3)
-        self.result_label.pack()
+        self.result_frame = tk.Frame(self.answer_frame)
+        self.result_frame.grid(row=1, column=0, columnspan=3)
+
+        self.result_label = tk.Label(self.result_frame, text=result)
+        self.result_label.grid(row=0, column=0)
 
 
 if __name__ == "__main__":
