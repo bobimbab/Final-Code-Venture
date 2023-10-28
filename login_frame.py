@@ -4,6 +4,7 @@ from authenticator import Authenticator
 from register_frame import RegisterFrame
 from younglearner_frame import YoungLearnerFrame
 from admin_frame import AdminFrame
+from forgotPw_frame import ForgotPwFrame
 
 class LoginFrame(tk.Frame):
     """
@@ -68,12 +69,19 @@ class LoginFrame(tk.Frame):
         login_message.grid(row=5, columnspan=2, padx=10, pady=10)
 
         # Button to reset password
-        pw_reset_button = tk.Button(master=self, text="Forgot Password")
+        pw_reset_button = tk.Button(master=self, text="Forgot Password", command=self.switch_to_forgot_pw)
         pw_reset_button.grid(row=6, columnspan=2, padx=10, pady=10)
 
         # Button to register new account
         register_button = tk.Button(master=self, text="Register New Account", command=self.switch_to_register)
         register_button.grid(row=7, columnspan=2, padx=10, pady=10)
+
+    def switch_to_forgot_pw(self):
+        self.place_forget()
+        forgot_pw_frame = ForgotPwFrame(self.master, login_frame=self)
+        forgot_pw_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        # DEBUGGING USE
+        print("Currently in forgot password frame")
 
     def switch_to_register(self):
         self.place_forget()
