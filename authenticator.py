@@ -79,6 +79,16 @@ class Authenticator:
                 return True
         return False
 
+    def register(self, username, password, firstname, lastname, dob, phone, email, grade):
+        # Check if the username is unique
+        if self.username_exists(username):
+            return None  # Username already exists
+
+        # Assuming User class has an appropriate constructor
+        new_user = User(username, password, firstname, lastname, dob, phone, email, grade)
+        self.users.append(new_user)  # Add the new user to the list (replace with database storage)
+        return new_user  # Return the newly registered user
+
 
 if __name__ == "__main__":
     # Feel free to amend this block while working or testing,
