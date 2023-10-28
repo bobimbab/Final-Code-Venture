@@ -49,6 +49,27 @@ class Authenticator:
             print(f"The file \"{self.file_path}\" does not exist!")
             return False
 
+    def save_users(self):
+        """
+        Save the list of users to the user data file.
+        """
+        try:
+            with open(self.file_path, "w", encoding="utf8") as users_f:
+                for user_obj in self.users:
+                    # Create a comma-separated line with user data
+                    user_data = ",".join([user_obj.__first_name,
+                                          user_obj.__last_name,
+                                          user_obj.__username,
+                                          user_obj.__password,
+                                          user_obj.__dob,
+                                          user_obj.__email,
+                                          user_obj.__ph_num,
+                                          user_obj.__role,
+                                          user_obj.__grade])
+                    users_f.write(user_data + "\n")
+        except FileNotFoundError:
+            print(f"The file \"{self.file_path}\" does not exist!")
+
     def authenticate(self, input_username, input_password):
         """
         Logic for authenticating a login procedure
