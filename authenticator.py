@@ -68,6 +68,17 @@ class Authenticator:
         # Account does not exist
         return False
 
+    def username_exists(self, input_username):
+        """
+        Check if the provided username exists in the system.
+        :param input_username: str - username entered by the user
+        :return: bool
+        """
+        for user_obj in self.users:
+            if user_obj.get_username() == input_username:
+                return True
+        return False
+
 
 if __name__ == "__main__":
     # Feel free to amend this block while working or testing,
