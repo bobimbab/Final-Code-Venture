@@ -3,6 +3,7 @@ from game_frame import GameFrame
 # from quizzes_frame import QuizFrame
 from detail_frame import detailframe
 class YoungLearnerFrame(tk.Frame):
+
     """
     A child class that inherits its parents (User).
     """
