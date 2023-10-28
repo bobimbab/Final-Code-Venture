@@ -100,14 +100,27 @@ class Authenticator:
                 return True
         return False
 
-    def register(self, username, password, firstname, lastname, dob, phone, email, grade):
+    def register(self, username, password, first_name, last_name, dob, phone, email, grade):
         # Check if the username is unique
         if self.username_exists(username):
             return None  # Username already exists
 
         # Assuming User class has an appropriate constructor
-        new_user = User(username, password, firstname, lastname, dob, phone, email, grade)
-        self.users.append(new_user)  # Add the new user to the list (replace with database storage)
+        new_user = YoungLearner(
+            first_name=first_name,
+            last_name=last_name,
+            username=username,
+            password=password,
+            dob=dob,
+            email=email,
+            ph_num=phone,
+            grade=grade
+        )
+        # Append the new user to the list of users
+        self.users.append(new_user)
+
+        # Save the updated user data to the file
+        self.save_users()
         return new_user  # Return the newly registered user
 
 
