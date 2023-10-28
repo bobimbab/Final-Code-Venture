@@ -139,14 +139,8 @@ class YoungLearner(User):
 class Admin(User):
     def __init__(self, first_name: str, last_name: str, username: str, password: str, dob: date,
                  email: str, ph_num: str) -> None:
-        super().__init(first_name=first_name,
-                         last_name=last_name,
-                         username=username,
-                         password=password,
-                         dob=dob,
-                         email=email,
-                         ph_num=ph_num,
-                         role="AD")
+        super().__init__(first_name, last_name, username, password, dob, email, ph_num, role="AD")
+
 
     def get_details(self) -> str:
         """
