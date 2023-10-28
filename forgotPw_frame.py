@@ -48,7 +48,7 @@ class ForgotPwFrame(tk.Frame):
         self.ph_num_entry.grid(row=5, column=1, sticky=tk.W, padx=10, pady=10)
 
         # Label to ask user for Password
-        password_label = tk.Label(master=self, text="Password:")
+        password_label = tk.Label(master=self, text="New Password:")
         password_label.grid(row=6, column=0, sticky=tk.E, padx=10, pady=10)
 
         # Variable and entry to password, password entry will be hidden
@@ -57,9 +57,19 @@ class ForgotPwFrame(tk.Frame):
                                        show="●")
         self.password_entry.grid(row=6, column=1, sticky=tk.W, padx=10, pady=10)
 
+        # Label to ask user to confirm their new Password
+        password_label = tk.Label(master=self, text="Confirm New Password:")
+        password_label.grid(row=7, column=0, sticky=tk.E, padx=10, pady=10)
+
+        # Variable and entry to new password, new password entry will be hidden
+        self.password = tk.StringVar()
+        self.password_entry = tk.Entry(master=self, textvariable=self.password,
+                                       show="●")
+        self.password_entry.grid(row=7, column=1, sticky=tk.W, padx=10, pady=10)
+
         # Confirm button for changing password
         confirm_button = tk.Button(master=self, text="Confirm")
-        confirm_button.grid(row=6, column=1, padx=100)
+        confirm_button.grid(row=7, column=1, padx=100)
 
         # Back to login page button
         # back_button = tk.Button(self, text="Back", command=lambda: login_frame.place())
