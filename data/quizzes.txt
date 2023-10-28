@@ -1,0 +1,16 @@
+Python Data Types;Easy;What data type is used to represent whole numbers in Python?;["a) int", "b) float", "c) str"];a) int
+Python Data Types;Easy;What data type is used to represent decimal numbers in Python?;["a) int", "b) float", "c) str"];b) float
+Python Data Types;Medium;What is the result of the expression '5 / 2' in Python?;["a) 2.5", "b) 2", "c) 2.0"];a) 2.5
+Python Data Types;Medium;How do you check the data type of a variable in Python?;["a) using the 'datatype()' function", "b) using the 'type()' function", "c) using the 'check_type()' function"];b) using the 'type()' function
+Python Data Types;Hard;What is the primary difference between a list and a tuple in Python?;["a) Lists are mutable, while tuples are immutable.", "b) Lists can only store integers, while tuples can store any data type.", "c) Lists are used for mathematical calculations, while tuples are used for text processing."];a) Lists are mutable, while tuples are immutable.
+Python Data Types;Hard;What is the purpose of the 'None' data type in Python?;["a) It represents an empty string.", "b) It represents a missing or undefined value.", "c) It is used for type conversion."];b) It represents a missing or undefined value.
+Python Data Types;Hard;How do you define a dictionary in Python?;["a) {key1: value1, key2: value2}", "b) [key1: value1, key2: value2]", "c) (key1: value1, key2: value2}"];a) {key1: value1, key2: value2}
+Python Programming;Easy;What is the result of the expression '5 + 3' in Python?;["a) 8", "b) 15", "c) 53"];a) 8
+Python Programming;Easy;Which data type is used to represent decimal numbers in Python?;["a) int", "b) float", "c) str"];b) float
+Python Programming;Easy;What is the primary purpose of the 'if' statement in Python?;["a) To create a loop", "b) To define a function", "c) To make decisions in the code"];c) To make decisions in the code
+Python Programming;Medium;Which operator is used for exponentiation in Python?;["a) +", "b) *", "c) ^", "d) **"];d) **
+Python Programming;Medium;What is the primary purpose of a Python function?;["a) To store data", "b) To perform a specific task or operation", "c) To create a class"];b) To perform a specific task or operation
+Python Programming;Medium;What is the correct way to comment multiple lines in Python?;["a) // This is a comment", "b) /* This is a comment */", "c) ''' This is a comment '''"];c) ''' This is a comment '''
+Python Programming;Hard;What is the primary use of the 'global' keyword in Python?;["a) To define a global variable", "b) To indicate a variable is local to a function", "c) To define a class attribute"];a) To define a global variable
+Python Programming;Hard;What is the purpose of the 'lambda' function in Python?;["a) To create a list", "b) To define a class", "c) To create anonymous functions"];c) To create anonymous functions
+Python Programming;Hard;What is the result of the expression '10 / 3' in Python?;["a) 3", "b) 3.33", "c) 3.0"];b) 3.33
