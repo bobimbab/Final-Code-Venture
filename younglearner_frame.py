@@ -2,6 +2,8 @@ import tkinter as tk
 from game_frame import GameFrame
 # from quizzes_frame import QuizFrame
 from detail_frame import detailframe
+from user import User, YoungLearner
+from datetime import date
 class YoungLearnerFrame(tk.Frame):
 
     """
@@ -24,7 +26,7 @@ class YoungLearnerFrame(tk.Frame):
         quiz = tk.Button(self, text="Do Quiz ✍️", command=self.do_quiz)
         quiz.grid(row=1, column=0, padx=10, pady=10)
 
-        view_profile = tk.Button(self, text="View Profile 📃", command=self.get_det)
+        view_profile = tk.Button(self, text="View Profile 📃", command=lambda: self.get_det(self.user_obj))
         view_profile.grid(row=2, column=0, padx=10, pady=10)
 
         logout = tk.Button(self, text="Logout", command=self.logout)
@@ -41,9 +43,9 @@ class YoungLearnerFrame(tk.Frame):
         # quiz_frame.place(relx=0.5,rely=0.5,anchor=tk.CENTER)
         pass
 
-    def get_det(self):
+    def get_det(self, user):
         self.place_forget()
-        dets_frame = detailframe(self.master, self,self.user_obj)
+        dets_frame = detailframe(self.master, self, user)
         dets_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
     def logout(self):
@@ -51,7 +53,28 @@ class YoungLearnerFrame(tk.Frame):
         self.login_frame.place(relx=0.5,rely=0.5,anchor=tk.CENTER)
 
 if __name__ == "__main__":
+    sample_user = YoungLearner(
+        first_name="John",
+        last_name="Doe",
+        username="johndoe",
+        password="password123",
+        dob=date(2005, 5, 15),
+        email="johndoe@example.com",
+        ph_num="123-456-7890",
+        grade=7
+    )
 
-    login = YoungLearnerFrame(tk.Tk(),None,None)
-    login.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-    login.mainloop()
+    # Create the main application window
+    root = tk.Tk()
+
+    # Create a YoungLearnerFrame with the sample user
+    young_learner_frame = YoungLearnerFrame(root, None, sample_user)
+
+    # Place the YoungLearnerFrame in the window
+    young_learner_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+    # Start the application's main loop
+    root.mainloop()
+    # login = YoungLearnerFrame(tk.Tk(),None,None)
+    # login.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+    # login.mainloop()
