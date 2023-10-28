@@ -56,16 +56,31 @@ class Authenticator:
         try:
             with open(self.file_path, "w", encoding="utf8") as users_f:
                 for user_obj in self.users:
-                    # Create a comma-separated line with user data
-                    user_data = ",".join([user_obj.__first_name,
-                                          user_obj.__last_name,
-                                          user_obj.__username,
-                                          user_obj.__password,
-                                          user_obj.__dob,
-                                          user_obj.__email,
-                                          user_obj.__ph_num,
-                                          user_obj.__role,
-                                          user_obj.__grade])
+                    if user_obj.get_role() == "YL":
+                        role = "YL"
+                        user_data = ",".join([
+                            user_obj._first_name,
+                            user_obj._last_name,
+                            user_obj._username,
+                            user_obj._password,
+                            user_obj._dob.strftime("%Y-%m-%d"),
+                            user_obj._email or "",  # Handle None
+                            user_obj._ph_num or "",  # Handle None
+                            role,
+                            str(user_obj._grade)
+                        ])
+                    else:
+                        role = "Admin"
+                        user_data = ",".join([
+                            user_obj._first_name,
+                            user_obj._last_name,
+                            user_obj._username,
+                            user_obj._password,
+                            user_obj._dob.strftime("%Y-%m-%d"),
+                            user_obj._email or "",  # Handle None
+                            user_obj._ph_num or "",  # Handle None
+                            role
+                        ])
                     users_f.write(user_data + "\n")
         except FileNotFoundError:
             print(f"The file \"{self.file_path}\" does not exist!")
