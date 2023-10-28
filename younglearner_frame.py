@@ -2,7 +2,7 @@ import tkinter as tk
 from game_frame import GameFrame
 # from quizzes_frame import QuizFrame
 from detail_frame import detailframe
-class YoungLearner(tk.Frame):
+class YoungLearnerFrame(tk.Frame):
     """
     A child class that inherits its parents (User).
     """
@@ -45,7 +45,7 @@ class YoungLearner(tk.Frame):
 
     def get_det(self):
         self.place_forget()
-        dets_frame = detailframe(self.master, self)
+        dets_frame = detailframe(self.master, self,self.user_obj)
         dets_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
     def logout(self):
@@ -54,7 +54,7 @@ class YoungLearner(tk.Frame):
 
 if __name__ == "__main__":
 
-    login = YoungLearner(tk.Tk(),None,None)
+    login = YoungLearnerFrame(tk.Tk(),None,None)
     login.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
     login.mainloop()
 

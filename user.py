@@ -26,6 +26,33 @@ class User:
         self.__ph_num = ph_num
         self.__role = role
 
+    def get_full_name(self):
+        """
+        Getter for the user's full name.
+        :return: str
+        """
+        return f"{self.__first_name} {self.__last_name}"
+
+    def get_dob(self):
+        """
+        Getter for the date of birth attribute.
+        :return: date
+        """
+        return self.__dob
+
+    def get_email(self):
+        """
+        Getter for the email attribute.
+        :return: str
+        """
+        return self.__email
+
+    def get_ph_num(self):
+        """
+        Getter for the phone number attribute.
+        :return: str
+        """
+        return self.__ph_num
     def get_username(self):
         """
         Getter for the username attribute.
@@ -67,6 +94,8 @@ class YoungLearner(User):
                          ph_num=ph_num,
                          role="YL")
         self.__grade = grade
+
+
 
     def get_details(self) -> str:
         """
