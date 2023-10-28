@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter import messagebox
 from PIL import Image, ImageTk
 from game import Game
 
@@ -7,67 +6,68 @@ class GameFrame:
     def __init__(self, root, game):
         self.root = root
         self.game = game
+        self.viewing_started = False  # Initialize the viewing flag
 
         self.root.title("Game")
-        self.root.geometry("800x600")  # Set the window size
+        self.root.geometry("1200x800")  # Set the window size
 
-        # Create a frame to center the content vertically
-        center_frame = tk.Frame(root)
-        center_frame.pack(expand=True, fill="both")
+        self.center_frame = tk.Frame(root)
+        self.center_frame.pack(fill=tk.BOTH, expand=True)
 
-        self.label = tk.Label(center_frame, text="Select a module:")
+        self.label = tk.Label(self.center_frame, text="Select a module:")
         self.label.pack()
 
         self.album_var = tk.StringVar()
-        self.album_var.set(game.albums[0])
+        if game.albums:
+            first_album = next(iter(game.albums))
+            self.album_var.set(first_album)
 
-        self.album_menu = tk.OptionMenu(center_frame, self.album_var, *game.albums)
+        self.album_menu = tk.OptionMenu(self.center_frame, self.album_var, *game.albums)
         self.album_menu.pack()
 
-        self.start_button = tk.Button(center_frame, text="Start", command=self.start_viewing)
+        self.start_button = tk.Button(self.center_frame, text="Start", command=self.start_viewing)
         self.start_button.pack()
 
         self.exit_button = tk.Button(root, text="Exit", command=root.quit)
-        self.exit_button.pack(side="bottom")
+        self.exit_button.pack(side=tk.BOTTOM)
 
         self.image_frame = tk.Frame(root)
-        self.image_frame.pack()
+        self.image_frame.pack(fill=tk.BOTH, expand=True)
 
         self.image_label = tk.Label(self.image_frame)
-        self.image_label.grid(row=0, column=0, columnspan=2)
+        self.image_label.pack(fill=tk.BOTH, expand=True)
 
-        # Create a nested frame for previous and next buttons and use grid within it
-        button_frame = tk.Frame(self.image_frame)
-        button_frame.grid(row=1, column=0, columnspan=2)
+        self.button_frame = tk.Frame(self.image_frame)
+        self.button_frame.pack(fill=tk.BOTH, expand=True)
 
-        self.prev_button = tk.Button(button_frame, text="Previous", command=self.show_previous_image)
-        self.next_button = tk.Button(button_frame, text="Next", command=self.show_next_image)
+        self.prev_button = tk.Button(self.button_frame, text="Previous", command=self.show_previous_image)
+        self.next_button = tk.Button(self.button_frame, text="Next", command=self.show_next_image)
 
-        self.prev_button.grid(row=0, column=0, sticky="nsew")
-        self.next_button.grid(row=0, column=1, sticky="nsew")
+        self.prev_button.pack(side=tk.LEFT)
+        self.next_button.pack(side=tk.RIGHT)
 
-        self.prev_button.grid_remove()  # Initially hide the previous button
-        self.next_button.grid_remove()  # Initially hide the next button
+        self.prev_button.pack_forget()  # Initially hide the previous button
+        self.next_button.pack_forget()  # Initially hide the next button
 
         self.answer_frame = tk.Frame(root)
 
-        self.answer_label = tk.Label(self.answer_frame, text="Your Answer:")
-        self.answer_label.pack(side=tk.LEFT)
+        self.answer_label = tk.Label(self.answer_frame, text="Challenge:")
+        self.answer_label.grid(row=0, column=0)
 
         self.answer_entry = tk.Entry(self.answer_frame)
-        self.answer_entry.pack(side=tk.LEFT)
+        self.answer_entry.grid(row=0, column=1)
         self.answer_entry.config(state=tk.DISABLED)
 
         self.submit_button = tk.Button(self.answer_frame, text="Submit", command=self.submit_answer)
-        self.submit_button.pack(side=tk.LEFT)
+        self.submit_button.grid(row=0, column=2)
         self.submit_button.config(state=tk.DISABLED)
 
+        self.answer_frame.pack(fill=tk.BOTH, expand=True)
         self.answer_frame.pack_forget()  # Initially hide the answer frame
 
     def start_viewing(self):
         album_name = self.album_var.get()
         self.game.set_current_album(album_name)
-        self.show_image()
         self.viewing_started = True  # Set viewing flag to true
 
         # Remove the "Select a module" and "Start" buttons
@@ -76,14 +76,18 @@ class GameFrame:
         self.start_button.pack_forget()
 
         # Show the previous and next buttons
-        self.prev_button.grid()
-        self.next_button.grid()
+        self.prev_button.pack(side=tk.LEFT)
+        self.next_button.pack(side=tk.RIGHT)
 
-        # Show the answer frame
-        self.answer_frame.pack()
+        self.show_image()  # Added to display the first image
+
     def show_image(self):
         current_image = self.game.get_current_image()
         current_challenge, _ = self.game.get_current_challenge()
+
+        # Remove the old image_label
+        if hasattr(self, "image_label"):
+            self.image_label.destroy()
 
         if current_image:
             # Resize the image to fit the window
@@ -92,25 +96,46 @@ class GameFrame:
             current_image = self.resize_image_to_fit_window(current_image, window_width, window_height)
 
             photo = ImageTk.PhotoImage(current_image)
-            self.image_label.config(image=photo)
-            self.image_label.image = photo
 
+            # Create a new image_label in the image_frame
+            self.image_label = tk.Label(self.image_frame, image=photo)
+            self.image_label.image = photo
+            self.image_label.pack(fill=tk.BOTH, expand=True)
+
+            if not self.viewing_started:
+                self.answer_frame.pack_forget()  # Hide answer frame when viewing starts
+
+            self.prev_button.config(state=tk.NORMAL)
+            self.next_button.config(state=tk.NORMAL)
+
+        else:
+            # No more images, so display the challenge
+            self.prev_button.config(state=tk.NORMAL)
+            self.next_button.config(state=tk.DISABLED)
+
+            self.answer_frame.pack(side=tk.TOP)
             self.answer_label.config(text=f"Challenge: {current_challenge}")
             self.answer_entry.delete(0, tk.END)
             self.answer_entry.config(state=tk.NORMAL)
             self.submit_button.config(state=tk.NORMAL)
-        else:
-            messagebox.showinfo("End of Module", "You've reached the end of the module!")
 
-    def resize_image_to_fit_window(self, image, window_width, window_height):
-        img_width, img_height = image.size
-        if img_width > window_width or img_height > window_height:
-            ratio = min(window_width / img_width, window_height / img_height)
-            new_width = int(img_width * ratio)
-            new_height = int(img_height * ratio)
-            return image.resize((new_width, new_height), Image.BILINEAR)
+    def resize_image_to_fit_window(self, image, new_w, new_h):
+        original_width, original_height = image.size
+        if new_w == 0:
+            scale_width = 1
         else:
-            return image
+            scale_width = new_w / original_width
+        if new_h == 0:
+            scale_height = 1
+        else:
+            scale_height = new_h / original_height
+
+        scale = min(scale_width, scale_height)
+        new_width = int(original_width * scale)
+        new_height = int(original_height * scale)
+
+        resized_image = image.resize((new_width, new_height), Image.BILINEAR)
+        return resized_image
 
     def show_previous_image(self):
         self.game.current_image_index -= 1
@@ -123,11 +148,21 @@ class GameFrame:
     def submit_answer(self):
         user_answer = self.answer_entry.get()
         result = self.game.check_answer(user_answer)
-        messagebox.showinfo("Result", result)
+        self.show_result(result)  # Show the result in the window
+
+        # Clear the answer entry
         self.answer_entry.delete(0, tk.END)
 
         if result == "Correct!":
             self.submit_button.config(state=tk.DISABLED)
+
+    def show_result(self, result):
+        if hasattr(self, "result_label"):
+            self.result_label.destroy()
+
+        self.result_label = tk.Label(self.answer_frame, text=result)
+        self.result_label.grid(row=1, column=0, columnspan=3)
+        self.result_label.pack()
 
 
 if __name__ == "__main__":
