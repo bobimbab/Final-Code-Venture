@@ -1,77 +1,30 @@
 import tkinter as tk
+import random
+from animations import AnimatedButton, FadingLabel,ConfettiApp
 from tkinter import ttk
 from quizzes import Quizzes
+import ast
 
 
 def load_quizzes() -> dict[str, Quizzes]:
     """
-    This function creates a Quizzes object and adds questions to it.
+    Load all quizzes from the quizzes.txt file
 
     """
     all_quizzes = {}
-    quiz = Quizzes("Python Data Types")
-    quiz2 = Quizzes("Python Programming")
-    # Adding multiple-choice questions and answers for the "Easy" difficulty
-
-    # Adding multiple-choice questions and answers for the "Easy" difficulty
-    quiz.add_question("Easy", "What data type is used to represent whole numbers in Python?",
-                      ["a) int", "b) float", "c) str"], "a) int")
-    quiz.add_question("Easy", "How do you create a string variable in Python?",
-                      ["a) str = 'Hello, World!'", "b) string = 'Hello, World!'", "c) s = 'Hello, World!'"],
-                      "a) str = 'Hello, World!'")
-
-    # Adding multiple-choice questions and answers for the "Medium" difficulty
-    quiz.add_question("Medium", "What is the result of the expression '5 / 2' in Python?", ["a) 2.5", "b) 2", "c) 2.0"],
-                      "a) 2.5")
-    quiz.add_question("Medium", "How do you check the data type of a variable in Python?",
-                      ["a) using the 'datatype()' function", "b) using the 'type()' function",
-                       "c) using the 'check_type()' function"], "b) using the 'type()' function")
-
-    # Adding multiple-choice questions and answers for the "Hard" difficulty
-    quiz.add_question("Hard", "What is the primary difference between a list and a tuple in Python?",
-                      ["a) Lists are mutable, while tuples are immutable.",
-                       "b) Lists can only store integers, while tuples can store any data type.",
-                       "c) Lists are used for mathematical calculations, while tuples are used for text processing."],
-                      "a) Lists are mutable, while tuples are immutable.")
-    quiz.add_question("Hard", "What is the purpose of the 'None' data type in Python?",
-                      ["a) It represents an empty string.", "b) It represents a missing or undefined value.",
-                       "c) It is used for type conversion."], "b) It represents a missing or undefined value")
-    quiz.add_question("Hard", "How do you define a dictionary in Python?",
-                      ["a) {key1: value1, key2: value2}", "b) [key1: value1, key2: value2]",
-                       "c) (key1: value1, key2: value2}"], "a) {key1: value1, key2: value2}")
-
-    # Adding multiple-choice questions and answers for the "Easy" difficulty
-    quiz2.add_question("Easy", "What is the result of 5 + 3 in Python?", "a) 8\nb) 15\nc) 53", "a) 8")
-    quiz2.add_question("Easy", "Which data type is used to represent decimal numbers in Python?",
-                       "a) int\nb) float\nc) str", "b) float")
-    quiz2.add_question("Easy", "What is the primary purpose of the 'if' statement in Python?",
-                       "a) To create a loop\nb) To define a function\nc) To make decisions in the code",
-                       "c) To make decisions in the code")
-
-    # Adding multiple-choice questions and answers for the "Medium" difficulty
-    quiz2.add_question("Medium", "Which operator is used for exponentiation in Python?", "a) +\nb) *\nc) ^\nd) **",
-                       "d) **")
-    quiz2.add_question("Medium", "What is the primary purpose of a Python function?",
-                       "a) To store data\nb) To perform a specific task or operation\nc) To create a class",
-                       "b) To perform a specific task or operation")
-    quiz2.add_question("Medium", "What is the correct way to comment multiple lines in Python?",
-                       "a) /* This is a comment */\nb) // This is a comment\nc) ''' This is a comment '''",
-                       "c) ''' This is a comment '''")
-
-    # Adding multiple-choice questions and answers for the "Hard" difficulty
-    quiz2.add_question("Hard", "What is the primary use of the 'global' keyword in Python?",
-                       "a) To define a global variable\nb) To indicate a variable is local to a function\nc) To define a class attribute",
-                       "a) To define a global variable")
-    quiz2.add_question("Hard", "What is the purpose of the 'lambda' function in Python?",
-                       "a) To create a list\nb) To define a class\nc) To create anonymous functions",
-                       "c) To create anonymous functions")
-    quiz2.add_question("Hard", "What is the result of the expression '10 / 3' in Python?", "a) 3\nb) 3.33\nc) 3.0",
-                       "b) 3.33")
-
-    all_quizzes[quiz.title] = quiz
-    all_quizzes[quiz2.title] = quiz2
+    with open("data/quizzes.txt", "r") as file:
+        quizzes = file.readlines()
+        for line in quizzes:
+            quiz = line.strip().split(";")
+            quiz_title = quiz[0]
+            quiz_difficulty = quiz[1]
+            quiz_questions = quiz[2]
+            quiz_options = ast.literal_eval(quiz[3])
+            quiz_answers = quiz[4]
+            if quiz_title not in all_quizzes:
+                all_quizzes[quiz_title] = Quizzes(quiz_title)
+            all_quizzes[quiz_title].add_question(quiz_difficulty, quiz_questions, quiz_options, quiz_answers)
     return all_quizzes
-
 
 
 class QuizzesMenuFrame(tk.Frame):
@@ -142,9 +95,8 @@ class QuizzesMenuFrame(tk.Frame):
             self.warning_text.set("Please select a quiz!")
             return
 
-        print(selected_quiz)
         self.place_forget()
-        choose_difficulty_frame = ChooseDifficultyFrame(self.parent, selected_quiz)
+        choose_difficulty_frame = ChooseDifficultyFrame(self.parent, selected_quiz,self)
         choose_difficulty_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
 
@@ -152,9 +104,10 @@ class ChooseDifficultyFrame(tk.Frame):
     """
     Frame to choose difficulty level
     """
-    def __init__(self,parent,selected_quiz):
+    def __init__(self,parent,selected_quiz,quiz_menu):
         super().__init__(parent)
         self.selected_quiz = selected_quiz
+        self.quiz_menu = quiz_menu
         self.parent = parent
 
         style = ttk.Style()
@@ -179,7 +132,7 @@ class ChooseDifficultyFrame(tk.Frame):
         self.selected_quiz.reset_quiz()
         self.selected_quiz.set_difficulty(choice)
         self.place_forget()
-        play_quiz_frame = PlayQuizFrame(self.parent, self.selected_quiz)
+        play_quiz_frame = PlayQuizFrame(self.parent, self.selected_quiz,self.quiz_menu)
         play_quiz_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
 
@@ -187,9 +140,12 @@ class PlayQuizFrame (tk.Frame):
     """
     The class definition for the PlayQuizFrame class.
     """
-    def __init__(self, parent, selected_quiz):
+    def __init__(self, parent, selected_quiz,quiz_menu):
         super().__init__(parent)
+        self.quiz_menu = quiz_menu
+        self.parent = parent
         self.selected_quiz = selected_quiz
+        self.score = 0 # Initialise score to 0
 
         # Set up the frame title
         quiz_title = tk.Label(self, text=self.selected_quiz.get_quiz_title(), font=("Arial", 20, "bold"))
@@ -202,36 +158,103 @@ class PlayQuizFrame (tk.Frame):
         self.question.pack(pady=10)
 
         # Create question widgets
-        for question in selected_quiz.questions:
-            question_label = tk.Label(self, text=question, font=("Arial", 16))
-            question_label.pack(pady=10)
+        self.options = self.selected_quiz.current_options
+        self.option_buttons = []
 
-            # Create answer options as radio buttons
-            # For example, use a loop to create radio buttons for answer options
-            # Option 1: tk.Radiobutton(...)
-            # Option 2: tk.Radiobutton(...)
-            # ...
-
-        # Create a "Submit" button
-        submit_button = tk.Button(self, text="Submit", font=("Arial", 14), command=self.update_questions)
-        submit_button.pack(pady=20)
+        for options in self.options:
+            option = AnimatedButton(self, text=options, font=("Arial", 14), command=lambda o=options: self.submit_quiz(o))
+            option.pack(pady=5)
+            self.option_buttons.append(option)
 
         # Back button to return to the quiz selection menu
-        back_button = tk.Button(self, text="Return to Menu", font=("Arial", 14), command="")
+        back_button = tk.Button(self, text="Return to Menu", font=("Arial", 14), command=self.return_to_menu)
         back_button.pack(pady=10)
 
-    def update_questions(self):
-        # Implement logic to update the questions in the same frame
-        self.selected_quiz.next_question()
-        self.quiz_question.set(f"{self.selected_quiz.current_question}")
+    def update_options(self, new_options):
+        self.options = new_options
+        for button, option_text in zip(self.option_buttons, new_options):
+            # change the text on the button
+            button.config(text=option_text)
+            # ensure that the button updates its value before calling the sumbit_quiz()
+            button.config(command=lambda o=option_text: self.submit_quiz(o))
 
-    def submit_quiz(self):
+        # ensure that buttons from the excess buttons are removed
+        for button in self.option_buttons[len(new_options):]:
+            button.pack_forget()
+
+    def submit_quiz(self,answer):
         # Implement quiz submission logic
-        pass
+        self.validate_answer(answer)
+        try:
+            self.selected_quiz.next_question()
+        except IndexError:
+            self.place_forget()
+            play_quiz_frame = QuizResultsFrame(self.parent, self.selected_quiz, self.quiz_menu,self.score)
+            play_quiz_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+        self.quiz_question.set(f"{self.selected_quiz.current_question}")
+        self.update_options(self.selected_quiz.current_options)
+
+    def validate_answer(self, answer):
+        # Implement the logic to validate the answer
+        print("your answer",answer)
+        print("current answer",self.selected_quiz.current_answer)
+        if answer == self.selected_quiz.current_answer:
+            self.score += 1
+            fading_label = FadingLabel(root, text="Correct", font=("Arial", 20,"bold"))
+            fading_label.pack(pady=10)
+        else:
+            fading_label = FadingLabel(root, text="Incorrect", font=("Arial", 20,"bold"))
+            fading_label.pack(pady=10)
 
     def return_to_menu(self):
         # Implement the logic to return to the quiz selection menu
-        pass
+        self.score = 0
+        self.selected_quiz.reset_quiz()
+        self.place_forget()
+        self.quiz_menu.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+
+class QuizResultsFrame(tk.Frame):
+    """
+    The class definition for the QuizResultsFrame class.
+    """
+    message = ["GREAT JOB!", "GOOD JOB!", "NICE!", "WELL DONE!"]
+
+    def __init__(self, parent, selected_quiz,quiz_menu,player_score):
+        super().__init__(parent)
+        self.quiz_menu = quiz_menu
+        self.score = player_score
+        self.selected_quiz = selected_quiz
+        self.parent = parent
+
+        # Set up the frame title
+        quiz_title = tk.Label(self, text= random.choice(self.message), font=("Arial", 20, "bold"))
+        quiz_title.pack(pady=10)
+
+        score_label = tk.Label(self, text="Your Score", font=("Arial", 14))
+        score_label.pack(pady=10)
+
+        # Display quiz results
+        self.quiz_results = tk.StringVar()
+        self.quiz_results.set(f"{self.score} out of {self.selected_quiz.get_number_of_questions}" )
+        self.results = tk.Label(self, textvariable=self.quiz_results, font=("Arial", 14))
+        self.results.pack(pady=10)
+
+        # Play again button
+        self.play_again_button = tk.Button(self, text="Play Again", font=("Arial", 14), command="")
+        self.play_again_button.pack(pady=10)
+
+        # Back button to return to the quiz selection menu
+        self.back_button = tk.Button(self, text="Return to Menu", font=("Arial", 14), command=self.return_to_menu)
+        self.back_button.pack(pady=10)
+
+    def return_to_menu(self):
+        # Implement the logic to return to the quiz selection menu
+        self.score = 0
+        self.selected_quiz.reset_quiz()
+        self.place_forget()
+        self.quiz_menu.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
 
 if __name__ == "__main__":

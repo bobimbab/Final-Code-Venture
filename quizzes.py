@@ -14,6 +14,15 @@ class Quizzes:
         # State variable to keep track of the current question index
         self.current_question_index = 0
 
+    @classmethod
+    def create_quiz(cls, title: str):
+        """
+        Create a quiz object with the given title
+        :param title:
+        :return:
+        """
+        pass
+
     def get_quiz_title(self):
         return self.title
 
@@ -30,6 +39,7 @@ class Quizzes:
         return f"{self.player_difficulty} Questions:\n{self.format_questions(self.questions)}\n"
 
     def add_question(self, difficulty: str, question: str, options: list[str], answer: str) -> None:
+        """Add question into the quiz"""
         if difficulty == "Easy":
             self.easy_questions.append((question, options, answer))
         elif difficulty == "Medium":
@@ -52,8 +62,17 @@ class Quizzes:
     def current_question(self) -> str:
         return self.questions[self.current_question_index][0]
 
+    @property
     def current_options(self) -> list:
         return self.questions[self.current_question_index][1]
+
+    @property
+    def current_answer(self) -> str:
+        return self.questions[self.current_question_index][2]
+
+    @property
+    def get_number_of_questions(self) -> int:
+        return len(self.questions)
 
     def next_question(self) -> None:
         if self.current_question_index < len(self.questions) - 1:
@@ -112,7 +131,8 @@ if __name__ == "__main__":
 
     # print(quiz)
     quiz.set_difficulty(1)
-    print(quiz)
+    print(quiz.current_options)
+
 
 
 
