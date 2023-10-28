@@ -74,7 +74,7 @@ class LoginFrame(tk.Frame):
 
         # Button to register new account
         register_button = tk.Button(master=self, text="Register New Account", command=self.switch_to_register)
-        register_button.grid(row=7, columnspan=2, padx=10, pady=10)
+        register_button.grid(row=7, columnspan=2, padx=10, pady=2)
 
     def switch_to_forgot_pw(self):
         self.place_forget()
@@ -103,9 +103,6 @@ class LoginFrame(tk.Frame):
 
         if isinstance(auth_res, User):
 
-            # Removes login successful text when logging out
-            # self.login_text.set("")
-
             if isinstance(auth_res, YoungLearner):  # Check if the user is a YoungLearner
                 self.login_text.set("Login successfully!")
                 self.password_entry.delete(0, 'end')
@@ -114,6 +111,9 @@ class LoginFrame(tk.Frame):
                 # Create and display the YoungLearnerFrame with the authenticated user
                 young_learner_frame = YoungLearnerFrame(self.master, self, auth_res)
                 young_learner_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+                # Removes login successful text when logging out
+                self.login_text.set("")
 
 
             elif auth_res.get_role() == "AD":  # Admin login
@@ -125,6 +125,9 @@ class LoginFrame(tk.Frame):
                 # Create and display the Admin frame
                 admin_frame = AdminFrame(self.master, self, auth_res)
                 admin_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+                # Removes login successful text when logging out
+                self.login_text.set("")
 
         else:
             self.login_text.set("Failed to login")
