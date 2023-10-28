@@ -57,4 +57,3 @@ if __name__ == "__main__":
     login = YoungLearnerFrame(tk.Tk(),None,None)
     login.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
     login.mainloop()
-

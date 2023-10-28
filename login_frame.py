@@ -2,7 +2,6 @@ import tkinter as tk
 from user import User, YoungLearner, Admin
 from authenticator import Authenticator
 from register_frame import RegisterFrame
-from younglearner_frame import YoungLearnerFrame
 
 class LoginFrame(tk.Frame):
     """
@@ -113,9 +112,6 @@ class LoginFrame(tk.Frame):
 
             elif auth_res.get_role() in ["YL", "AD"]:
                 self.login_text.set("Login successfully!")
-                self.place_forget()
-                yl_frame = YoungLearnerFrame(self.master, self)
-                yl_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
                 # TESTING USAGE
                 print("auth_res:", auth_res)
                 # print("Role:", auth_res.get_role())
