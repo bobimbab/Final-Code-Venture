@@ -1,4 +1,5 @@
 from user import User, YoungLearner, Admin
+from datetime import datetime
 
 
 class Authenticator:
@@ -17,32 +18,14 @@ class Authenticator:
             with open(self.file_path, "r", encoding="utf8") as users_f:
                 users_lines = users_f.readlines()
                 for line in users_lines:
-                    (first_name,
-                     last_name,
-                     username,
-                     password,
-                     dob,
-                     email,
-                     ph_num,
-                     role,
-                     grade) = line.strip().split(",")
+                    user_data = line.strip().split(",")
+                    (first_name, last_name, username, password, dob_str, email, ph_num, role, grade) = user_data
                     if role == "YL":
-                        user_obj = YoungLearner(first_name=first_name,
-                                                last_name=last_name,
-                                                username=username,
-                                                password=password,
-                                                dob=dob,
-                                                email=email,
-                                                ph_num=ph_num,
-                                                grade=grade)
+                        dob = datetime.strptime(dob_str, "%Y-%m-%d").date()
+                        user_obj = YoungLearner(first_name, last_name, username, password, dob, email, ph_num, grade)
                     else:
-                        user_obj = Admin(first_name=first_name,
-                                         last_name=last_name,
-                                         username=username,
-                                         password=password,
-                                         dob=dob,
-                                         email=email,
-                                         ph_num=ph_num)
+                        dob = datetime.strptime(dob_str, "%Y-%m-%d").date()
+                        user_obj = Admin(first_name, last_name, username, password, dob, email, ph_num)
                     self.users.append(user_obj)
             return True
         except FileNotFoundError:
@@ -56,6 +39,7 @@ class Authenticator:
         try:
             with open(self.file_path, "w", encoding="utf8") as users_f:
                 for user_obj in self.users:
+                    dob_str = user_obj._dob.strftime("%Y-%m-%d")
                     if user_obj.get_role() == "YL":
                         role = "YL"
                         user_data = ",".join([
@@ -63,7 +47,7 @@ class Authenticator:
                             user_obj._last_name,
                             user_obj._username,
                             user_obj._password,
-                            user_obj._dob.strftime("%Y-%m-%d"),
+                            dob_str,
                             user_obj._email or "",  # Handle None
                             user_obj._ph_num or "",  # Handle None
                             role,
@@ -76,14 +60,14 @@ class Authenticator:
                             user_obj._last_name,
                             user_obj._username,
                             user_obj._password,
-                            user_obj._dob.strftime("%Y-%m-%d"),
+                            dob_str,
                             user_obj._email or "",  # Handle None
                             user_obj._ph_num or "",  # Handle None
                             role
                         ])
                     users_f.write(user_data + "\n")
         except FileNotFoundError:
-            print(f"The file \"{self.file_path}\" does not exist!")
+            print(f"The file \"{self.file_path}\" does not exist.")
 
     def authenticate(self, input_username, input_password):
         """
@@ -140,9 +124,4 @@ class Authenticator:
 
 
 if __name__ == "__main__":
-    # Feel free to amend this block while working or testing,
-    # but any amendments here should be reverted upon submission.
-    # You will not be assessed for any work here, but if any code
-    # written here causes an error when running week11_interface.py,
-    # then marks will be deducted.
     pass
