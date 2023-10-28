@@ -7,11 +7,11 @@ class YoungLearnerFrame(tk.Frame):
     """
     A child class that inherits its parents (User).
     """
-    def __init__(self, master,login_frame, user_obj):
+    def __init__(self, master,login_frame):
         super().__init__(master)
         self.master = master
         self.login_frame=login_frame
-        self.user_obj = user_obj
+        # self.user_obj = user_obj
 
         for row_count in range(5):
             self.master.rowconfigure(row_count, weight=1, uniform="row")
@@ -29,9 +29,6 @@ class YoungLearnerFrame(tk.Frame):
 
         logout = tk.Button(self, text="Logout", command=self.logout)
         logout.grid(row=3, column=0, padx=10, pady=10)
-
-
-    @staticmethod
 
     def play_game(self):
         self.place_forget()
