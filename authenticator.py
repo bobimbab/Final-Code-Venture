@@ -19,11 +19,16 @@ class Authenticator:
                 users_lines = users_f.readlines()
                 for line in users_lines:
                     user_data = line.strip().split(",")
-                    (first_name, last_name, username, password, dob_str, email, ph_num, role, grade) = user_data
-                    if role == "YL":
+                    # DEBUGGING USE
+                    print(user_data)
+                    # (first_name, last_name, username, password, dob_str, email, ph_num, role, grade) = user_data
+                    if len(user_data) == 9:
+                    # if role == "YL":
+                        (first_name, last_name, username, password, dob_str, email, ph_num, role, grade) = user_data
                         dob = datetime.strptime(dob_str, "%Y-%m-%d").date()
                         user_obj = YoungLearner(first_name, last_name, username, password, dob, email, ph_num, grade)
                     else:
+                        (first_name, last_name, username, password, dob_str, email, ph_num, role) = user_data
                         dob = datetime.strptime(dob_str, "%Y-%m-%d").date()
                         user_obj = Admin(first_name, last_name, username, password, dob, email, ph_num)
                     self.users.append(user_obj)
@@ -54,7 +59,7 @@ class Authenticator:
                             str(user_obj._grade)
                         ])
                     else:
-                        role = "Admin"
+                        role = "AD"
                         user_data = ",".join([
                             user_obj._first_name,
                             user_obj._last_name,
