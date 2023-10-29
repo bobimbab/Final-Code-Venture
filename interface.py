@@ -28,8 +28,8 @@ class Interface(tk.Tk):
 # TESTING USE
 if __name__ == "__main__":
     # DO NOT MODIFY THIS
-    hcms = Interface("xxx")
-    login = LoginFrame(hcms)
+    x = Interface("CodeVenture Application")
+    login = LoginFrame(x)
     login.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-    hcms.mainloop()
+    x.mainloop()
     print("--- End of program execution ---")

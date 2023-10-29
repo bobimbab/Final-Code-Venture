@@ -1,118 +1,175 @@
 import tkinter as tk
 from PIL import Image, ImageTk
-from game import GameLogic
+from game import Game
 
-class GameFrame(tk.Frame):
-    def __init__(self, parent):
-        super().__init__(parent)
-        self.parent = parent
-        self.game_logic = None
-        self.navigation_frame = None
-        self.current_image = None  # Store the current image as an attribute
+class GameFrame:
+    def __init__(self, root, game):
+        self.root = root
+        self.game = game
+        self.viewing_started = False  # Initialize the viewing flag
 
-        self.difficulty_var = tk.StringVar()
-        self.difficulty_var.set("easy")  # Default difficulty
+        self.root.title("Game")
+        self.root.geometry("1200x800")  # Set the window size
 
-        self.create_widgets()
+        self.center_frame = tk.Frame(root)
+        self.center_frame.pack(fill=tk.BOTH, expand=True)
 
-    def create_widgets(self):
-        # Create and place the navigation frame
-        self.navigation_frame = tk.Frame(self.parent)
-        self.navigation_frame.grid(row=0, column=0, columnspan=2)
+        self.label = tk.Label(self.center_frame, text="Select a module:")
+        self.label.pack()
 
-        self.difficulty_label = tk.Label(self, text="Choose Difficulty:")
-        self.difficulty_label.grid(row=1, column=0)
+        self.album_var = tk.StringVar()
+        if game.albums:
+            first_album = next(iter(game.albums))
+            self.album_var.set(first_album)
 
-        difficulty_options = ["easy", "medium", "hard"]
-        self.difficulty_menu = tk.OptionMenu(self, self.difficulty_var, *difficulty_options)
-        self.difficulty_menu.grid(row=1, column=1)
+        self.album_menu = tk.OptionMenu(self.center_frame, self.album_var, *game.albums)
+        self.album_menu.pack()
 
-        self.start_button = tk.Button(self, text="Start Game", command=self.start_game)
-        self.start_button.grid(row=2, column=0, columnspan=2)
+        self.start_button = tk.Button(self.center_frame, text="Start", command=self.start_viewing, bg='#d3f2e0',
+                                      foreground='#087513')
+        self.start_button.pack()
 
-        self.canvas = tk.Canvas(self)
-        self.canvas.grid(row=3, column=0, columnspan=2)
+        self.exit_button = tk.Button(root, text="Exit", command=root.quit, bg='#f2dad3', foreground='red')
+        self.exit_button.pack(side=tk.BOTTOM)
 
-        self.question_label = tk.Label(self, text="")
-        self.question_label.grid(row=4, column=0, columnspan=2)
+        self.image_frame = tk.Frame(root)
+        self.image_frame.pack(fill=tk.BOTH, expand=True)
 
-        self.previous_button = tk.Button(self, text="Previous", command=self.previous_image)
-        self.next_button = tk.Button(self, text="Next", command=self.next_image)
+        self.image_label = tk.Label(self.image_frame)
+        self.image_label.pack(fill=tk.BOTH, expand=True)
 
-        self.create_exit_button()  # Create the exit button
+        self.button_frame = tk.Frame(self.image_frame)
+        self.button_frame.pack(fill=tk.BOTH, expand=True)
 
-    def create_exit_button(self):
-        self.exit_button = tk.Button(self, text="Exit", command=self.exit_game)
-        self.exit_button.grid(row=5, column=0, columnspan=2)
-        # Show the exit button by default
-        self.exit_button.grid()
+        self.prev_button = tk.Button(self.button_frame, text="Previous", command=self.show_previous_image, bg='#d3e3c5')
+        self.next_button = tk.Button(self.button_frame, text="Next", command=self.show_next_image, bg='#d3e3c5')
 
-    def start_game(self):
-        difficulty = self.difficulty_var.get()
-        self.game_logic = GameLogic(difficulty)
-        self.game_logic.load_images()
-        self.game_logic.load_questions()
-        self.display_current_image()
+        self.prev_button.pack(side=tk.LEFT)
+        self.next_button.pack(side=tk.RIGHT)
 
-        # Clear the "Choose Difficulty" label and the "Start Game" button
-        self.difficulty_label.destroy()
-        self.difficulty_menu.destroy()
-        self.start_button.destroy()
+        self.prev_button.pack_forget()  # Initially hide the previous button
+        self.next_button.pack_forget()  # Initially hide the next button
 
-        self.previous_button.grid(row=5, column=0)  # Show the previous button
-        self.next_button.grid(row=5, column=1)  # Show the next button
+        self.answer_frame = tk.Frame(root)
 
-        self.create_exit_button()  # Create the exit button after the game starts
+        self.answer_label = tk.Label(self.answer_frame, text="Challenge:")
+        self.answer_label.grid(row=0, column=0, pady=300)
 
-    def display_current_image(self):
-        current_image_path = self.game_logic.get_current_image()
-        image = Image.open(current_image_path)
-        resized_image = self.resize_image(image)
+        self.answer_entry = tk.Entry(self.answer_frame)
+        self.answer_entry.grid(row=0, column=1)
+        self.answer_entry.config(state=tk.DISABLED)
 
-        self.canvas.delete("all")  # Clear canvas before drawing new image
-        self.current_image = resized_image  # Store the PhotoImage object
-        self.canvas.create_image(0, 0, anchor="nw", image=self.current_image)
-    def resize_image(self, image):
-        canvas_width = self.canvas.winfo_width()
-        canvas_height = self.canvas.winfo_height()
-        image_width, image_height = image.size
+        self.submit_button = tk.Button(self.answer_frame, text="Submit", command=self.submit_answer, bg='#f5f3b3')
+        self.submit_button.grid(row=0, column=2)
+        self.submit_button.config(state=tk.DISABLED)
 
-        # Calculate the aspect ratio to maintain the image's original proportions
-        aspect_ratio = min(canvas_width / image_width, canvas_height / image_height)
-        new_width = int(image_width * aspect_ratio)
-        new_height = int(image_height * aspect_ratio)
+        self.answer_frame.pack(fill=tk.BOTH, expand=True)
+        self.answer_frame.pack_forget()  # Initially hide the answer frame
 
-        resized_image = image.resize((new_width, new_height), Image.LANCZOS)
-        return ImageTk.PhotoImage(resized_image)
+    def start_viewing(self):
+        album_name = self.album_var.get()
+        self.game.set_current_album(album_name)
+        self.viewing_started = True  # Set viewing flag to true
 
-    def display_current_question(self):
-        current_question = self.game_logic.get_current_question()
-        self.canvas.grid_forget()
-        self.question_label.config(text=current_question)
+        # Remove the "Select a module" and "Start" buttons
+        self.label.pack_forget()
+        self.album_menu.pack_forget()
+        self.start_button.pack_forget()
 
-        # Update the grid layout to properly position the buttons
-        self.previous_button.grid(row=6, column=0)
-        self.next_button.grid(row=6, column=1)
-        self.exit_button.grid_remove()  # Remove the duplicate exit button
+        # Show the previous and next buttons
+        self.prev_button.pack(side=tk.LEFT)
+        self.next_button.pack(side=tk.RIGHT)
 
-    def next_image(self):
-        self.game_logic.next_image()
-        self.display_current_image()
-        if self.game_logic.current_image_index == len(self.game_logic.images) - 1:
-            self.display_current_question()
+        self.show_image()  # Added to display the first image
 
-    def previous_image(self):
-        self.game_logic.previous_image()
-        self.display_current_image()
+    def show_image(self):
+        current_image = self.game.get_current_image()
+        current_challenge, _ = self.game.get_current_challenge()
 
-    def exit_game(self):
-        self.parent.destroy()  # Destroy the current frame and exit the application
+        # Remove the old image_label
+        if hasattr(self, "image_label"):
+            self.image_label.destroy()
+
+        if current_image:
+            # Resize the image to fit the window
+            window_width = self.root.winfo_width()
+            window_height = self.root.winfo_height()
+            current_image = self.resize_image_to_fit_window(current_image, window_width, window_height)
+
+            photo = ImageTk.PhotoImage(current_image)
+
+            # Create a new image_label in the image_frame
+            self.image_label = tk.Label(self.image_frame, image=photo)
+            self.image_label.image = photo
+            self.image_label.pack(fill=tk.BOTH, expand=True)
+
+            if not self.viewing_started:
+                self.answer_frame.pack_forget()  # Hide answer frame when viewing starts
+
+            self.prev_button.config(state=tk.NORMAL)
+            self.next_button.config(state=tk.NORMAL)
+
+        else:
+            # No more images, so display the challenge
+            self.prev_button.config(state=tk.NORMAL)
+            self.next_button.config(state=tk.DISABLED)
+
+            self.answer_frame.pack(side=tk.TOP)
+            self.answer_label.config(text=f"Challenge: {current_challenge}")
+            self.answer_entry.delete(0, tk.END)
+            self.answer_entry.config(state=tk.NORMAL)
+            self.submit_button.config(state=tk.NORMAL)
+
+    def resize_image_to_fit_window(self, image, new_w, new_h):
+        original_width, original_height = image.size
+        if new_w == 0:
+            scale_width = 1
+        else:
+            scale_width = new_w / original_width
+        if new_h == 0:
+            scale_height = 1
+        else:
+            scale_height = new_h / original_height
+
+        scale = min(scale_width, scale_height)
+        new_width = int(original_width * scale)
+        new_height = int(original_height * scale)
+
+        resized_image = image.resize((new_width, new_height), Image.BILINEAR)
+        return resized_image
+
+    def show_previous_image(self):
+        self.game.current_image_index -= 1
+        self.show_image()
+
+    def show_next_image(self):
+        self.game.current_image_index += 1
+        self.show_image()
+
+    def submit_answer(self):
+        user_answer = self.answer_entry.get()
+        result = self.game.check_answer(user_answer)
+        self.show_result(result)  # Show the result in the window
+
+        # Clear the answer entry
+        self.answer_entry.delete(0, tk.END)
+
+        if result == "Correct!":
+            self.submit_button.config(state=tk.DISABLED)
+
+    def show_result(self, result):
+        if hasattr(self, "result_frame"):
+            self.result_frame.destroy()
+
+        self.result_frame = tk.Frame(self.answer_frame)
+        self.result_frame.grid(row=1, column=0, columnspan=3)
+
+        self.result_label = tk.Label(self.result_frame, text=result)
+        self.result_label.grid(row=0, column=0)
+
 
 if __name__ == "__main__":
     root = tk.Tk()
-    root.geometry("1000x800")
-
-    game_frame = GameFrame(root)
-    game_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)  # Place the frame in the center
-
+    game = Game()
+    app = GameFrame(root, game)
     root.mainloop()

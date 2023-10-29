@@ -2,6 +2,9 @@ import tkinter as tk
 from user import User, YoungLearner, Admin
 from authenticator import Authenticator
 from register_frame import RegisterFrame
+from younglearner_frame import YoungLearnerFrame
+from admin_frame import AdminFrame
+from forgotPw_frame import ForgotPwFrame
 
 class LoginFrame(tk.Frame):
     """
@@ -66,18 +69,27 @@ class LoginFrame(tk.Frame):
         login_message.grid(row=5, columnspan=2, padx=10, pady=10)
 
         # Button to reset password
-        pw_reset_button = tk.Button(master=self, text="Forgot Password")
+        pw_reset_button = tk.Button(master=self, text="Forgot Password", command=self.switch_to_forgot_pw)
         pw_reset_button.grid(row=6, columnspan=2, padx=10, pady=10)
 
         # Button to register new account
         register_button = tk.Button(master=self, text="Register New Account", command=self.switch_to_register)
-        register_button.grid(row=7, columnspan=2, padx=10, pady=10)
+        register_button.grid(row=7, columnspan=2, padx=10, pady=2)
+
+    def switch_to_forgot_pw(self):
+        self.place_forget()
+        forgot_pw_frame = ForgotPwFrame(self.master, login_frame=self)
+        forgot_pw_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        # DEBUGGING USE
+        print("Currently in forgot password frame")
 
     def switch_to_register(self):
         self.place_forget()
-        register_frame = RegisterFrame(self.master)
+        register_frame = RegisterFrame(self.master, login_frame=self)
         # register_frame = RegisterFrame(master=self)
         register_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)  # Display the register frame
+        # DEBUGGING USE
+        print("Currently in register frame")
 
     def authenticate_login(self):
         """
@@ -91,33 +103,34 @@ class LoginFrame(tk.Frame):
 
         if isinstance(auth_res, User):
 
-            # Removes login successful text when logging out
-            # self.login_text.set("")
-
-            if auth_res.get_role() == "PA":  # patient login
-
-                # Clears password and username input from index 0 to the end of index upon successful login
-                # Not visible until user logs out
+            if isinstance(auth_res, YoungLearner):  # Check if the user is a YoungLearner
+                self.login_text.set("Login successfully!")
                 self.password_entry.delete(0, 'end')
                 self.username_entry.delete(0, 'end')
+                self.place_forget()
+                # Create and display the YoungLearnerFrame with the authenticated user
+                young_learner_frame = YoungLearnerFrame(self.master, self, auth_res)
+                young_learner_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
-                # Remove login page from display
+                # Removes login successful text when logging out
+                self.login_text.set("")
+
+
+            elif auth_res.get_role() == "AD":  # Admin login
+                self.login_text.set("Login successfully!")
+                self.password_entry.delete(0, 'end')
+                self.username_entry.delete(0, 'end')
                 self.place_forget()
 
-                # Create and display the Patient login frame
-                login_frame = YoungLearner(self.master, self, auth_res)
-                login_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+                # Create and display the Admin frame
+                admin_frame = AdminFrame(self.master, self, auth_res)
+                admin_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
-            elif auth_res.get_role() in ["YL", "AD"]:
-                self.login_text.set("Login successfully!")
-                # TESTING USAGE
-                print("auth_res:", auth_res)
-                # print("Role:", auth_res.get_role())
+                # Removes login successful text when logging out
+                self.login_text.set("")
+
         else:
             self.login_text.set("Failed to login")
-            # TESTING USAGE
-            print("auth_res:", auth_res)
-            # print("Role:", auth_res.get_role())
 
 
 def main():

@@ -1,65 +1,68 @@
 import os
+from PIL import Image
 
 
-class GameLogic:
-    def __init__(self, difficulty):
-        self.difficulty = difficulty
-        self.images = []
+class Game:
+    def __init__(self):
+        self.albums = {}  # Use a dictionary to store albums
+        self.current_album = None
         self.current_image_index = 0
-        self.questions = []
-        self.progress = 0
+        self.questions = {}
+        self.load_albums_and_images()
+        self.load_challenges_and_answers()
 
-    def load_images(self):
-        # Load the series of images based on the difficulty chosen
-        module_folder = os.path.join(os.path.dirname(__file__), "data")
-        image_folder = os.path.join(module_folder, "module_content")
-        image_txt_path = os.path.join(module_folder, "modules.txt")
+    def load_albums_and_images(self):
+        data_directory = "data"
+        module_content_directory = "module_content"
+        albums_file_path = os.path.join(data_directory, 'modules.txt')
 
-        with open(image_txt_path, "r") as file:
-            image_lines = file.readlines()
-            images_by_difficulty = {}
+        with open(albums_file_path, 'r') as file:
+            for line in file:
+                album_name, image_names = line.strip().split(': ')
+                image_names = image_names.split(', ')
+                image_paths = [os.path.join(data_directory, module_content_directory, album_name, name) for name in
+                               image_names]
+                self.albums[album_name] = image_paths  # Store image paths in the dictionary
 
-            for line in image_lines:
-                line = line.strip()
-                difficulty, images = line.split(":")
-                images_by_difficulty[difficulty] = [os.path.join(image_folder, image.strip()) for image in images.split(",")]
+    def load_challenges_and_answers(self):
+        data_directory = "data"
+        challenges_file_path = os.path.join(data_directory, 'challenges.txt')
+        with open(challenges_file_path, 'r') as file:
+            for line in file:
+                album_name, question, answer = line.strip().split(': ')
+                self.questions[album_name] = (question, answer)
 
-            self.images = images_by_difficulty.get(self.difficulty, [])
-
-    def load_questions(self):
-        # Load the questions after each series of images
-        with open("data/challenges.txt", "r") as file:
-            question_lines = file.readlines()
-            for line in question_lines:
-                question = line.strip()
-                self.questions.append(question)
-
-    def save_progress(self):
-        # Save the progress to a text file
-        with open("data/progress.txt", "w") as file:
-            file.write(str(self.progress))
+    def set_current_album(self, album_name):
+        self.current_album = album_name
+        self.current_image_index = 0
 
     def get_current_image(self):
-        # Get the current image based on the current_image_index
-        return self.images[self.current_image_index]
+        if self.current_album is not None:
+            image_paths = self.albums.get(self.current_album)
+            if image_paths and 0 <= self.current_image_index < len(image_paths):
+                image_path = image_paths[self.current_image_index]
+                return Image.open(image_path)
+        return None
 
-    def get_current_question(self):
-        # Get the current question based on the current_image_index
-        return self.questions[self.current_image_index]
+    def get_current_challenge(self):
+        if self.current_album is not None:
+            return self.questions.get(self.current_album, ("No question", "No answer"))
 
-    def next_image(self):
-        # Move to the next image
-        if self.current_image_index < len(self.images) - 1:
-            self.current_image_index += 1
-            self.progress += 1
+    def has_next_image(self):
+        if self.current_album is not None:
+            image_paths = self.albums.get(self.current_album)
+            if image_paths and self.current_image_index < len(image_paths) - 1:
+                return True
+        return False
 
-    def previous_image(self):
-        # Move to the previous image
-        if self.current_image_index > 0:
-            self.current_image_index -= 1
-            self.progress -= 1
+    def has_previous_image(self):
+        return self.current_image_index > 0
 
-    def answer_question(self, answer):
-        # Handle the user's answer to the question
-        
-        pass
+    def get_current_image_index(self):
+        return self.current_image_index
+
+    def set_current_image_index(self, index):
+        self.current_image_index = index
+
+    def check_answer(self, user_answer):
+        _, correct_answer = self.get_current_challenge()

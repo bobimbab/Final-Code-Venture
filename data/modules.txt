@@ -1,3 +1,5 @@
-easy: image1.jpg
-medium: image4.jpg, image5.jpg, image6.jpg
-hard: image7.jpg, image8.jpg, image9.jpg
+basic syntax: image1.jpg, image2.jpg
+variables and types: image4.jpg, image5.jpg, image6.jpg
+operators: image.jpg
+loops: image7.jpg, image8.jpg, image9.jpg
+functions: image10.jpg

@@ -1,1 +1,5 @@
+Library used:
 Pillow~=10.0.0
+
+tkcalendar
+command: pip install tkcalendar
