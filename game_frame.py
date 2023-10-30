@@ -1,10 +1,10 @@
 import tkinter as tk
 from datetime import date
-
 from PIL import Image, ImageTk
 from game import Game
 from younglearner_frame import YoungLearnerFrame
 from user import YoungLearner
+
 
 class GameFrame(tk.Frame):
     def __init__(self, root, young_learner_frame, user_obj):
@@ -135,7 +135,8 @@ class GameFrame(tk.Frame):
             self.answer_entry.config(state=tk.NORMAL)
             self.submit_button.config(state=tk.NORMAL)
 
-    def resize_image_to_fit_window(self, image, new_w, new_h):
+    @staticmethod
+    def resize_image_to_fit_window(image, new_w, new_h):
         original_width, original_height = image.size
         if new_w == 0:
             scale_width = 1
@@ -222,4 +223,3 @@ if __name__ == "__main__":
 
     # Start the application's main loop
     root.mainloop()
-
