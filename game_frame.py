@@ -1,15 +1,22 @@
 import tkinter as tk
+from datetime import date
+
 from PIL import Image, ImageTk
 from game import Game
+from younglearner_frame import YoungLearnerFrame
+from user import YoungLearner
 
-class GameFrame:
-    def __init__(self, root, game):
+class GameFrame(tk.Frame):
+    def __init__(self, root, young_learner_frame, user_obj):
+        super().__init__(root)
         self.root = root
-        self.game = game
+        self.young_learner_frame = young_learner_frame  # Store a reference to the YoungLearnerFrame
+        self.user_obj = user_obj
+        self.game = Game()
         self.viewing_started = False  # Initialize the viewing flag
 
         self.root.title("Game")
-        self.root.geometry("1200x800")  # Set the window size
+        self.root.geometry("960x540")  # Set the window size
 
         self.center_frame = tk.Frame(root)
         self.center_frame.pack(fill=tk.BOTH, expand=True)
@@ -18,18 +25,19 @@ class GameFrame:
         self.label.pack()
 
         self.album_var = tk.StringVar()
-        if game.albums:
-            first_album = next(iter(game.albums))
+        if self.game.albums:
+            first_album = next(iter(self.game.albums))
             self.album_var.set(first_album)
 
-        self.album_menu = tk.OptionMenu(self.center_frame, self.album_var, *game.albums)
+        self.album_menu = tk.OptionMenu(self.center_frame, self.album_var, *self.game.albums)
         self.album_menu.pack()
 
         self.start_button = tk.Button(self.center_frame, text="Start", command=self.start_viewing, bg='#d3f2e0',
                                       foreground='#087513')
         self.start_button.pack()
 
-        self.exit_button = tk.Button(root, text="Exit", command=root.quit, bg='#f2dad3', foreground='red')
+        self.exit_button = tk.Button(root, text="Exit", command=self.return_to_younglearner, bg='#f2dad3',
+                                     foreground='red')
         self.exit_button.pack(side=tk.BOTTOM)
 
         self.image_frame = tk.Frame(root)
@@ -53,7 +61,7 @@ class GameFrame:
         self.answer_frame = tk.Frame(root)
 
         self.answer_label = tk.Label(self.answer_frame, text="Challenge:")
-        self.answer_label.grid(row=0, column=0, pady=300)
+        self.answer_label.grid(row=0, column=0, pady=150)
 
         self.answer_entry = tk.Entry(self.answer_frame)
         self.answer_entry.grid(row=0, column=1)
@@ -174,9 +182,44 @@ class GameFrame:
         self.result_label = tk.Label(self.result_frame, text=result)
         self.result_label.grid(row=0, column=0)
 
+    def return_to_younglearner(self):
+        # Hide the "Exit" button
+        self.exit_button.pack_forget()
+
+        # Hide the current frame (GameFrame)
+        self.center_frame.pack_forget()
+        self.image_frame.pack_forget()
+        self.answer_frame.pack_forget()
+        self.result_frame.pack_forget()
+
+        # Show the YoungLearnerFrame (assuming you have an instance of YoungLearnerFrame available)
+        self.young_learner_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
 
 if __name__ == "__main__":
     root = tk.Tk()
-    game = Game()
-    app = GameFrame(root, game)
+
+    # Define the sample_user
+    sample_user = YoungLearner(
+        first_name="John",
+        last_name="Doe",
+        username="johndoe",
+        password="password123",
+        dob=date(2005, 5, 15),
+        email="johndoe@example.com",
+        ph_num="123-456-7890",
+        grade=7
+    )
+
+    # Create a YoungLearnerFrame with the sample user
+    young_learner_frame = YoungLearnerFrame(root, None, sample_user)
+
+    # Create a GameFrame with the YoungLearnerFrame and sample_user
+    game_frame = GameFrame(root, young_learner_frame, sample_user)
+
+    # Place the YoungLearnerFrame in the window
+    young_learner_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+    # Start the application's main loop
     root.mainloop()
+

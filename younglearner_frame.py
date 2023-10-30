@@ -1,5 +1,5 @@
 import tkinter as tk
-from game_frame import GameFrame
+
 # from quizzes_frame import QuizFrame
 from detail_frame import detailframe
 from user import User, YoungLearner
@@ -32,12 +32,10 @@ class YoungLearnerFrame(tk.Frame):
         logout = tk.Button(self, text="Logout", command=self.logout)
         logout.grid(row=3, column=0, padx=10, pady=10)
 
-
-    @staticmethod
-
     def play_game(self):
+        from game_frame import GameFrame
         self.place_forget()
-        game_frame = GameFrame(self.master,self)
+        game_frame = GameFrame(self.master,self, self.user_obj)
         game_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
     def do_quiz(self):
