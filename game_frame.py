@@ -48,13 +48,13 @@ class GameFrame(tk.Frame):
         self.label = tk.Label(self.center_frame, text="Select a module:")
         self.label.pack()
 
-        self.album_var = tk.StringVar()
-        if self.game.albums:
-            first_album = next(iter(self.game.albums))
-            self.album_var.set(first_album)
+        self.module_var = tk.StringVar()
+        if self.game.modules:
+            first_module = next(iter(self.game.modules))
+            self.module_var.set(first_module)
 
-        self.album_menu = tk.OptionMenu(self.center_frame, self.album_var, *self.game.albums)
-        self.album_menu.pack()
+        self.module_menu = tk.OptionMenu(self.center_frame, self.module_var, *self.game.modules)
+        self.module_menu.pack()
 
         self.start_button = tk.Button(self.center_frame, text="Start", command=self.start_viewing, bg='#d3f2e0',
                                       foreground='#087513')
@@ -106,13 +106,13 @@ class GameFrame(tk.Frame):
         self.result_label.grid_remove()  # Initially hide the result label
 
     def start_viewing(self):
-        album_name = self.album_var.get()
-        self.game.set_current_album(album_name)
+        module_name = self.module_var.get()
+        self.game.set_current_module(module_name)
         self.viewing_started = True  # Set viewing flag to true
 
         # Remove the "Select a module" and "Start" buttons
         self.label.pack_forget()
-        self.album_menu.pack_forget()
+        self.module_menu.pack_forget()
         self.start_button.pack_forget()
 
         # Show the previous and next buttons
