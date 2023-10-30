@@ -1,5 +1,29 @@
 import os
 from PIL import Image
+"""
+Game Class
+
+A class representing a game that allows the user to browse through albums of images and answer challenges.
+
+Attributes:
+- albums (dict): A dictionary storing the albums and their corresponding image paths.
+- current_album (str): The name of the current album being viewed.
+- current_image_index (int): The index of the current image being viewed.
+- questions (dict): A dictionary storing the challenges for each album.
+
+Methods:
+- load_albums_and_images(): Loads the albums and their image paths from a file.
+- load_challenges_and_answers(): Loads the challenges and their answers from a file.
+- set_current_album(album_name): Sets the current album to the specified album.
+- get_current_image(): Returns the current image being viewed.
+- get_current_challenge(): Returns the challenge for the current album.
+- has_next_image(): Checks if there is a next image in the current album.
+- has_previous_image(): Checks if there is a previous image in the current album.
+- get_current_image_index(): Returns the index of the current image.
+- set_current_image_index(index): Sets the index of the current image.
+- check_answer(user_answer): Checks if the user's answer matches the correct answer for the current challenge.
+
+"""
 
 
 class Game:
