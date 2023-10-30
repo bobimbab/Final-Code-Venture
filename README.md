@@ -1,6 +1,11 @@
 # MY FRI 1400 CodeVenture GRP10
 ## FIT1056
 
+## About The Project
+A python learning program for young learners.
+Learn the basics of python with CodeVenture to 
+enhance your learning experience.
+
 ## Installation
 
 Run the command below to install the requirements needed
