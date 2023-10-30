@@ -66,6 +66,13 @@ class GameFrame:
         self.answer_frame.pack(fill=tk.BOTH, expand=True)
         self.answer_frame.pack_forget()  # Initially hide the answer frame
 
+        self.result_frame = tk.Frame(self.answer_frame)  # Create the result frame
+        self.result_frame.grid(row=1, column=0, columnspan=3)
+
+        self.result_label = tk.Label(self.answer_frame, text="", fg="blue")
+        self.result_label.grid(row=1, column=1, pady=(10, 0))  # Use grid to position the result label
+        self.result_label.grid_remove()  # Initially hide the result label
+
     def start_viewing(self):
         album_name = self.album_var.get()
         self.game.set_current_album(album_name)
@@ -149,15 +156,15 @@ class GameFrame:
     def submit_answer(self):
         user_answer = self.answer_entry.get()
         result = self.game.check_answer(user_answer)
-        self.show_result(result)  # Show the result in the window
-
-        # Clear the answer entry
-        self.answer_entry.delete(0, tk.END)
+        self.result_label.config(text=result)
 
         if result == "Correct!":
             self.submit_button.config(state=tk.DISABLED)
 
+        self.result_label.grid()  # Show the result label using grid
+
     def show_result(self, result):
+        self.result_label.config(text=result)
         if hasattr(self, "result_frame"):
             self.result_frame.destroy()
 

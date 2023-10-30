@@ -66,3 +66,9 @@ class Game:
 
     def check_answer(self, user_answer):
         _, correct_answer = self.get_current_challenge()
+
+        if user_answer.lower() == correct_answer.lower():
+            return "Correct!"
+        else:
+            return "Incorrect!"
+
