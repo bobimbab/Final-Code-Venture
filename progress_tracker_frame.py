@@ -26,7 +26,7 @@ class ProgressTrackerFrame(tk.Frame):
         # Show the YoungLearnerFrame (assuming you have an instance of YoungLearnerFrame available)
         self.young_learner.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
-    # def show_progress(self):
+    def show_progress(self):
         progress = self.user_obj.get_progress()  # Replace with your method to retrieve progress
         message = "Your progress:\n"
         if self.user_obj.completed:
