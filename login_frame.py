@@ -20,6 +20,7 @@ class LoginFrame(tk.Frame):
         """
         super().__init__(master=master)
         self.master = master
+        self.shutdown_frame = None
         # self.master.geometry(f"{width}x{height}")
 
         # Logo image for the login page
@@ -125,7 +126,7 @@ class LoginFrame(tk.Frame):
                 self.place_forget()
 
                 # Create and display the Admin frame
-                admin_frame = AdminFrame(self.master, self, auth_res)
+                admin_frame = AdminFrame(self.master, self, self.shutdown_frame, auth_res)
                 admin_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
                 # Removes login successful text when logging out

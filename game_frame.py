@@ -214,7 +214,7 @@ class GameFrame(tk.Frame):
                 message += f"{module}: Completed"
         else:
             for module, count in progress.items():
-                message += f"{module}: {count} images viewed\n"
+                message += f"{module}: {count} pages viewed\n"
         self.progress_label.config(text=message)
 
     def return_to_younglearner(self):

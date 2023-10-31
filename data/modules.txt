@@ -1,5 +1,2 @@
-basic syntax: image1.jpg, image2.jpg
-variables and types: image4.jpg, image5.jpg, image6.jpg
-operators: image.jpg
-loops: image7.jpg, image8.jpg, image9.jpg
-functions: image10.jpg
+introduction to python: image1.png, image2.png, image3.png, image4.png, image5.png
+conditionals and iterations: image6.png, image7.png, image8.png, image9.png, image10.png
