@@ -1,4 +1,5 @@
 from user import User, YoungLearner, Admin
+from datetime import datetime
 
 
 class Authenticator:
@@ -17,32 +18,19 @@ class Authenticator:
             with open(self.file_path, "r", encoding="utf8") as users_f:
                 users_lines = users_f.readlines()
                 for line in users_lines:
-                    (first_name,
-                     last_name,
-                     username,
-                     password,
-                     dob,
-                     email,
-                     ph_num,
-                     role,
-                     grade) = line.strip().split(",")
-                    if role == "YL":
-                        user_obj = YoungLearner(first_name=first_name,
-                                                last_name=last_name,
-                                                username=username,
-                                                password=password,
-                                                dob=dob,
-                                                email=email,
-                                                ph_num=ph_num,
-                                                grade=grade)
+                    user_data = line.strip().split(",")
+                    # DEBUGGING USE
+                    print(user_data)
+                    # (first_name, last_name, username, password, dob_str, email, ph_num, role, grade) = user_data
+                    if len(user_data) == 9:
+                    # if role == "YL":
+                        (first_name, last_name, username, password, dob_str, email, ph_num, role, grade) = user_data
+                        dob = datetime.strptime(dob_str, "%Y-%m-%d").date()
+                        user_obj = YoungLearner(first_name, last_name, username, password, dob, email, ph_num, grade)
                     else:
-                        user_obj = Admin(first_name=first_name,
-                                         last_name=last_name,
-                                         username=username,
-                                         password=password,
-                                         dob=dob,
-                                         email=email,
-                                         ph_num=ph_num)
+                        (first_name, last_name, username, password, dob_str, email, ph_num, role) = user_data
+                        dob = datetime.strptime(dob_str, "%Y-%m-%d").date()
+                        user_obj = Admin(first_name, last_name, username, password, dob, email, ph_num)
                     self.users.append(user_obj)
             return True
         except FileNotFoundError:
@@ -56,19 +44,35 @@ class Authenticator:
         try:
             with open(self.file_path, "w", encoding="utf8") as users_f:
                 for user_obj in self.users:
-                    # Create a comma-separated line with user data
-                    user_data = ",".join([user_obj.__first_name,
-                                          user_obj.__last_name,
-                                          user_obj.__username,
-                                          user_obj.__password,
-                                          user_obj.__dob,
-                                          user_obj.__email,
-                                          user_obj.__ph_num,
-                                          user_obj.__role,
-                                          user_obj.__grade])
+                    dob_str = user_obj._dob.strftime("%Y-%m-%d")
+                    if user_obj.get_role() == "YL":
+                        role = "YL"
+                        user_data = ",".join([
+                            user_obj._first_name,
+                            user_obj._last_name,
+                            user_obj._username,
+                            user_obj._password,
+                            dob_str,
+                            user_obj._email or "",  # Handle None
+                            user_obj._ph_num or "",  # Handle None
+                            role,
+                            str(user_obj._grade)
+                        ])
+                    else:
+                        role = "AD"
+                        user_data = ",".join([
+                            user_obj._first_name,
+                            user_obj._last_name,
+                            user_obj._username,
+                            user_obj._password,
+                            dob_str,
+                            user_obj._email or "",  # Handle None
+                            user_obj._ph_num or "",  # Handle None
+                            role
+                        ])
                     users_f.write(user_data + "\n")
         except FileNotFoundError:
-            print(f"The file \"{self.file_path}\" does not exist!")
+            print(f"The file \"{self.file_path}\" does not exist.")
 
     def authenticate(self, input_username, input_password):
         """
@@ -82,6 +86,27 @@ class Authenticator:
                 # If username is found
                 if user_obj.get_password() == input_password:
                     # Passwords match and account is active
+                    return user_obj
+                else:
+                    # Authentication fails
+                    return False
+        # Account does not exist
+        return False
+
+    def authenticate_forgot_pw(self, input_email, input_ph_num, new_password):
+        """
+        Logic for authenticating a login procedure
+        :param input_email: str - username entered by the user
+        :param input_ph_num: str - password entered by the user
+        :return: bool
+        """
+        for user_obj in self.users:
+            if user_obj.get_email() == input_email:
+                # If username is found
+                if user_obj.get_ph_num() == input_ph_num:
+                    # Passwords match and account is active
+                    user_obj.set_password(new_password)
+                    self.save_users()
                     return user_obj
                 else:
                     # Authentication fails
@@ -125,9 +150,4 @@ class Authenticator:
 
 
 if __name__ == "__main__":
-    # Feel free to amend this block while working or testing,
-    # but any amendments here should be reverted upon submission.
-    # You will not be assessed for any work here, but if any code
-    # written here causes an error when running week11_interface.py,
-    # then marks will be deducted.
     pass

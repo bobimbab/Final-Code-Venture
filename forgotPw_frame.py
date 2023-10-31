@@ -1,4 +1,7 @@
 import tkinter as tk
+from authenticator import Authenticator
+from user import User, YoungLearner
+from tkinter import messagebox
 
 class ForgotPwFrame(tk.Frame):
     """
@@ -34,8 +37,8 @@ class ForgotPwFrame(tk.Frame):
         email_label.grid(row=4, column=0, sticky=tk.E, padx=10, pady=10)
 
         # Variable and entry to email
-        self.email_entry = tk.StringVar()
-        self.email_entry = tk.Entry(master=self, textvariable=self.email_entry)
+        self.email = tk.StringVar()
+        self.email_entry = tk.Entry(master=self, textvariable=self.email)
         self.email_entry.grid(row=4, column=1, sticky=tk.W, padx=10, pady=10)
 
         # Label to ask user for their phone number
@@ -43,8 +46,8 @@ class ForgotPwFrame(tk.Frame):
         ph_num_label.grid(row=5, column=0, sticky=tk.E, padx=10, pady=10)
 
         # Variable and entry to phone number
-        self.ph_num_entry = tk.StringVar()
-        self.ph_num_entry = tk.Entry(master=self, textvariable=self.ph_num_entry)
+        self.ph_num = tk.StringVar()
+        self.ph_num_entry = tk.Entry(master=self, textvariable=self.ph_num)
         self.ph_num_entry.grid(row=5, column=1, sticky=tk.W, padx=10, pady=10)
 
         # Label to ask user for Password
@@ -68,7 +71,7 @@ class ForgotPwFrame(tk.Frame):
         self.password_entry.grid(row=7, column=1, sticky=tk.W, padx=10, pady=10)
 
         # Confirm button for changing password
-        confirm_button = tk.Button(master=self, text="Confirm")
+        confirm_button = tk.Button(master=self, text="Confirm", command=self.authenticate_info)
         confirm_button.grid(row=7, column=1, padx=100)
 
         # Back to login page button
@@ -76,6 +79,12 @@ class ForgotPwFrame(tk.Frame):
         back_button = tk.Button(master=self, text="Back", command=self.return_menu)
         # back_button = tk.Button(master=self, text="Back")
         back_button.grid(row=0, column=0, sticky=tk.NW)
+
+        # Variable and label to inform user of password outcome
+        self.pw_outcome_text = tk.StringVar()
+        pw_outcome_message = tk.Label(master=self, textvariable=self.pw_outcome_text)
+        pw_outcome_message.grid(row=8, columnspan=2, padx=10, pady=10)
+
 
     def return_menu(self):
         """
@@ -86,6 +95,43 @@ class ForgotPwFrame(tk.Frame):
                                                                        # \middle
         # DEBUGGING USE
         print("Currently in login frame")
+
+    def authenticate_info(self):
+        # Get the values from the input fields
+        email = self.email_entry.get()
+        ph_num = self.ph_num_entry.get()
+        password = self.password_entry.get()
+
+        # Check if any of the fields is empty
+        if not email or not ph_num or not password:
+            messagebox.showerror("Error", "All fields are required")
+            return  # Don't proceed further if any field is empty
+
+        # Continue with the authentication procedure
+        authenticator = Authenticator()
+        auth_res = authenticator.authenticate_forgot_pw(email, ph_num, password)
+
+        if isinstance(auth_res, User):
+            if isinstance(auth_res, YoungLearner):
+                self.pw_outcome_text.set("Password changed successfully!")
+        else:
+            self.pw_outcome_text.set("Failed to change password. Invalid details.")
+    # def authenticate_info(self):
+    #     """
+    #     Frontend function for the authentication procedure.
+    #     This is invoked when the login button is clicked.
+    #     :return: None
+    #     """
+    #     authenticator = Authenticator()
+    #     auth_res = authenticator.authenticate_forgot_pw(self.email_entry.get(), self.ph_num.get())
+    #
+    #     if isinstance(auth_res, User):
+    #
+    #         if isinstance(auth_res, YoungLearner):  # Check if the user is a YoungLearner
+    #             self.pw_outcome_text.set("Password changed successfully!")
+    #
+    #     else:
+    #         self.pw_outcome_text.set("Fail to change password")
 
 def main():
     root = tk.Tk()

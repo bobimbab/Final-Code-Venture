@@ -25,6 +25,12 @@ class Interface(tk.Tk):
         self.title(title)
         self.geometry(f"{width}x{height}")
 
+
+# root = Interface("CodeVenture")
+# login = LoginFrame(root)
+# login.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+# root.mainloop()
+
 # TESTING USE
 if __name__ == "__main__":
     # DO NOT MODIFY THIS
