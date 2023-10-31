@@ -217,7 +217,6 @@ class GameFrame(tk.Frame):
         self.progress_label.config(text=message)
 
     def return_to_younglearner(self):
-        # self.show_progress()
         self.place_forget()
 
         # Hide the "Exit" button
