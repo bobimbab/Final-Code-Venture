@@ -66,6 +66,7 @@ class Game:
                     progress_data = json.load(file)
                     self.username = progress_data.get("username")
                     self.progress = progress_data.get("progress")
+                    self.completion = progress_data.get("completed")
             else:
                 print("Progress file is empty.")
         else:
