@@ -6,24 +6,6 @@ Game Class
 
 A class representing a game that allows the user to browse through modules of images and answer challenges.
 
-Attributes:
-- modules (dict): A dictionary storing the modules and their corresponding image paths.
-- current_module (str): The name of the current module being viewed.
-- current_image_index (int): The index of the current image being viewed.
-- questions (dict): A dictionary storing the challenges for each module.
-
-Methods:
-- load_modules_and_images(): Loads the modules and their image paths from a file.
-- load_challenges_and_answers(): Loads the challenges and their answers from a file.
-- set_current_module(module_name): Sets the current module to the specified module.
-- get_current_image(): Returns the current image being viewed.
-- get_current_challenge(): Returns the challenge for the current module.
-- has_next_image(): Checks if there is a next image in the current module.
-- has_previous_image(): Checks if there is a previous image in the current module.
-- get_current_image_index(): Returns the index of the current image.
-- set_current_image_index(index): Sets the index of the current image.
-- check_answer(user_answer): Checks if the user's answer matches the correct answer for the current challenge.
-
 """
 
 
@@ -34,6 +16,7 @@ class Game:
         self.current_image_index = 0
         self.questions = {}
         self.progress = {}
+        self.completion = False
         self.username = username
         self.load_modules_and_images()
         self.load_challenges_and_answers()
@@ -67,13 +50,11 @@ class Game:
         progress_data = {
             "username": self.username,
             "progress": self.progress,
-            "challenges": self.questions
+            "completed": self.completion
         }
 
         with open(progress_file_path, 'w') as file:
             json.dump(progress_data, file)
-
-        
                 
     def load_progress(self):
         data_directory = "data"
@@ -91,22 +72,17 @@ class Game:
             print("Progress file not found.")
             
     def update_progress(self):
-        if self.current_module in self.progress:
-            self.progress[self.current_module] += 1
-        else:
-            self.progress[self.current_module] = 1
+        if Game.has_next_image(self) == False:
+            self.completion = True
 
-        if self.progress[self.current_module] == len(self.modules[self.current_module]):
-            self.progress[self.current_module] = "Challenge Completed"
-
-        self.save_progress()  # Add this line to save the progress and challenge completion
+        self.save_progress()
                 
 
     def set_current_module(self, module_name):
         self.current_module = module_name
         self.current_image_index = 0
         self.progress[module_name] = 0
-        self.save_progress()  # Add this line to save the progress
+        self.save_progress()  # save the progress
 
     def get_current_image(self):
         if self.current_module is not None:

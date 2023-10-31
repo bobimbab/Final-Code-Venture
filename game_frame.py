@@ -8,25 +8,6 @@ from user import YoungLearner
 The GameFrame class 
 represents the frame that displays the game to the user. It inherits from the tkinter Frame class and contains various 
 widgets and methods for managing the game interface.
-
-Attributes:
-- root: The root window of the application.
-- young_learner_frame: A reference to the YoungLearnerFrame object.
-- user_obj: An instance of the YoungLearner class representing the current user.
-- game: An instance of the Game class representing the game logic.
-- viewing_started: A boolean flag indicating whether the user has started viewing the images or challenges.
-
-Methods:
-- __init__(self, root, young_learner_frame, user_obj): Initializes the GameFrame object.
-- start_viewing(self): Starts the image viewing process.
-- show_image(self): Displays the current image or challenge.
-- resize_image_to_fit_window(image, new_w, new_h): Resizes the image to fit the window.
-- show_previous_image(self): Displays the previous image.
-- show_next_image(self): Displays the next image.
-- submit_answer(self): Submits the user's answer to the challenge.
-- show_result(self, result): Displays the result of the user's answer.
-- return_to_younglearner(self): Returns to the YoungLearnerFrame and hides the GameFrame.
-
 '''
 
 
@@ -122,7 +103,7 @@ class GameFrame(tk.Frame):
         self.prev_button.pack(side=tk.LEFT)
         self.next_button.pack(side=tk.RIGHT)
 
-        self.show_image()  # Added to display the first image
+        self.show_image()  # display the first image
 
     def show_image(self):
         current_image = self.game.get_current_image()
@@ -228,8 +209,12 @@ class GameFrame(tk.Frame):
     def show_progress(self):
         progress = self.game.progress
         message = "Your progress:\n"
-        for module, count in progress.items():
-            message += f"{module}: {count} images viewed\n"
+        if self.game.completion == True:
+            for module in progress:
+                message += f"{module}: Completed"
+        else:
+            for module, count in progress.items():
+                message += f"{module}: {count} images viewed\n"
         self.progress_label.config(text=message)
 
     def return_to_younglearner(self):
