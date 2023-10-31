@@ -111,7 +111,7 @@ class LoginFrame(tk.Frame):
                 self.username_entry.delete(0, 'end')
                 self.place_forget()
                 # Create and display the YoungLearnerFrame with the authenticated user
-                young_learner_frame = YoungLearnerFrame(self.master, self, auth_res)
+                young_learner_frame = YoungLearnerFrame(self.master, self, auth_res, None)
                 young_learner_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
                 # Removes login successful text when logging out

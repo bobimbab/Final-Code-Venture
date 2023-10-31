@@ -219,7 +219,8 @@ class GameFrame(tk.Frame):
 
     def return_to_younglearner(self):
         self.show_progress()
-        
+        # self.place_forget()
+
         # Hide the "Exit" button
         self.exit_button.pack_forget()
 
@@ -231,7 +232,7 @@ class GameFrame(tk.Frame):
 
         # Show the YoungLearnerFrame (assuming you have an instance of YoungLearnerFrame available)
         self.young_learner_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-        
+
 
 
 if __name__ == "__main__":

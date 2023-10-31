@@ -9,11 +9,13 @@ class YoungLearnerFrame(tk.Frame):
     """
     A child class that inherits its parents (User).
     """
-    def __init__(self, master,login_frame, user_obj):
+    def __init__(self, master,login_frame, user_obj, game_frame):
         super().__init__(master)
         self.master = master
-        self.login_frame=login_frame
+        self.login_frame = login_frame
         self.user_obj = user_obj
+        self.game_frame = game_frame
+
 
         for row_count in range(5):
             self.master.rowconfigure(row_count, weight=1, uniform="row")
@@ -31,6 +33,9 @@ class YoungLearnerFrame(tk.Frame):
 
         logout = tk.Button(self, text="Logout", command=self.logout)
         logout.grid(row=3, column=0, padx=10, pady=10)
+
+        self.progress_label = tk.Label(self, text="")
+        self.progress_label.grid()
 
     def play_game(self):
         from game_frame import GameFrame
@@ -53,6 +58,17 @@ class YoungLearnerFrame(tk.Frame):
         self.place_forget()
         self.login_frame.place(relx=0.5,rely=0.5,anchor=tk.CENTER)
 
+    def show_progress(self):
+        progress = self.user_obj.get_progress()  # Assuming you have a method like get_progress in your user class
+        message = "Your progress:\n"
+        if self.user_obj.completed:
+            for module in progress:
+                message += f"{module}: Completed\n"
+        else:
+            for module, count in progress.items():
+                message += f"{module}: {count} images viewed\n"
+        self.progress_label.config(text=message)
+
 if __name__ == "__main__":
     sample_user = YoungLearner(
         first_name="John",
@@ -69,7 +85,7 @@ if __name__ == "__main__":
     root = tk.Tk()
 
     # Create a YoungLearnerFrame with the sample user
-    young_learner_frame = YoungLearnerFrame(root, None, sample_user)
+    young_learner_frame = YoungLearnerFrame(root, None, sample_user, None)
 
     # Place the YoungLearnerFrame in the window
     young_learner_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
