@@ -74,6 +74,15 @@ class Quizzes:
     def get_number_of_questions(self) -> int:
         return len(self.questions)
 
+    def get_number_of_easy_questions(self) -> int:
+        return len(self.easy_questions)
+
+    def get_number_of_medium_questions(self) -> int:
+        return len(self.medium_questions)
+
+    def get_number_of_hard_questions(self) -> int:
+        return len(self.hard_questions)
+
     def next_question(self) -> None:
         if self.current_question_index < len(self.questions) - 1:
             self.current_question_index += 1
