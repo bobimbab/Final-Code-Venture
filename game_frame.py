@@ -21,7 +21,6 @@ class GameFrame(tk.Frame):
         self.viewing_started = False  # Initialize the viewing flag
 
         self.root.title("Game")
-        self.root.geometry("960x540")  # Set the window size
 
         self.center_frame = tk.Frame(root)
         self.center_frame.pack(fill=tk.BOTH, expand=True)
@@ -232,32 +231,3 @@ class GameFrame(tk.Frame):
 
         # Show the YoungLearnerFrame (assuming you have an instance of YoungLearnerFrame available)
         self.young_learner_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-
-
-
-if __name__ == "__main__":
-    root = tk.Tk()
-
-    # Define the sample_user
-    sample_user = YoungLearner(
-        first_name="John",
-        last_name="Doe",
-        username="johndoe",
-        password="password123",
-        dob=date(2005, 5, 15),
-        email="johndoe@example.com",
-        ph_num="123-456-7890",
-        grade=7
-    )
-
-    # Create a YoungLearnerFrame with the sample user
-    young_learner_frame = YoungLearnerFrame(root, None, sample_user)
-
-    # Create a GameFrame with the YoungLearnerFrame and sample_user
-    game_frame = GameFrame(root, young_learner_frame, sample_user)
-
-    # Place the YoungLearnerFrame in the window
-    young_learner_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-
-    # Start the application's main loop
-    root.mainloop()
