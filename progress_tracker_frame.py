@@ -13,8 +13,8 @@ class ProgressTrackerFrame(tk.Frame):
         self.progress_label = tk.Label(self, text="")
         self.progress_label.pack()
 
-        progress_label = tk.Label(self, text="Progress: ")
-        progress_label.pack()
+        # progress_label = tk.Label(self, text="Progress: ")
+        # progress_label.pack()
 
         self.show_progress()
 
