@@ -16,15 +16,19 @@ def load_quizzes() -> dict[str, Quizzes]:
         with open("data/quizzes.txt", "r") as file:
             quizzes = file.readlines()
             for line in quizzes:
-                quiz = line.strip().split(";")
-                quiz_title = quiz[0]
-                quiz_difficulty = quiz[1]
-                quiz_questions = quiz[2]
-                quiz_options = ast.literal_eval(quiz[3])
-                quiz_answers = quiz[4]
-                if quiz_title not in all_quizzes:
-                    all_quizzes[quiz_title] = Quizzes(quiz_title)
-                all_quizzes[quiz_title].add_question(quiz_difficulty, quiz_questions, quiz_options, quiz_answers)
+                try:
+                    quiz = line.strip().split(";")
+                    quiz_title = quiz[0]
+                    quiz_difficulty = quiz[1]
+                    quiz_questions = quiz[2]
+                    quiz_options = ast.literal_eval(quiz[3])
+                    quiz_answers = quiz[4]
+                    if quiz_title not in all_quizzes:
+                        all_quizzes[quiz_title] = Quizzes(quiz_title)
+                    all_quizzes[quiz_title].add_question(quiz_difficulty, quiz_questions, quiz_options, quiz_answers)
+                except IndexError:
+                    print("Invalid quiz format!")
+                    continue
         return all_quizzes
     except FileNotFoundError:
         print("No quizzes found!")
@@ -233,7 +237,7 @@ class QuizResultsFrame(tk.Frame):
         self.parent = parent
 
         # Set up the frame title
-        quiz_title = tk.Label(self, text= random.choice(self.message), font=("Arial", 20, "bold"))
+        quiz_title = tk.Label(self, text=random.choice(self.message), font=("Arial", 20, "bold"))
         quiz_title.pack(pady=10)
 
         score_label = tk.Label(self, text="Your Score", font=("Arial", 14))
