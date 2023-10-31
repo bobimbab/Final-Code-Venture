@@ -19,10 +19,10 @@ class AdminFrame(tk.Frame):
 
         self.master.columnconfigure(0, weight=1, uniform="col")
 
-        add = tk.Button(self, text="Add Module",command=self.add)
+        add = tk.Button(self, text="Add Module",command=self.add_module)
         add.grid(row=0, column=0, padx=10, pady=10)
 
-        delete = tk.Button(self, text="Del Module", command=self.delete)
+        delete = tk.Button(self, text="Del Module", command=self.delete_module)
         delete.grid(row=1, column=0, padx=10, pady=10)
 
         view_profile_user = tk.Button(self, text="View Profile for user", command=self.get_det_user)
@@ -37,7 +37,7 @@ class AdminFrame(tk.Frame):
         shutdown = tk.Button(self, text="Shutdown", command=self.logout)
         shutdown.grid(row=5, column=0, padx=10, pady=10)
 
-    def add(self):
+    def add_module(self):
         module_path = os.path.join("data", "modules.txt")
         module_name = self.get_module_name_input()
         image_names = self.get_image_names_input()
@@ -49,7 +49,7 @@ class AdminFrame(tk.Frame):
         else:
             tk.messagebox.showerror("Error", "Module name or image names cannot be empty!")
 
-    def delete(self):
+    def delete_module(self):
         module_path = os.path.join("data", "modules.txt")
         with open(module_path, "r") as file:
             module_lines = file.readlines()
@@ -85,7 +85,6 @@ class AdminFrame(tk.Frame):
     def get_selected_module_input(self):
         selected_module = simpledialog.askstring("Enter the module name to delete", "Module Name")
         return selected_module
-
 
     def get_det_user(self):
         self.place_forget()

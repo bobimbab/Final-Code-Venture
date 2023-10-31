@@ -1,9 +1,9 @@
 import tkinter as tk
-
-# from quizzes_frame import QuizFrame
 from detail_frame import detailframe
-from user import User, YoungLearner
+from user import YoungLearner
 from datetime import date
+
+
 class YoungLearnerFrame(tk.Frame):
 
     """
@@ -39,9 +39,10 @@ class YoungLearnerFrame(tk.Frame):
         game_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
     def do_quiz(self):
-        # self.place_forget()
-        # quiz_frame = QuizFrame(self.master,self)
-        # quiz_frame.place(relx=0.5,rely=0.5,anchor=tk.CENTER)
+        from quizzes_frame import QuizFrame
+        self.place_forget()
+        quiz_frame = QuizFrame(self.master,self)
+        quiz_frame.place(relx=0.5,rely=0.5,anchor=tk.CENTER)
         pass
 
     def get_det(self, user):
@@ -76,6 +77,3 @@ if __name__ == "__main__":
 
     # Start the application's main loop
     root.mainloop()
-    # login = YoungLearnerFrame(tk.Tk(),None,None)
-    # login.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-    # login.mainloop()
