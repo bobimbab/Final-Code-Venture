@@ -4,6 +4,7 @@ import tkinter as tk
 from detail_frame import detailframe
 from user import User, YoungLearner
 from datetime import date
+from progress_tracker_frame import ProgressTrackerFrame
 class YoungLearnerFrame(tk.Frame):
 
     """
@@ -31,11 +32,12 @@ class YoungLearnerFrame(tk.Frame):
         view_profile = tk.Button(self, text="View Profile 📃", command=lambda: self.get_det(self.user_obj))
         view_profile.grid(row=2, column=0, padx=10, pady=10)
 
-        logout = tk.Button(self, text="Logout", command=self.logout)
-        logout.grid(row=3, column=0, padx=10, pady=10)
+        view_progress = tk.Button(self, text="View Progress", command=self.progress_tracker)
+        view_progress.grid(row=3, column=0, padx=10, pady=10)
 
-        self.progress_label = tk.Label(self, text="")
-        self.progress_label.grid()
+        logout = tk.Button(self, text="Logout", command=self.logout)
+        logout.grid(row=4, column=0, padx=10, pady=10)
+
 
     def play_game(self):
         from game_frame import GameFrame
@@ -54,20 +56,16 @@ class YoungLearnerFrame(tk.Frame):
         dets_frame = detailframe(self.master, self, user)
         dets_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
+    def progress_tracker(self):
+        self.place_forget()
+        progress_tracker = ProgressTrackerFrame(self.master, self.user_obj, self)
+        progress_tracker.place(relx=0.5, rely=0.5, anchor=tk.CENTER)  # Display the register frame
+
+
     def logout(self):
         self.place_forget()
         self.login_frame.place(relx=0.5,rely=0.5,anchor=tk.CENTER)
 
-    def show_progress(self):
-        progress = self.user_obj.get_progress()  # Assuming you have a method like get_progress in your user class
-        message = "Your progress:\n"
-        if self.user_obj.completed:
-            for module in progress:
-                message += f"{module}: Completed\n"
-        else:
-            for module, count in progress.items():
-                message += f"{module}: {count} images viewed\n"
-        self.progress_label.config(text=message)
 
 if __name__ == "__main__":
     sample_user = YoungLearner(
