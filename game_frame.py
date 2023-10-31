@@ -36,7 +36,7 @@ class GameFrame(tk.Frame):
         self.root = root
         self.young_learner_frame = young_learner_frame  # Store a reference to the YoungLearnerFrame
         self.user_obj = user_obj
-        self.game = Game()
+        self.game = Game(user_obj._username)
         self.viewing_started = False  # Initialize the viewing flag
 
         self.root.title("Game")
@@ -63,6 +63,9 @@ class GameFrame(tk.Frame):
         self.exit_button = tk.Button(root, text="Exit", command=self.return_to_younglearner, bg='#f2dad3',
                                      foreground='red')
         self.exit_button.pack(side=tk.BOTTOM)
+        
+        self.progress_label = tk.Label(root, text="")
+        self.progress_label.pack()
 
         self.image_frame = tk.Frame(root)
         self.image_frame.pack(fill=tk.BOTH, expand=True)
@@ -193,8 +196,23 @@ class GameFrame(tk.Frame):
 
         if result == "Correct!":
             self.submit_button.config(state=tk.DISABLED)
+            self.game.update_progress()  # Add this line to update the progress
 
         self.result_label.grid()  # Show the result label using grid
+
+        if result == "Incorrect!":
+            self.submit_button.config(command=self.submit_correct_answer)
+
+    def submit_correct_answer(self):
+        user_answer = self.answer_entry.get()
+        result = self.game.check_answer(user_answer)
+        self.result_label.config(text=result)
+
+        if result == "Correct!":
+            self.submit_button.config(state=tk.DISABLED)
+            self.game.update_progress()  # Add this line to update the progress
+
+        self.result_label.grid()
 
     def show_result(self, result):
         self.result_label.config(text=result)
@@ -206,8 +224,17 @@ class GameFrame(tk.Frame):
 
         self.result_label = tk.Label(self.result_frame, text=result)
         self.result_label.grid(row=0, column=0)
+        
+    def show_progress(self):
+        progress = self.game.progress
+        message = "Your progress:\n"
+        for module, count in progress.items():
+            message += f"{module}: {count} images viewed\n"
+        self.progress_label.config(text=message)
 
     def return_to_younglearner(self):
+        self.show_progress()
+        
         # Hide the "Exit" button
         self.exit_button.pack_forget()
 
@@ -219,6 +246,7 @@ class GameFrame(tk.Frame):
 
         # Show the YoungLearnerFrame (assuming you have an instance of YoungLearnerFrame available)
         self.young_learner_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        
 
 
 if __name__ == "__main__":

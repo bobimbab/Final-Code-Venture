@@ -1,4 +1,5 @@
 import os
+import json
 from PIL import Image
 """
 Game Class
@@ -27,13 +28,16 @@ Methods:
 
 
 class Game:
-    def __init__(self):
+    def __init__(self, username):
         self.modules = {}  # Use a dictionary to store modules
         self.current_module = None
         self.current_image_index = 0
         self.questions = {}
+        self.progress = {}
+        self.username = username
         self.load_modules_and_images()
         self.load_challenges_and_answers()
+        self.load_progress()
 
     def load_modules_and_images(self):
         data_directory = "data"
@@ -55,16 +59,62 @@ class Game:
             for line in file:
                 module_name, question, answer = line.strip().split(': ')
                 self.questions[module_name] = (question, answer)
+                
+    def save_progress(self):
+        data_directory = "data"
+        progress_file_path = os.path.join(data_directory, "progress.json")
+
+        progress_data = {
+            "username": self.username,
+            "progress": self.progress,
+            "challenges": self.questions
+        }
+
+        with open(progress_file_path, 'w') as file:
+            json.dump(progress_data, file)
+
+        
+                
+    def load_progress(self):
+        data_directory = "data"
+        progress_file_path = os.path.join(data_directory, "progress.json")
+
+        if os.path.exists(progress_file_path):
+            if os.path.getsize(progress_file_path) > 0:  # Check if the file is not empty
+                with open(progress_file_path, 'r') as file:
+                    progress_data = json.load(file)
+                    self.username = progress_data.get("username")
+                    self.progress = progress_data.get("progress")
+            else:
+                print("Progress file is empty.")
+        else:
+            print("Progress file not found.")
+            
+    def update_progress(self):
+        if self.current_module in self.progress:
+            self.progress[self.current_module] += 1
+        else:
+            self.progress[self.current_module] = 1
+
+        if self.progress[self.current_module] == len(self.modules[self.current_module]):
+            self.progress[self.current_module] = "Challenge Completed"
+
+        self.save_progress()  # Add this line to save the progress and challenge completion
+                
 
     def set_current_module(self, module_name):
         self.current_module = module_name
         self.current_image_index = 0
+        self.progress[module_name] = 0
+        self.save_progress()  # Add this line to save the progress
 
     def get_current_image(self):
         if self.current_module is not None:
             image_paths = self.modules.get(self.current_module)
             if image_paths and 0 <= self.current_image_index < len(image_paths):
                 image_path = image_paths[self.current_image_index]
+                self.progress[self.current_module] += 1
+                self.save_progress()  # Add this line to save the progress
                 return Image.open(image_path)
         return None
 

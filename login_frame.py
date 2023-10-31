@@ -5,6 +5,7 @@ from register_frame import RegisterFrame
 from younglearner_frame import YoungLearnerFrame
 from admin_frame import AdminFrame
 from forgotPw_frame import ForgotPwFrame
+from game import Game
 
 class LoginFrame(tk.Frame):
     """
@@ -102,6 +103,7 @@ class LoginFrame(tk.Frame):
                                               self.password.get())
 
         if isinstance(auth_res, User):
+            game = Game(self.username)
 
             if isinstance(auth_res, YoungLearner):  # Check if the user is a YoungLearner
                 self.login_text.set("Login successfully!")
