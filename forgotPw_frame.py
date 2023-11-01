@@ -28,12 +28,12 @@ class ForgotPwFrame(tk.Frame):
         # Label containing description
         forgot_pw_desc = tk.Label(master=self,
                                   text="Enter your details for verification to reset password successfully.",
-                                  font=("Times New Romans", 12))
+                                  font=("Times New Romans", 12), fg="blue")
         # regis_title.grid()
         forgot_pw_desc.grid(row=2, columnspan=2, padx=10, pady=10)
 
         # Label to ask user for Email
-        email_label = tk.Label(master=self, text="Email:")
+        email_label = tk.Label(master=self, text="Email:", font=("Georgia"))
         email_label.grid(row=4, column=0, sticky=tk.E, padx=10, pady=10)
 
         # Variable and entry to email
@@ -42,7 +42,7 @@ class ForgotPwFrame(tk.Frame):
         self.email_entry.grid(row=4, column=1, sticky=tk.W, padx=10, pady=10)
 
         # Label to ask user for their phone number
-        ph_num_label = tk.Label(master=self, text="Phone number:")
+        ph_num_label = tk.Label(master=self, text="Phone number:", font=("Georgia"))
         ph_num_label.grid(row=5, column=0, sticky=tk.E, padx=10, pady=10)
 
         # Variable and entry to phone number
@@ -51,7 +51,7 @@ class ForgotPwFrame(tk.Frame):
         self.ph_num_entry.grid(row=5, column=1, sticky=tk.W, padx=10, pady=10)
 
         # Label to ask user for Password
-        password_label = tk.Label(master=self, text="New Password:")
+        password_label = tk.Label(master=self, text="New Password:", font=("Georgia"))
         password_label.grid(row=6, column=0, sticky=tk.E, padx=10, pady=10)
 
         # Variable and entry to password, password entry will be hidden
@@ -61,7 +61,7 @@ class ForgotPwFrame(tk.Frame):
         self.password_entry.grid(row=6, column=1, sticky=tk.W, padx=10, pady=10)
 
         # Label to ask user to confirm their new Password
-        confirm_password_label = tk.Label(master=self, text="Confirm New Password:")
+        confirm_password_label = tk.Label(master=self, text="Confirm New Password:", font=("Georgia"))
         confirm_password_label.grid(row=7, column=0, sticky=tk.E, padx=10, pady=10)
 
         # Variable and entry to new password, new password entry will be hidden
@@ -71,8 +71,8 @@ class ForgotPwFrame(tk.Frame):
         self.confirm_password_entry.grid(row=7, column=1, sticky=tk.W, padx=10, pady=10)
 
         # Confirm button for changing password
-        confirm_button = tk.Button(master=self, text="Confirm", command=self.authenticate_info)
-        confirm_button.grid(row=7, column=1, padx=100)
+        confirm_button = tk.Button(master=self, text="Confirm", command=self.authenticate_info, bg="#baffcd")
+        confirm_button.grid(row=7, column=1, padx=120)
 
         # Back to login page button
         back_button = tk.Button(master=self, text="Back", command=self.return_menu)
