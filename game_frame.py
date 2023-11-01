@@ -4,6 +4,7 @@ from PIL import Image, ImageTk
 from game import Game
 from younglearner_frame import YoungLearnerFrame
 from user import YoungLearner
+
 '''
 The GameFrame class 
 represents the frame that displays the game to the user. It inherits from the tkinter Frame class and contains various 
@@ -43,7 +44,7 @@ class GameFrame(tk.Frame):
         self.exit_button = tk.Button(root, text="Exit", command=self.return_to_younglearner, bg='#f2dad3',
                                      foreground='red')
         self.exit_button.pack(side=tk.BOTTOM)
-        
+
         self.progress_label = tk.Label(root, text="")
         self.progress_label.pack()
 
@@ -204,7 +205,7 @@ class GameFrame(tk.Frame):
 
         self.result_label = tk.Label(self.result_frame, text=result)
         self.result_label.grid(row=0, column=0)
-        
+
     def show_progress(self):
         progress = self.game.progress
         message = "Your progress:\n"

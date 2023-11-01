@@ -2,8 +2,6 @@ import tkinter as tk
 from user import User, YoungLearner, Admin
 from authenticator import Authenticator
 from register_frame import RegisterFrame
-from younglearner_frame import YoungLearnerFrame
-from admin_frame import AdminFrame
 
 class LoginFrame(tk.Frame):
     """
@@ -98,28 +96,30 @@ class LoginFrame(tk.Frame):
             # Removes login successful text when logging out
             # self.login_text.set("")
 
-            if isinstance(auth_res, YoungLearner):  # Check if the user is a YoungLearner
-                self.login_text.set("Login successfully!")
+            if auth_res.get_role() == "PA":  # patient login
+
+                # Clears password and username input from index 0 to the end of index upon successful login
+                # Not visible until user logs out
                 self.password_entry.delete(0, 'end')
                 self.username_entry.delete(0, 'end')
+
+                # Remove login page from display
                 self.place_forget()
-                # Create and display the YoungLearnerFrame with the authenticated user
-                young_learner_frame = YoungLearnerFrame(self.master, self, auth_res)
-                young_learner_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
+                # Create and display the Patient login frame
+                login_frame = YoungLearner(self.master, self, auth_res)
+                login_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
-            elif auth_res.get_role() == "AD":  # Admin login
+            elif auth_res.get_role() in ["YL", "AD"]:
                 self.login_text.set("Login successfully!")
-                self.password_entry.delete(0, 'end')
-                self.username_entry.delete(0, 'end')
-                self.place_forget()
-
-                # Create and display the Admin frame
-                admin_frame = AdminFrame(self.master, self, auth_res)
-                admin_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-
+                # TESTING USAGE
+                print("auth_res:", auth_res)
+                # print("Role:", auth_res.get_role())
         else:
             self.login_text.set("Failed to login")
+            # TESTING USAGE
+            print("auth_res:", auth_res)
+            # print("Role:", auth_res.get_role())
 
 
 def main():
