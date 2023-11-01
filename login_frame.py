@@ -2,6 +2,8 @@ import tkinter as tk
 from user import User, YoungLearner, Admin
 from authenticator import Authenticator
 from register_frame import RegisterFrame
+from younglearner_frame import YoungLearnerFrame
+from admin_frame import AdminFrame
 
 class LoginFrame(tk.Frame):
     """
@@ -96,7 +98,7 @@ class LoginFrame(tk.Frame):
             # Removes login successful text when logging out
             # self.login_text.set("")
 
-            if auth_res.get_role() == "PA":  # patient login
+            if auth_res.get_role() == "YL":  # patient login
 
                 # Clears password and username input from index 0 to the end of index upon successful login
                 # Not visible until user logs out
@@ -105,13 +107,20 @@ class LoginFrame(tk.Frame):
 
                 # Remove login page from display
                 self.place_forget()
-
-                # Create and display the Patient login frame
-                login_frame = YoungLearner(self.master, self, auth_res)
+                login_frame = YoungLearnerFrame(self.master, self, auth_res)
                 login_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+                # Create and display the Patient login frame
 
-            elif auth_res.get_role() in ["YL", "AD"]:
+
+            elif auth_res.get_role() in ["AD"]:
                 self.login_text.set("Login successfully!")
+                self.password_entry.delete(0, 'end')
+                self.username_entry.delete(0, 'end')
+
+                # Remove login page from display
+                self.place_forget()
+                login_frame = AdminFrame(self.master, self, auth_res)
+                login_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
                 # TESTING USAGE
                 print("auth_res:", auth_res)
                 # print("Role:", auth_res.get_role())
