@@ -16,7 +16,17 @@ pip install -r requirements.txt
 ```
 
 ## Usage
+After installing the requirements.
 
+Run the program by running the the interface.py. This will take you to the login frame.
+
+If you are a new user please click on the "Register New Account" button to register as a user.
+
+After that the program is yours to explore!
+
+Play game is where you will learn basic python.
+
+Quizzes is where you can test your skills.
 
 ## Contact
 Xin Ru - xleo0003@student.monash.edu
