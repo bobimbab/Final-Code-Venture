@@ -40,7 +40,7 @@ class LoginFrame(tk.Frame):
         login_title.grid(row=1, columnspan=2, padx=10, pady=10)
 
         # Label to ask user for Username
-        username_label = tk.Label(master=self, text="Username:")
+        username_label = tk.Label(master=self, text="Username:", font=("Georgia"))
         username_label.grid(row=2, column=0, sticky=tk.E, padx=10, pady=10)
 
         # Variable and entry for username
@@ -49,7 +49,7 @@ class LoginFrame(tk.Frame):
         self.username_entry.grid(row=2, column=1, sticky=tk.W, padx=10, pady=10)
 
         # Label to ask user for Password
-        password_label = tk.Label(master=self, text="Password:")
+        password_label = tk.Label(master=self, text="Password:", font=("Georgia"))
         password_label.grid(row=3, column=0, sticky=tk.E, padx=10, pady=10)
 
         # Variable and entry to password, password entry will be hidden
@@ -59,9 +59,8 @@ class LoginFrame(tk.Frame):
         self.password_entry.grid(row=3, column=1, sticky=tk.W, padx=10, pady=10)
 
         # Button to login
-        # login_button = tk.Button(master=self, text="Login")
         login_button = tk.Button(master=self, text="Login",
-                                 command=self.authenticate_login)
+                                 command=self.authenticate_login, bg="#baffcd")
         login_button.grid(row=3, column=1, padx=100)
 
         # Variable and label to inform user of login outcome
@@ -70,11 +69,13 @@ class LoginFrame(tk.Frame):
         login_message.grid(row=5, columnspan=2, padx=10, pady=10)
 
         # Button to reset password
-        pw_reset_button = tk.Button(master=self, text="Forgot Password", command=self.switch_to_forgot_pw)
+        pw_reset_button = tk.Button(master=self, text="Forgot Password", font=("Georgia"),
+                                    command=self.switch_to_forgot_pw)
         pw_reset_button.grid(row=6, columnspan=2, padx=10, pady=10)
 
         # Button to register new account
-        register_button = tk.Button(master=self, text="Register New Account", command=self.switch_to_register)
+        register_button = tk.Button(master=self, text="Register New Account", font=("Georgia"),
+                                    command=self.switch_to_register)
         register_button.grid(row=7, columnspan=2, padx=10, pady=2)
 
     def switch_to_forgot_pw(self):
