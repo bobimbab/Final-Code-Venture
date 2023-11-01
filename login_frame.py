@@ -8,9 +8,7 @@ from forgotPw_frame import ForgotPwFrame
 from game import Game
 
 class LoginFrame(tk.Frame):
-    """
-        The class definition for the LoginFrame class.
-        """
+    """The class definition for the LoginFrame class."""
 
     def __init__(self, master):
         """
@@ -21,14 +19,16 @@ class LoginFrame(tk.Frame):
         super().__init__(master=master)
         self.master = master
         self.shutdown_frame = None
-        # self.master.geometry(f"{width}x{height}")
 
-        # Logo image for the login page
+        # Creates a canvas for login page
         login_canvas = tk.Canvas(master=self, width=128, height=128)
         login_canvas.grid(row=0, columnspan=2, sticky=tk.S, padx=10, pady=10)
 
+        # Select the path to the logo image and loads it using tk.PhotoImage
         image_path = "images/python_logo.png"
         self.login_logo = tk.PhotoImage(file=image_path)
+
+        # Add image to canvas widget
         login_canvas.create_image(0, 0,
                                   anchor=tk.NW,
                                   image=self.login_logo)
@@ -63,7 +63,6 @@ class LoginFrame(tk.Frame):
         login_button = tk.Button(master=self, text="Login",
                                  command=self.authenticate_login)
         login_button.grid(row=3, column=1, padx=100)
-        # login_button.grid(row=4, columnspan=2, padx=10, pady=10)
 
         # Variable and label to inform user of login outcome
         self.login_text = tk.StringVar()
@@ -79,19 +78,24 @@ class LoginFrame(tk.Frame):
         register_button.grid(row=7, columnspan=2, padx=10, pady=2)
 
     def switch_to_forgot_pw(self):
+        """
+           Switch to the Forgot Password frame.
+           This method hides the current frame and displays
+           the Forgot Password frame in the application window.
+        """
         self.place_forget()
         forgot_pw_frame = ForgotPwFrame(self.master, login_frame=self)
         forgot_pw_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-        # DEBUGGING USE
-        print("Currently in forgot password frame")
 
     def switch_to_register(self):
+        """
+           Switch to the user Registration frame.
+           This method hides the current frame and displays
+           the Registration frame in the application window.
+        """
         self.place_forget()
         register_frame = RegisterFrame(self.master, login_frame=self)
-        # register_frame = RegisterFrame(master=self)
         register_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)  # Display the register frame
-        # DEBUGGING USE
-        print("Currently in register frame")
 
     def authenticate_login(self):
         """
@@ -99,23 +103,24 @@ class LoginFrame(tk.Frame):
         This is invoked when the login button is clicked.
         :return: None
         """
+        # Create an Authenticator instance
         authenticator = Authenticator()
         auth_res = authenticator.authenticate(self.username.get(),
                                               self.password.get())
 
         if isinstance(auth_res, User):
-            game = Game(self.username)
-
+            # If authentication is successful
             if isinstance(auth_res, YoungLearner):  # Check if the user is a YoungLearner
                 self.login_text.set("Login successfully!")
                 self.password_entry.delete(0, 'end')
                 self.username_entry.delete(0, 'end')
                 self.place_forget()
+
                 # Create and display the YoungLearnerFrame with the authenticated user
                 young_learner_frame = YoungLearnerFrame(self.master, self, auth_res, None)
                 young_learner_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
-                # Removes login successful text when logging out
+                # Removes login status ("Login successfully!") text when logging out
                 self.login_text.set("")
 
 
