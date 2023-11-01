@@ -1,5 +1,8 @@
 import random
+import ast
+
 class Quizzes:
+
     difficulties = ["Easy", "Medium", "Hard"]
 
     def __init__(self, title: str):
@@ -14,14 +17,34 @@ class Quizzes:
         # State variable to keep track of the current question index
         self.current_question_index = 0
 
-    @classmethod
-    def create_quiz(cls, title: str):
+    @staticmethod
+    def load_quizzes() -> dict[str, "Quizzes"]:
         """
-        Create a quiz object with the given title
-        :param title:
-        :return:
+        Load all quizzes from the quizzes.txt file
         """
-        pass
+        all_quizzes = {}
+        try:
+            with open("data/quizzes.txt", "r") as file:
+                quizzes = file.readlines()
+                for line in quizzes:
+                    try:
+                        quiz = line.strip().split(";")
+                        quiz_title = quiz[0]
+                        quiz_difficulty = quiz[1]
+                        quiz_questions = quiz[2]
+                        quiz_options = ast.literal_eval(quiz[3])
+                        quiz_answers = quiz[4]
+                        if quiz_title not in all_quizzes:
+                            all_quizzes[quiz_title] = Quizzes(quiz_title)
+                        all_quizzes[quiz_title].add_question(quiz_difficulty, quiz_questions, quiz_options,
+                                                             quiz_answers)
+                    except IndexError:
+                        print("Invalid quiz format!")
+                        continue
+            return all_quizzes
+        except FileNotFoundError:
+            print("No quizzes found!")
+            return {}
 
     def get_quiz_title(self):
         return self.title
@@ -93,6 +116,17 @@ class Quizzes:
         self.player_difficulty = None
         self.current_question_index = 0
         self.questions = None
+
+    def get_questions(self,difficulty) -> list[str]:
+        """
+        Return all question from the quiz based on the difficulty
+        """
+        if difficulty == "Easy":
+            return self.easy_questions
+        elif difficulty == "Medium":
+            return self.medium_questions
+        elif difficulty == "Hard":
+            return self.hard_questions
 
     def __str__(self):
         return f"Quiz Title: {self.title}\n" \

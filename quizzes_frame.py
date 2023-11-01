@@ -3,36 +3,6 @@ import random
 from animations import AnimatedButton, FadingLabel,ConfettiApp
 from tkinter import ttk
 from quizzes import Quizzes
-import ast
-
-
-def load_quizzes() -> dict[str, Quizzes]:
-    """
-    Load all quizzes from the quizzes.txt file
-
-    """
-    all_quizzes = {}
-    try:
-        with open("data/quizzes.txt", "r") as file:
-            quizzes = file.readlines()
-            for line in quizzes:
-                try:
-                    quiz = line.strip().split(";")
-                    quiz_title = quiz[0]
-                    quiz_difficulty = quiz[1]
-                    quiz_questions = quiz[2]
-                    quiz_options = ast.literal_eval(quiz[3])
-                    quiz_answers = quiz[4]
-                    if quiz_title not in all_quizzes:
-                        all_quizzes[quiz_title] = Quizzes(quiz_title)
-                    all_quizzes[quiz_title].add_question(quiz_difficulty, quiz_questions, quiz_options, quiz_answers)
-                except IndexError:
-                    print("Invalid quiz format!")
-                    continue
-        return all_quizzes
-    except FileNotFoundError:
-        print("No quizzes found!")
-        return {}
 
 
 class QuizzesMenuFrame(tk.Frame):
@@ -49,7 +19,7 @@ class QuizzesMenuFrame(tk.Frame):
 
         """
         super().__init__(parent)
-        self.all_quizzes = load_quizzes()
+        self.all_quizzes = Quizzes.load_quizzes()
         self.parent = parent
 
         style = ttk.Style()
