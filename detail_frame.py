@@ -1,6 +1,8 @@
 import tkinter as tk
 from user import User,YoungLearner,Admin
-class detailframe(tk.Frame):
+
+
+class DetailFrame(tk.Frame):
     def __init__(self, master, younglearner_frame, user):
         super().__init__(master)
         self.master = master

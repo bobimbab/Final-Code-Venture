@@ -79,7 +79,7 @@ class ManageQuiz(tk.Frame):
 
 class AddQuizzesFrame(tk.Frame):
     """
-
+    This frame is used to add a new quiz
     """
     def __init__(self, parent,manage_quiz_frame):
         super().__init__(parent)
@@ -124,7 +124,7 @@ class AddQuizzesFrame(tk.Frame):
 
 class AddQuestionFrame(tk.Frame):
     """
-
+    This frame is used to add questions to a quiz
     """
     def __init__(self, parent, quiz_title,manage_quiz_frame):
         super().__init__(parent)
@@ -153,7 +153,7 @@ class AddQuestionFrame(tk.Frame):
         self.question_entry.grid(row=4, column=0, columnspan=5, padx=10, pady=(0, 20))
 
         # Options
-        option_labels = ['a', 'b', 'c', 'd'] # can be changed to more options
+        option_labels = ['a', 'b', 'c', 'd'] # can be changed to add more options
         self.option_entries = {}
         self.correct_answer = tk.StringVar()
         for label in option_labels:
@@ -178,9 +178,7 @@ class AddQuestionFrame(tk.Frame):
 
     def add_question(self):
         """
-
-
-
+        This function is used to add a question to the quiz
         """
         options = []
         if self.difficulty_box.get() == "Please select a difficulty":
@@ -234,6 +232,9 @@ class AddQuestionFrame(tk.Frame):
         self.message.set("Question added successfully")
 
     def done_button(self):
+        """
+        When the user is done adding questions, this function is used to save the questions into the quizzes.txt
+        """
         if len(self.question_lst) == 0:
             self.message.set("Please enter at least one question")
             print("Please enter at least one question")
@@ -257,6 +258,9 @@ class AddQuestionFrame(tk.Frame):
 # ---------------------------- View Quiz Frame ---------------------------- #
 
 class ViewQuiz(tk.Frame):
+    """
+    This frame is used to view the quiz
+    """
     def __init__(self, parent, selected_quiz, selected_difficulty, manage_quiz_frame):
         super().__init__(parent)
         self.parent = parent
@@ -303,6 +307,9 @@ class ViewQuiz(tk.Frame):
 
 
 class ViewQuestion(tk.Frame):
+    """
+    This frame is used to view the question
+    """
     def __init__(self, parent, question, view_quiz_frame):
         super().__init__(parent)
         self.parent = parent

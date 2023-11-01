@@ -1,6 +1,7 @@
 import random
 import ast
 
+
 class Quizzes:
 
     difficulties = ["Easy", "Medium", "Hard"]
@@ -21,6 +22,7 @@ class Quizzes:
     def load_quizzes() -> dict[str, "Quizzes"]:
         """
         Load all quizzes from the quizzes.txt file
+        :return: The dictionary of quizzes
         """
         all_quizzes = {}
         try:
@@ -45,15 +47,6 @@ class Quizzes:
         except FileNotFoundError:
             print("No quizzes found!")
             return {}
-
-    @classmethod
-    def create_quiz(cls, title: str):
-        """
-        Create a quiz object with the given title
-        :param title:
-        :return:
-        """
-        pass
 
     def get_quiz_title(self):
         return self.title
@@ -80,6 +73,9 @@ class Quizzes:
             self.hard_questions.append((question, options, answer))
 
     def set_difficulty(self, choice: int) -> None:
+        """
+        Set the difficulty of the quiz based on the choice
+        """
         if choice in [1, 2, 3]:
             self.player_difficulty = self.difficulties[choice - 1]
 
@@ -137,7 +133,10 @@ class Quizzes:
         elif difficulty == "Hard":
             return self.hard_questions
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """
+        Return a string representation of the quiz
+        """
         return f"Quiz Title: {self.title}\n" \
                f"Easy Questions:\n{self.format_questions(self.easy_questions)}\n" \
                f"Medium Questions:\n{self.format_questions(self.medium_questions)}\n" \
@@ -150,9 +149,7 @@ class Quizzes:
 if __name__ == "__main__":
     # sample data
     quiz = Quizzes("Python Data Types")
-
     # Adding multiple-choice questions and answers for the "Easy" difficulty
-
     # Adding multiple-choice questions and answers for the "Easy" difficulty
     quiz.add_question("Easy", "What data type is used to represent whole numbers in Python?",
                       ["a) int", "b) float", "c) str"], "a) int")
