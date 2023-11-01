@@ -8,9 +8,10 @@ class ManageQuiz(tk.Frame):
 
     difficulty = ["Easy", "Medium", "Hard"]
 
-    def __init__(self, parent):
+    def __init__(self, parent,admin_frame):
         super().__init__(parent)
         self.quizzes = Quizzes.load_quizzes()
+        self.admin_frame = admin_frame
         self.parent = parent
         self.title = ttk.Label(self, text="Manage Quiz", font=("Arial", 30, "bold"))
         self.title.pack(padx=10, pady=10)
@@ -35,6 +36,9 @@ class ManageQuiz(tk.Frame):
 
         self.add_quiz_button = ttk.Button(self, text="Add a new Quiz", command=self.add_quizzes)
         self.add_quiz_button.pack(padx=10, pady=30)
+
+        self.back_button = ttk.Button(self, text="Back", command=self.go_back)
+        self.back_button.pack(padx=10, pady=10)
 
         self.message = tk.StringVar()
         self.message_label = ttk.Label(self, textvariable=self.message, font=("Arial", 10, "bold"))
@@ -65,6 +69,10 @@ class ManageQuiz(tk.Frame):
         self.place_forget()
         add_question_frame = AddQuizzesFrame(self.master,self)
         add_question_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+    def go_back(self):
+        self.place_forget()
+        self.admin_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
 # ---------------------------- Add Quiz Frame ---------------------------- #
 
@@ -308,7 +316,6 @@ class ViewQuestion(tk.Frame):
         for i in self.options:
             self.options_label = ttk.Label(self, text=i, font=("Arial", 15),
                                    wraplength=1000)
-            print(self.options.index(i) + 3)
             self.options_label.grid(row=self.options.index(i) + 3, column=0, columnspan=2, padx=10, pady=10)
 
         self.correct_answer = self.question[2]
