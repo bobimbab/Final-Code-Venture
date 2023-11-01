@@ -117,8 +117,6 @@ class RegisterFrame(tk.Frame):
         self.place_forget() # forget a widget from the parent widget or screen
         self.login_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER) # Positions the frame and is anchored in the
                                                                        # \middle
-        # DEBUGGING USE
-        print("Currently in login frame")
 
     def authenticate_register(self):
         """
