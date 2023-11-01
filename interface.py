@@ -1,10 +1,4 @@
-"""
-FIT1056 Problem Solving Tasks for Week 11
-"""
-
-# Third party imports
 import tkinter as tk
-# Local application imports
 from login_frame import LoginFrame
 
 
