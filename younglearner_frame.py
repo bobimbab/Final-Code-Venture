@@ -10,12 +10,12 @@ class YoungLearnerFrame(tk.Frame):
     """
     A child class that inherits its parents (User).
     """
-    def __init__(self, master,login_frame, user_obj):
+    def __init__(self, master,login_frame, user_obj, game_frame):
         super().__init__(master)
         self.master = master
         self.login_frame = login_frame
         self.user_obj = user_obj
-        # self.game_frame = game_frame
+        self.game_frame = game_frame
 
 
         for row_count in range(5):
@@ -83,7 +83,7 @@ if __name__ == "__main__":
     root = tk.Tk()
 
     # Create a YoungLearnerFrame with the sample user
-    young_learner_frame = YoungLearnerFrame(root, None, sample_user)
+    young_learner_frame = YoungLearnerFrame(root, None, sample_user, None)
 
     # Place the YoungLearnerFrame in the window
     young_learner_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)

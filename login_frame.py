@@ -4,6 +4,8 @@ from authenticator import Authenticator
 from register_frame import RegisterFrame
 from younglearner_frame import YoungLearnerFrame
 from admin_frame import AdminFrame
+from forgotPw_frame import ForgotPwFrame
+from game import Game
 
 class LoginFrame(tk.Frame):
     """
@@ -18,6 +20,7 @@ class LoginFrame(tk.Frame):
         """
         super().__init__(master=master)
         self.master = master
+        self.shutdown_frame = None
         # self.master.geometry(f"{width}x{height}")
 
         # Logo image for the login page
@@ -68,12 +71,19 @@ class LoginFrame(tk.Frame):
         login_message.grid(row=5, columnspan=2, padx=10, pady=10)
 
         # Button to reset password
-        pw_reset_button = tk.Button(master=self, text="Forgot Password")
+        pw_reset_button = tk.Button(master=self, text="Forgot Password", command=self.switch_to_forgot_pw)
         pw_reset_button.grid(row=6, columnspan=2, padx=10, pady=10)
 
         # Button to register new account
         register_button = tk.Button(master=self, text="Register New Account", command=self.switch_to_register)
-        register_button.grid(row=7, columnspan=2, padx=10, pady=10)
+        register_button.grid(row=7, columnspan=2, padx=10, pady=2)
+
+    def switch_to_forgot_pw(self):
+        self.place_forget()
+        forgot_pw_frame = ForgotPwFrame(self.master, login_frame=self)
+        forgot_pw_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        # DEBUGGING USE
+        print("Currently in forgot password frame")
 
     def switch_to_register(self):
         self.place_forget()
@@ -94,41 +104,36 @@ class LoginFrame(tk.Frame):
                                               self.password.get())
 
         if isinstance(auth_res, User):
+            game = Game(self.username)
 
-            # Removes login successful text when logging out
-            # self.login_text.set("")
-
-            if auth_res.get_role() == "YL":  # patient login
-
-                # Clears password and username input from index 0 to the end of index upon successful login
-                # Not visible until user logs out
-                self.password_entry.delete(0, 'end')
-                self.username_entry.delete(0, 'end')
-
-                # Remove login page from display
-                self.place_forget()
-                login_frame = YoungLearnerFrame(self.master, self, auth_res)
-                login_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-                # Create and display the Patient login frame
-
-
-            elif auth_res.get_role() in ["AD"]:
+            if isinstance(auth_res, YoungLearner):  # Check if the user is a YoungLearner
                 self.login_text.set("Login successfully!")
                 self.password_entry.delete(0, 'end')
                 self.username_entry.delete(0, 'end')
-
-                # Remove login page from display
                 self.place_forget()
-                login_frame = AdminFrame(self.master, self, auth_res)
-                login_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-                # TESTING USAGE
-                print("auth_res:", auth_res)
-                # print("Role:", auth_res.get_role())
+                # Create and display the YoungLearnerFrame with the authenticated user
+                young_learner_frame = YoungLearnerFrame(self.master, self, auth_res, None)
+                young_learner_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+                # Removes login successful text when logging out
+                self.login_text.set("")
+
+
+            elif auth_res.get_role() == "AD":  # Admin login
+                self.login_text.set("Login successfully!")
+                self.password_entry.delete(0, 'end')
+                self.username_entry.delete(0, 'end')
+                self.place_forget()
+
+                # Create and display the Admin frame
+                admin_frame = AdminFrame(self.master, self, self.shutdown_frame, auth_res)
+                admin_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+                # Removes login successful text when logging out
+                self.login_text.set("")
+
         else:
             self.login_text.set("Failed to login")
-            # TESTING USAGE
-            print("auth_res:", auth_res)
-            # print("Role:", auth_res.get_role())
 
 
 def main():
