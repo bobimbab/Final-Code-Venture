@@ -36,7 +36,7 @@ class QuizzesMenuFrame(tk.Frame):
     The class definition for the QuizzesFrame class.
     """
 
-    def __init__(self,parent):
+    def __init__(self,parent,young_learner_frame):
         """
         Constructor for the Interface class,
         the main window for the HCMS.
@@ -47,6 +47,7 @@ class QuizzesMenuFrame(tk.Frame):
         super().__init__(parent)
         self.all_quizzes = Quizzes.load_quizzes()
         self.parent = parent
+        self.young_learner_frame = young_learner_frame
 
         style = ttk.Style()
         style.configure('W.TButton', font=
@@ -89,7 +90,7 @@ class QuizzesMenuFrame(tk.Frame):
         self.warning_label = tk.Label(self, textvariable=self.warning_text, font=("Arial", 15), fg="red").pack(pady=10)
 
         # Back button
-        self.back_button = tk.Button(self, text="Return to Menu", font=("Arial", 15), command="")
+        self.back_button = tk.Button(self, text="Return to Menu", font=("Arial", 15), command=self.back_to_menu)
         self.back_button.pack(pady=10)  # Add vertical padding
 
     def play_quiz(self):
@@ -102,6 +103,10 @@ class QuizzesMenuFrame(tk.Frame):
         self.place_forget()
         choose_difficulty_frame = ChooseDifficultyFrame(self.parent, selected_quiz,self)
         choose_difficulty_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+    def back_to_menu(self):
+        self.place_forget()
+        self.young_learner_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
 
 class ChooseDifficultyFrame(tk.Frame):
@@ -211,10 +216,10 @@ class PlayQuizFrame (tk.Frame):
         print("current answer",self.selected_quiz.current_answer)
         if answer == self.selected_quiz.current_answer:
             self.score += 1
-            fading_label = FadingLabel(root, text="Correct", font=("Arial", 20,"bold"))
+            fading_label = FadingLabel(self.parent, text="Correct", font=("Arial", 20,"bold"))
             fading_label.pack(pady=10)
         else:
-            fading_label = FadingLabel(root, text="Incorrect", font=("Arial", 20,"bold"))
+            fading_label = FadingLabel(self.parent, text="Incorrect", font=("Arial", 20,"bold"))
             fading_label.pack(pady=10)
 
     def return_to_menu(self):

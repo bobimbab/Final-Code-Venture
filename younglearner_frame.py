@@ -46,10 +46,10 @@ class YoungLearnerFrame(tk.Frame):
         game_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
     def do_quiz(self):
-        # self.place_forget()
-        # quiz_frame = QuizFrame(self.master,self)
-        # quiz_frame.place(relx=0.5,rely=0.5,anchor=tk.CENTER)
-        pass
+        from quizzes_frame import QuizzesMenuFrame
+        self.place_forget()
+        quiz_frame = QuizzesMenuFrame(self.master, self)
+        quiz_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
     def get_det(self, user):
         self.place_forget()
