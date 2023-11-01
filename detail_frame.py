@@ -1,9 +1,19 @@
 import tkinter as tk
-from user import User,YoungLearner,Admin
-
+from user import User, YoungLearner, Admin
 
 class DetailFrame(tk.Frame):
+    """
+    The DetailFrame class represents a frame that displays user details.
+    """
     def __init__(self, master, younglearner_frame, user):
+        """
+        Initialize the DetailFrame with user details.
+
+        Args:
+            master (tk.Tk): The parent window.
+            younglearner_frame: The young learner frame to return to.
+            user (User): The user object to display details for.
+        """
         super().__init__(master)
         self.master = master
         self.younglearner_frame = younglearner_frame
@@ -33,5 +43,8 @@ class DetailFrame(tk.Frame):
         back_button.grid(row=6, column=0, padx=10, pady=10)
 
     def back(self):
+        """
+        Return to the young learner frame.
+        """
         self.place_forget()
         self.younglearner_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
