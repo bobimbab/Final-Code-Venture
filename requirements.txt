@@ -1,2 +1,2 @@
-Pillow~=10.0.0
-tkcalendar
+Pillow~=10.1.0
+tkcalendar~=1.6.1
