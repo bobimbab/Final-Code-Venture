@@ -3,10 +3,11 @@ from authenticator import Authenticator
 from user import User, YoungLearner
 from tkinter import messagebox
 
+
 class ForgotPwFrame(tk.Frame):
     """
-            The class definition for the ForgotPwFrame class.
-            """
+    The class definition for the ForgotPwFrame class.
+    """
 
     def __init__(self, master, login_frame):
         """
@@ -20,10 +21,9 @@ class ForgotPwFrame(tk.Frame):
 
         # Label containing heading indicating the current frame is a password resetting page
         forgot_pw_title = tk.Label(master=self,
-                               text="Trouble Logging in?",
-                               font=("Arial", 30))
-        # regis_title.grid()
-        forgot_pw_title.grid(row=1,columnspan=2, padx=10, pady=10)
+                                   text="Trouble Logging in?",
+                                   font=("Arial", 30))
+        forgot_pw_title.grid(row=1, columnspan=2, padx=10, pady=10)
 
         # Label containing description
         forgot_pw_desc = tk.Label(master=self,
@@ -61,23 +61,21 @@ class ForgotPwFrame(tk.Frame):
         self.password_entry.grid(row=6, column=1, sticky=tk.W, padx=10, pady=10)
 
         # Label to ask user to confirm their new Password
-        password_label = tk.Label(master=self, text="Confirm New Password:")
-        password_label.grid(row=7, column=0, sticky=tk.E, padx=10, pady=10)
+        confirm_password_label = tk.Label(master=self, text="Confirm New Password:")
+        confirm_password_label.grid(row=7, column=0, sticky=tk.E, padx=10, pady=10)
 
         # Variable and entry to new password, new password entry will be hidden
-        self.password = tk.StringVar()
-        self.password_entry = tk.Entry(master=self, textvariable=self.password,
-                                       show="●")
-        self.password_entry.grid(row=7, column=1, sticky=tk.W, padx=10, pady=10)
+        self.confirm_password = tk.StringVar()
+        self.confirm_password_entry = tk.Entry(master=self, textvariable=self.confirm_password,
+                                               show="●")
+        self.confirm_password_entry.grid(row=7, column=1, sticky=tk.W, padx=10, pady=10)
 
         # Confirm button for changing password
         confirm_button = tk.Button(master=self, text="Confirm", command=self.authenticate_info)
         confirm_button.grid(row=7, column=1, padx=100)
 
         # Back to login page button
-        # back_button = tk.Button(self, text="Back", command=lambda: login_frame.place())
         back_button = tk.Button(master=self, text="Back", command=self.return_menu)
-        # back_button = tk.Button(master=self, text="Back")
         back_button.grid(row=0, column=0, sticky=tk.NW)
 
         # Variable and label to inform user of password outcome
@@ -85,53 +83,51 @@ class ForgotPwFrame(tk.Frame):
         pw_outcome_message = tk.Label(master=self, textvariable=self.pw_outcome_text)
         pw_outcome_message.grid(row=8, columnspan=2, padx=10, pady=10)
 
-
     def return_menu(self):
         """
         Returns to previous menu
         """
-        self.place_forget() # forget a widget from the parent widget or screen
-        self.login_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER) # Positions the frame and is anchored in the
-                                                                       # \middle
-        # DEBUGGING USE
-        print("Currently in login frame")
+        self.place_forget()  # forget a widget from the parent widget or screen
+        self.login_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)  # Positions the frame and is anchored in the
 
     def authenticate_info(self):
+        """
+            This function is invoked when the "Confirm" button is clicked to change the password.
+            It collects input values, validates them, checks if the "New Password" and "Confirm Password" match,
+            and proceeds with the password change if all checks pass.
+
+        """
         # Get the values from the input fields
         email = self.email_entry.get()
         ph_num = self.ph_num_entry.get()
         password = self.password_entry.get()
+
+        # Add this line to get the value of the confirm password field
+        confirm_password = self.confirm_password_entry.get()
 
         # Check if any of the fields is empty
         if not email or not ph_num or not password:
             messagebox.showerror("Error", "All fields are required")
             return  # Don't proceed further if any field is empty
 
+        # Check if the "New Password" and "Confirm Password" fields match
+        if password != confirm_password:
+            messagebox.showerror("Error", "Password and Confirm Password do not match.")
+            return
+
         # Continue with the authentication procedure
         authenticator = Authenticator()
         auth_res = authenticator.authenticate_forgot_pw(email, ph_num, password)
 
+        # If authentication is successful
         if isinstance(auth_res, User):
+
+            # If user is younglearner
             if isinstance(auth_res, YoungLearner):
                 self.pw_outcome_text.set("Password changed successfully!")
         else:
             self.pw_outcome_text.set("Failed to change password. Invalid details.")
-    # def authenticate_info(self):
-    #     """
-    #     Frontend function for the authentication procedure.
-    #     This is invoked when the login button is clicked.
-    #     :return: None
-    #     """
-    #     authenticator = Authenticator()
-    #     auth_res = authenticator.authenticate_forgot_pw(self.email_entry.get(), self.ph_num.get())
-    #
-    #     if isinstance(auth_res, User):
-    #
-    #         if isinstance(auth_res, YoungLearner):  # Check if the user is a YoungLearner
-    #             self.pw_outcome_text.set("Password changed successfully!")
-    #
-    #     else:
-    #         self.pw_outcome_text.set("Fail to change password")
+
 
 def main():
     root = tk.Tk()
@@ -144,6 +140,7 @@ def main():
     y_frame.grid(row=0, padx=10, pady=10)
 
     root.mainloop()
+
 
 if __name__ == "__main__":
     main()
