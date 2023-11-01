@@ -188,4 +188,63 @@ class AdminFrame(tk.Frame):
         """
         self.place_forget()
         dets_frame = DetailFrame(self.master, self, user)
-        dets_frame
+        dets_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+    def get_det_admin(self, user):
+        """
+        Display user details for the admin.
+        """
+        self.place_forget()
+        dets_frame = DetailFrame(self.master, self, user)
+        dets_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+    def logout(self):
+        """
+        Log out and return to the login frame.
+        """
+        self.place_forget()
+        self.login_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+    def shut_down(self):
+        """
+        Initiate a shutdown process by displaying a shutdown message and scheduling the actual shutdown.
+        """
+        for widget in self.winfo_children():
+            widget.destroy()
+        shutdown_label = tk.Label(self, text="Shutting Down...", font=("Helvetica", 18))
+        shutdown_label.grid(row=0, column=0, padx=10, pady=10)
+
+        # Schedule the actual shutdown after 3 seconds
+        self.after(3000, self.shutdown_application)
+
+    def shutdown_application(self):
+        """
+        Perform any shutdown actions and close the application.
+        """
+        self.master.destroy()
+
+if __name__ == "__main__":
+    from user import Admin
+    from datetime import date
+
+    sample_user = Admin(
+        first_name="John",
+        last_name="Doe",
+        username="johndoe",
+        password="password123",
+        dob=date(2005, 5, 15),
+        email="johndoe@example.com",
+        ph_num="123-456-7890",
+    )
+
+    # Create the main application window
+    root = tk.Tk()
+
+    # Create an AdminFrame with the sample admin user
+    admin_frame = AdminFrame(root, None, None, sample_user)
+
+    # Place the AdminFrame in the window
+    admin_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+    # Start the application's main loop
+    root.mainloop()
