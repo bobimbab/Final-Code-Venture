@@ -3,7 +3,6 @@ from tkcalendar import Calendar
 from tkcalendar import DateEntry
 from tkinter import messagebox
 from datetime import datetime
-
 from user import User, YoungLearner, Admin
 from authenticator import Authenticator
 
@@ -18,22 +17,13 @@ class RegisterFrame(tk.Frame):
         super().__init__(master=master)
         self.master = master
         self.login_frame = login_frame
-        # self.master.geometry(f"{width}x{height}")
-
-        # # Logo image for the login page
-        # canvas = tk.Canvas(master=self, width=128, height=128)
-        # canvas.grid(row=0, columnspan=2, padx=10, pady=10)
-        #
-        # image_path = "images/python_logo.png"
-        # self.logo = tk.PhotoImage(file=image_path)
-        # canvas.create_image(0, 0, anchor=tk.NW, image=self.logo)
 
         # Label containing heading indicating the current frame is a account registration page
         regis_title = tk.Label(master=self,
                                text="Welcome to CodeVenture!",
                                font=("Arial Bold", 30))
         # regis_title.grid()
-        regis_title.grid(row=1,columnspan=2, padx=10, pady=10)
+        regis_title.grid(row=1, columnspan=2, padx=10, pady=10)
 
         # Label to ask user for Username
         username_label = tk.Label(master=self, text="Username:")
@@ -77,10 +67,7 @@ class RegisterFrame(tk.Frame):
         dob_label.grid(row=6, column=0, sticky=tk.E, padx=10, pady=10)
 
         # Variable and entry to date of birth
-        # self.dob_entry = tk.StringVar()
         self.dob_entry = DateEntry(self, selectmode="day", locale="en_UK", date_pattern="yyyy-mm-dd")
-        # self.dob_entry = DateEntry(master=self, width=12, borderwidth=2)
-        # self.dob_entry = tk.Entry(master=self, textvariable=self.dob_entry)
         self.dob_entry.grid(row=6, column=1, sticky=tk.W, padx=10, pady=10)
 
         # Label to ask user for their phone number
@@ -112,12 +99,9 @@ class RegisterFrame(tk.Frame):
 
         # Button to register
         register_button = tk.Button(master=self, text="Register", command=self.authenticate_register)
-        # login_button = tk.Button(master=self, text="Login",
-        #                          command=self.authenticate_login)
         register_button.grid(row=10,column=0, columnspan=2, padx=10, pady=10)
 
         # Back to login page button
-        # back_button = tk.Button(self, text="Back", command=lambda: login_frame.place())
         back_button = tk.Button(master=self, text="Back", command=self.return_menu)
         back_button.grid(row=0, column=0, sticky=tk.NW)
 
@@ -142,6 +126,8 @@ class RegisterFrame(tk.Frame):
         This is invoked when the register button is clicked.
         :return: None
         """
+
+        # Extract user registration information from the input fields
         username = self.username_entry.get()
         password = self.password_entry.get()
         first_name = self.first_name_entry.get()
@@ -152,6 +138,7 @@ class RegisterFrame(tk.Frame):
         try:
             dob_date = datetime.strptime(dob_str, "%Y-%m-%d").date()
         except ValueError:
+            # Display an error message if the date format is invalid
             messagebox.showerror("Registration Error", "Invalid date of birth format. Use YYYY-MM-DD")
             return
 
@@ -160,18 +147,26 @@ class RegisterFrame(tk.Frame):
         grade = self.grade_entry.get()
 
         # Check if any of the fields are empty
-        if not username or not password or not first_name or not last_name or not dob_date or not phone or not email or not grade:
+        if not username or not password or not first_name or not last_name or not dob_date \
+                or not phone or not email or not grade:
+            # Display an error message if any fields are left blank
             messagebox.showerror("Registration Error", "Please fill in all registration fields.")
         else:
             authenticator = Authenticator()
-            auth_res = authenticator.username_exists(username)
+            auth_res = authenticator.username_exists(username)  # Check if the username already exists
 
             if auth_res:
                 messagebox.showerror("Error:", "Username already exists. Please pick another username")
+
             else:
+                # Attempt to register the user with the provided information
                 user = authenticator.register(username, password, first_name, last_name, dob_date, phone, email, grade)
+
                 if user:
+                    # Display a success message if registration is successful
                     self.registration_text.set("Registration successful! You may now log in from the login page.")
+
+                    # Clear input fields upon successful registration
                     self.username_entry.delete(0, 'end')
                     self.password_entry.delete(0, 'end')
                     self.first_name_entry.delete(0, 'end')
@@ -180,8 +175,9 @@ class RegisterFrame(tk.Frame):
                     self.ph_num_entry.delete(0, 'end')
                     self.email_entry.delete(0, 'end')
                     self.grade_entry.delete(0, 'end')
-                    # messagebox.showinfo("Registration Successful", "Registration successful!")
+
                 else:
+                    # Display an error message if registration fails
                     self.registration_text.set("Failed to register. Please try again.")
                     messagebox.showerror("Registration Error", "Failed to register. Please try again.")
 
