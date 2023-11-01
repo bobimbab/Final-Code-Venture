@@ -1,7 +1,10 @@
 from datetime import date
 
-
 class User:
+    """
+    The User class represents a user with various attributes.
+    """
+
     def __init__(self, first_name: str, last_name: str, username: str, password: str, dob: date,
                  email: str | None = None, ph_num: str | None = None, role: str | None = None) -> None:
         """
@@ -98,8 +101,11 @@ class User:
         """
         self._password = new_password
 
-
 class YoungLearner(User):
+    """
+    The YoungLearner class represents a young learner, inheriting from the User class.
+    """
+
     def __init__(self, first_name: str, last_name: str, username: str, password: str, dob: date,
                  email: str, ph_num: str, grade: int) -> None:
         super().__init__(first_name=first_name,
@@ -135,12 +141,14 @@ class YoungLearner(User):
                f"Phone Number: {self.get_ph_num()}\n" \
                f"Grade: {self.get_grade()}\n"
 
-
 class Admin(User):
+    """
+    The Admin class represents an admin user, inheriting from the User class.
+    """
+
     def __init__(self, first_name: str, last_name: str, username: str, password: str, dob: date,
                  email: str, ph_num: str) -> None:
         super().__init__(first_name, last_name, username, password, dob, email, ph_num, role="AD")
-
 
     def get_details(self) -> str:
         """
