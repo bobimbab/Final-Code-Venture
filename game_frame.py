@@ -1,18 +1,25 @@
 import tkinter as tk
-from datetime import date
 from PIL import Image, ImageTk
 from game import Game
 from younglearner_frame import YoungLearnerFrame
 from user import YoungLearner
-'''
-The GameFrame class 
-represents the frame that displays the game to the user. It inherits from the tkinter Frame class and contains various 
-widgets and methods for managing the game interface.
-'''
-
 
 class GameFrame(tk.Frame):
+    """
+    The GameFrame class represents the frame that displays the game to the user. 
+    It inherits from the tkinter Frame class and contains various widgets and methods 
+    for managing the game interface.
+    """
+
     def __init__(self, root, young_learner_frame, user_obj):
+        """
+        Initialize a GameFrame instance.
+
+        Args:
+            root (tk.Tk): The root tkinter window.
+            young_learner_frame (YoungLearnerFrame): Reference to the YoungLearnerFrame.
+            user_obj (YoungLearner): The user object.
+        """
         super().__init__(root)
         self.root = root
         self.young_learner_frame = young_learner_frame  # Store a reference to the YoungLearnerFrame
@@ -43,7 +50,7 @@ class GameFrame(tk.Frame):
         self.exit_button = tk.Button(root, text="Exit", command=self.return_to_younglearner, bg='#f2dad3',
                                      foreground='red')
         self.exit_button.pack(side=tk.BOTTOM)
-        
+
         self.progress_label = tk.Label(root, text="")
         self.progress_label.pack()
 
@@ -89,6 +96,9 @@ class GameFrame(tk.Frame):
         self.result_label.grid_remove()  # Initially hide the result label
 
     def start_viewing(self):
+        """
+        Start the game viewing when the "Start" button is clicked.
+        """
         module_name = self.module_var.get()
         self.game.set_current_module(module_name)
         self.viewing_started = True  # Set viewing flag to true
@@ -105,6 +115,9 @@ class GameFrame(tk.Frame):
         self.show_image()  # display the first image
 
     def show_image(self):
+        """
+        Display the current image or challenge to the user.
+        """
         current_image = self.game.get_current_image()
         current_challenge, _ = self.game.get_current_challenge()
 
@@ -144,6 +157,17 @@ class GameFrame(tk.Frame):
 
     @staticmethod
     def resize_image_to_fit_window(image, new_w, new_h):
+        """
+        Resize the image to fit the specified dimensions.
+
+        Args:
+            image (PIL.Image.Image): The image to resize.
+            new_w (int): The new width.
+            new_h (int): The new height.
+
+        Returns:
+            PIL.Image.Image: The resized image.
+        """
         original_width, original_height = image.size
         if new_w == 0:
             scale_width = 1
@@ -162,14 +186,23 @@ class GameFrame(tk.Frame):
         return resized_image
 
     def show_previous_image(self):
+        """
+        Display the previous image when the "Previous" button is clicked.
+        """
         self.game.current_image_index -= 1
         self.show_image()
 
     def show_next_image(self):
+        """
+        Display the next image when the "Next" button is clicked.
+        """
         self.game.current_image_index += 1
         self.show_image()
 
     def submit_answer(self):
+        """
+        Submit the user's answer and display the result.
+        """
         user_answer = self.answer_entry.get()
         result = self.game.check_answer(user_answer)
         self.result_label.config(text=result)
@@ -184,6 +217,9 @@ class GameFrame(tk.Frame):
             self.submit_button.config(command=self.submit_correct_answer)
 
     def submit_correct_answer(self):
+        """
+        Submit the user's answer again after an incorrect attempt.
+        """
         user_answer = self.answer_entry.get()
         result = self.game.check_answer(user_answer)
         self.result_label.config(text=result)
@@ -195,6 +231,12 @@ class GameFrame(tk.Frame):
         self.result_label.grid()
 
     def show_result(self, result):
+        """
+        Display the result to the user.
+
+        Args:
+            result (str): The result message to display.
+        """
         self.result_label.config(text=result)
         if hasattr(self, "result_frame"):
             self.result_frame.destroy()
@@ -204,11 +246,14 @@ class GameFrame(tk.Frame):
 
         self.result_label = tk.Label(self.result_frame, text=result)
         self.result_label.grid(row=0, column=0)
-        
+
     def show_progress(self):
+        """
+        Display the user's progress.
+        """
         progress = self.game.progress
         message = "Your progress:\n"
-        if self.game.completion == True:
+        if self.game.completion:
             for module in progress:
                 message += f"{module}: Completed"
         else:
@@ -217,6 +262,9 @@ class GameFrame(tk.Frame):
         self.progress_label.config(text=message)
 
     def return_to_younglearner(self):
+        """
+        Return to the YoungLearnerFrame and hide the GameFrame.
+        """
         self.place_forget()
 
         # Hide the "Exit" button
