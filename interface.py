@@ -13,7 +13,7 @@ class Interface(tk.Tk):
     """
     Class definition for the Interface class
     """
-    def __init__(self, title, width=960, height=540):
+    def __init__(self, title, width=1000, height=700):
         """
         Constructor for the Interface class,
         the main window for the HCMS.
