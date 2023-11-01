@@ -3,6 +3,7 @@ import shutil
 import tkinter as tk
 from tkinter import simpledialog
 from detail_frame import detailframe
+from user import User, YoungLearner, Admin
 
 
 class AdminFrame(tk.Frame):
@@ -25,10 +26,10 @@ class AdminFrame(tk.Frame):
         delete = tk.Button(self, text="Del Module", command=self.delete_module)
         delete.grid(row=1, column=0, padx=10, pady=10)
 
-        view_profile_user = tk.Button(self, text="View Profile for user", command=self.get_det_user)
+        view_profile_user = tk.Button(self, text="View Profile for user", command=lambda: self.get_det_user(self.user_obj))
         view_profile_user.grid(row=2, column=0, padx=10, pady=10)
 
-        view_profile_admins = tk.Button(self, text="View Profile for admin", command=self.get_det_admin)
+        view_profile_admins = tk.Button(self, text="View Profile for admin", command=lambda:self.get_det_admin(self.user_obj))
         view_profile_admins.grid(row=3, column=0, padx=10, pady=10)
 
         logout = tk.Button(self, text="Logout", command=self.logout)
@@ -86,20 +87,67 @@ class AdminFrame(tk.Frame):
         selected_module = simpledialog.askstring("Enter the module name to delete", "Module Name")
         return selected_module
 
-    def get_det_user(self):
-        self.place_forget()
-        dets_frame = detailframe(self.master, self)
-        dets_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-        # return f"User: {self.first_name} {self.last_name}\n" \
-        # f"Username: {self.username}\n" \
-        # f"Date of Birth: {self.dob}\n" \
-        # f"Email: {self.email}\n" \
-        # f"Phone Number: {self.ph_num}\n" \
-        # f"Grade: {self.grade}\n"
+    def get_det_user(self,user):
 
-    def get_det_admin(self):
+        username = simpledialog.askstring("Enter the username", "Username of the user (patient):")
+
+        if username:
+            # Look up the user with the entered username
+            user = self.lookup_user_by_username(username)
+
+            if user:
+                self.place_forget()
+                dets_frame = detailframe(self.master, self, user)
+                dets_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+                self.show_user_details(user)
+            else:
+                tk.messagebox.showerror("Error", "User with the entered username does not exist.")
+        else:
+            tk.messagebox.showerror("Error", "Username cannot be empty.")
+
+    def lookup_user_by_username(self, username):
+        user_data_file = os.path.join("data", "user_data.txt")
+        user= None
+        # Read user data from the file
+        with open(user_data_file, "r", encoding="utf8") as file:
+            files = file.readlines()
+            for line in files:
+                user_info = line.strip().split(",")
+                if len(user_info) == 9:
+                    first_name, last_name, user_name, password, dob, email, ph_num, user_type, grade = user_info
+                    if user_name==username:
+                        if user_type == "YL":
+                            user = YoungLearner(
+                                first_name=first_name,
+                                last_name=last_name,
+                                username=username,
+                                password=password,
+                                dob=dob,
+                                email=email,
+                                ph_num=ph_num,
+                                grade=grade
+                            )
+                        elif user_type == "AD":
+                            user = Admin(
+                                first_name=first_name,
+                                last_name=last_name,
+                                username=username,
+                                password=password,
+                                dob=dob,
+                                email=email,
+                                ph_num=ph_num
+                            )
+                        break
+        return user
+
+    def show_user_details(self, user):
+        # Display the user details using a detailframe or any other method
         self.place_forget()
-        dets_frame = detailframe(self.master,self)
+        dets_frame = detailframe(self.master, self, user)
+        dets_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+    def get_det_admin(self,user):
+        self.place_forget()
+        dets_frame = detailframe(self.master,self, user)
         dets_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
     def logout(self):
@@ -123,6 +171,7 @@ if __name__ == "__main__":
         ph_num="123-456-7890",
 
     )
+
 
     # Create the main application window
     root = tk.Tk()
