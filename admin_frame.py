@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import simpledialog
 from detail_frame import detailframe
 from user import User, YoungLearner, Admin
+from manage_quiz import ManageQuiz
 
 
 class AdminFrame(tk.Frame):
@@ -34,11 +35,14 @@ class AdminFrame(tk.Frame):
                                         command=lambda: self.get_det_admin(self.user_obj))
         view_profile_admins.grid(row=3, column=0, padx=10, pady=10)
 
+        manage_quiz = tk.Button(self, text="Manage Quiz", command=self.manage_quiz)
+        manage_quiz.grid(row=4, column=0, padx=10, pady=10)
+
         logout = tk.Button(self, text="Logout", command=self.logout)
-        logout.grid(row=4, column=0, padx=10, pady=10)
+        logout.grid(row=5, column=0, padx=10, pady=10)
 
         shutdown = tk.Button(self, text="Shutdown", command=self.shut_down)
-        shutdown.grid(row=5, column=0, padx=10, pady=10)
+        shutdown.grid(row=6, column=0, padx=10, pady=10)
 
     def add_module(self):
         module_path = os.path.join("data", "modules.txt")
@@ -153,6 +157,11 @@ class AdminFrame(tk.Frame):
                             )
                         break
         return user
+
+    def manage_quiz(self):
+        self.place_forget()
+        quiz_frame = ManageQuiz(self.master, self)
+        quiz_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
     def show_user_details(self, user):
         # Display the user details using a detailframe or any other method
