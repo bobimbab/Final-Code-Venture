@@ -1,6 +1,6 @@
 import tkinter as tk
 from authenticator import Authenticator
-from user import User, YoungLearner
+from user import User, YoungLearner, Admin
 from tkinter import messagebox
 
 
@@ -125,6 +125,11 @@ class ForgotPwFrame(tk.Frame):
             # If user is younglearner
             if isinstance(auth_res, YoungLearner):
                 self.pw_outcome_text.set("Password changed successfully!")
+
+            # If user is Admin
+            elif isinstance(auth_res, Admin):
+                self.pw_outcome_text.set("Password changed successfully!")
+
         else:
             self.pw_outcome_text.set("Failed to change password. Invalid details.")
 
