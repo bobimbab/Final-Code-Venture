@@ -21,10 +21,10 @@ pip install -r requirements.txt
 ## Contact
 Xin Ru - xleo0003@student.monash.edu
 
-Zhi Enn - 
+Zhi Enn - zton0006@student.monash.edu
 
-Qiao En - 
+Qiao En - qlim0011@student.monash.edu
 
-Jordan - 
+Jordan - jngg0145@student.monash.edu
 
 Project Link: https://github.com/bobimbab/Final-Code-Venture
