@@ -31,27 +31,29 @@ class AdminFrame(tk.Frame):
 
         self.master.columnconfigure(0, weight=1, uniform="col")
 
-        add = tk.Button(self, text="Add Module", command=self.add_module)
+        button_font = ("Georgia", 15)  # Specify the font family and size
+
+        add = tk.Button(self, text="Add Module", command=self.add_module, font=button_font)
         add.grid(row=0, column=0, padx=10, pady=10)
 
-        delete = tk.Button(self, text="Delete Module", command=self.delete_module)
+        delete = tk.Button(self, text="Delete Module", command=self.delete_module, font=button_font)
         delete.grid(row=1, column=0, padx=10, pady=10)
 
         view_profile_user = tk.Button(self, text="View Profile for User",
-                                      command=lambda: self.get_det_user(self.user_obj))
+                                      command=lambda: self.get_det_user(self.user_obj), font=button_font)
         view_profile_user.grid(row=2, column=0, padx=10, pady=10)
 
         view_profile_admins = tk.Button(self, text="View Profile for Admin",
-                                        command=lambda: self.get_det_admin(self.user_obj))
+                                        command=lambda: self.get_det_admin(self.user_obj), font=button_font)
         view_profile_admins.grid(row=3, column=0, padx=10, pady=10)
 
-        manage_quiz = tk.Button(self, text="Manage Quiz", command=self.manage_quiz)
+        manage_quiz = tk.Button(self, text="Manage Quiz", command=self.manage_quiz, font=button_font)
         manage_quiz.grid(row=4, column=0, padx=10, pady=10)
 
-        logout = tk.Button(self, text="Logout", command=self.logout)
+        logout = tk.Button(self, text="Logout", command=self.logout, font=button_font)
         logout.grid(row=5, column=0, padx=10, pady=10)
 
-        shutdown = tk.Button(self, text="Shutdown", command=self.shut_down)
+        shutdown = tk.Button(self, text="Shutdown", command=self.shut_down, font=button_font)
         shutdown.grid(row=6, column=0, padx=10, pady=10)
 
     def add_module(self):

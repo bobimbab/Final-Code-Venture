@@ -29,19 +29,24 @@ class YoungLearnerFrame(tk.Frame):
 
         self.master.columnconfigure(0, weight=1, uniform="col")
 
-        play_game = tk.Button(self, text="Play Game 👾", command=self.play_game)
+        button_font = ("Georgia", 12)  # Define the font for the buttons
+        button_height = 2  # Adjust the button height
+
+        play_game = tk.Button(self, text="Play Game 👾", command=self.play_game, font=button_font, height=button_height)
         play_game.grid(row=0, column=0, padx=10, pady=10)
 
-        quiz = tk.Button(self, text="Do Quiz ✍️", command=self.do_quiz)
+        quiz = tk.Button(self, text="Do Quiz ✍️", command=self.do_quiz, font=button_font, height=button_height)
         quiz.grid(row=1, column=0, padx=10, pady=10)
 
-        view_profile = tk.Button(self, text="View Profile 📃", command=lambda: self.get_det(self.user_obj))
+        view_profile = tk.Button(self, text="View Profile 📃", command=lambda: self.get_det(self.user_obj),
+                                 font=button_font, height=button_height)
         view_profile.grid(row=2, column=0, padx=10, pady=10)
 
-        view_progress = tk.Button(self, text="View Progress", command=self.progress_tracker)
+        view_progress = tk.Button(self, text="View Progress", command=self.progress_tracker, font=button_font,
+                                  height=button_height)
         view_progress.grid(row=3, column=0, padx=10, pady=10)
 
-        logout = tk.Button(self, text="Logout", command=self.logout)
+        logout = tk.Button(self, text="Logout", command=self.logout, font=button_font, height=button_height)
         logout.grid(row=4, column=0, padx=10, pady=10)
 
     def play_game(self):
