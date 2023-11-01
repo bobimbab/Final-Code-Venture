@@ -1,6 +1,6 @@
 import tkinter as tk
 import random
-from animations import AnimatedButton, FadingLabel,ConfettiApp
+from animations import AnimatedButton, FadingLabel
 from tkinter import ttk
 from quizzes import Quizzes
 import ast
@@ -45,7 +45,7 @@ class QuizzesMenuFrame(tk.Frame):
 
         """
         super().__init__(parent)
-        self.all_quizzes = load_quizzes()
+        self.all_quizzes = Quizzes.load_quizzes()
         self.parent = parent
 
         style = ttk.Style()
@@ -123,14 +123,17 @@ class ChooseDifficultyFrame(tk.Frame):
         self.title = ttk.Label(self, text="PLEASE SELECT YOUR DIFFICULTY", font=("Arial", 30, "bold"))
         self.title.grid(row=0, column=0, columnspan=8, pady=10)  # Add vertical padding
 
-        self.easy_button = ttk.Button(self, text="Easy", style="Easy.TButton", command=lambda: self.set_difficulty(1))
-        self.easy_button.grid(row=1, column=1, padx=(10, 5), pady=15, sticky="w")
+        if self.selected_quiz.get_number_of_easy_questions() > 0:
+            self.easy_button = ttk.Button(self, text="Easy", style="Easy.TButton", command=lambda: self.set_difficulty(1))
+            self.easy_button.grid(row=1, column=1, padx=(10, 5), pady=15, sticky="w")
 
-        self.medium_button = ttk.Button(self, text="Medium", style="Medium.TButton", command=lambda: self.set_difficulty(2))
-        self.medium_button.grid(row=1, column=3, padx=5, pady=15)
+        if self.selected_quiz.get_number_of_medium_questions() > 0:
+            self.medium_button = ttk.Button(self, text="Medium", style="Medium.TButton", command=lambda: self.set_difficulty(2))
+            self.medium_button.grid(row=1, column=3, padx=5, pady=15)
 
-        self.hard_button = ttk.Button(self, text="Hard", style="Hard.TButton", command=lambda: self.set_difficulty(3))
-        self.hard_button.grid(row=1, column=5, padx=(5, 10), pady=15, sticky="e")
+        if self.selected_quiz.get_number_of_hard_questions() > 0:
+            self.hard_button = ttk.Button(self, text="Hard", style="Hard.TButton", command=lambda: self.set_difficulty(3))
+            self.hard_button.grid(row=1, column=5, padx=(5, 10), pady=15, sticky="e")
 
     def set_difficulty(self,choice):
         self.selected_quiz.reset_quiz()
@@ -138,7 +141,6 @@ class ChooseDifficultyFrame(tk.Frame):
         self.place_forget()
         play_quiz_frame = PlayQuizFrame(self.parent, self.selected_quiz,self.quiz_menu)
         play_quiz_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-
 
 class PlayQuizFrame (tk.Frame):
     """
@@ -155,20 +157,24 @@ class PlayQuizFrame (tk.Frame):
         quiz_title = tk.Label(self, text=self.selected_quiz.get_quiz_title(), font=("Arial", 20, "bold"))
         quiz_title.pack(pady=10)
 
-        # Display quiz instructions or information
+        # Display quiz instructions and information
         self.quiz_question = tk.StringVar()
-        self.quiz_question.set(self.selected_quiz.current_question)
-        self.question = tk.Label(self, textvariable=self.quiz_question, font=("Arial", 14))
-        self.question.pack(pady=10)
+        try:
+            self.quiz_question.set(self.selected_quiz.current_question)
+            self.question = tk.Label(self, textvariable=self.quiz_question, font=("Arial", 14))
+            self.question.pack(pady=10)
 
-        # Create question widgets
-        self.options = self.selected_quiz.current_options
-        self.option_buttons = []
+            # Display options
+            self.options = self.selected_quiz.current_options
+            self.option_buttons = []
 
-        for options in self.options:
-            option = AnimatedButton(self, text=options, font=("Arial", 14), command=lambda o=options: self.submit_quiz(o))
-            option.pack(pady=5)
-            self.option_buttons.append(option)
+            for options in self.options:
+                option = AnimatedButton(self, text=options, font=("Arial", 14), command=lambda o=options: self.submit_quiz(o))
+                option.pack(pady=5)
+                self.option_buttons.append(option)
+        except IndexError:
+            self.error = tk.Label(self, text="No questions in this quiz/difficulty!", font=("Arial", 14))
+            self.error.pack(pady=10)
 
         # Back button to return to the quiz selection menu
         back_button = tk.Button(self, text="Return to Menu", font=("Arial", 14), command=self.return_to_menu)
@@ -233,7 +239,7 @@ class QuizResultsFrame(tk.Frame):
         self.parent = parent
 
         # Set up the frame title
-        quiz_title = tk.Label(self, text= random.choice(self.message), font=("Arial", 20, "bold"))
+        quiz_title = tk.Label(self, text=random.choice(self.message), font=("Arial", 20, "bold"))
         quiz_title.pack(pady=10)
 
         score_label = tk.Label(self, text="Your Score", font=("Arial", 14))
@@ -244,10 +250,6 @@ class QuizResultsFrame(tk.Frame):
         self.quiz_results.set(f"{self.score} out of {self.selected_quiz.get_number_of_questions}" )
         self.results = tk.Label(self, textvariable=self.quiz_results, font=("Arial", 14))
         self.results.pack(pady=10)
-
-        # Play again button
-        self.play_again_button = tk.Button(self, text="Play Again", font=("Arial", 14), command="")
-        self.play_again_button.pack(pady=10)
 
         # Back button to return to the quiz selection menu
         self.back_button = tk.Button(self, text="Return to Menu", font=("Arial", 14), command=self.return_to_menu)
@@ -269,8 +271,3 @@ if __name__ == "__main__":
     quiz_frame = QuizzesMenuFrame(root)
     quiz_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)  # Place the frame in the center
     root.mainloop()
-
-
-
-
-
