@@ -68,7 +68,11 @@ class ManageQuiz(tk.Frame):
 
 # ---------------------------- Add Quiz Frame ---------------------------- #
 
+
 class AddQuizzesFrame(tk.Frame):
+    """
+
+    """
     def __init__(self, parent,manage_quiz_frame):
         super().__init__(parent)
         self.manage_quiz_frame = manage_quiz_frame
@@ -111,6 +115,9 @@ class AddQuizzesFrame(tk.Frame):
 
 
 class AddQuestionFrame(tk.Frame):
+    """
+
+    """
     def __init__(self, parent, quiz_title,manage_quiz_frame):
         super().__init__(parent)
         self.manage_quiz_frame = manage_quiz_frame
@@ -163,10 +170,9 @@ class AddQuestionFrame(tk.Frame):
 
     def add_question(self):
         """
-        Current bugs:
-        2. Right now empty title can be added
 
-        :return:
+
+
         """
         options = []
         if self.difficulty_box.get() == "Please select a difficulty":
@@ -254,23 +260,67 @@ class ViewQuiz(tk.Frame):
         self.label.grid(row=0, column=0, columnspan=5, padx=10, pady=10)
 
         # display the questions and radio buttons for each question
-        self.questions = [x[0] for x in self.selected_quiz.get_questions(self.selected_difficulty)]
+        self.questions = [x for x in self.selected_quiz.get_questions(self.selected_difficulty)]
         print(self.questions)
 
+        self.selected_question = tk.StringVar()
+        for index, question in enumerate(self.questions, start=1):
+            question_label = ttk.Label(self, text=f"{index}) {question[0]}")
+            question_label.grid(row=index, column=0, padx=10, pady=10, sticky='w')
+            option_radio = ttk.Radiobutton(self,value=question, variable=self.selected_question)
+            option_radio.grid(row=index, column=1, padx=10, pady=10, sticky='w')
+
+        self.view_question_button = ttk.Button(self, text="View Question", command=self.view_question)
+        self.view_question_button.grid(row=11, column=0, padx=10, pady=10)
+        self.back_button = ttk.Button(self, text="Back", command=self.back_button)
+        self.back_button.grid(row=11, column=1, padx=10, pady=10)
+
+        self.message = tk.StringVar()
+        self.message_label = ttk.Label(self, textvariable=self.message, font=("Arial", 10, "bold"))
+        self.message_label.grid(row=12, column=0, columnspan=5, padx=10, pady=10)
+
+    def view_question(self):
+        if self.selected_question.get() == "":
+            self.message.set("Please select a question")
+            print("Please select a question")
+            return
+        selected_question = eval(self.selected_question.get())
+        self.place_forget()
+        view_question_frame = ViewQuestion(self.parent, selected_question, self)
+        view_question_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+    def back_button(self):
+        self.place_forget()
+        self.manage_quiz_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
 
+class ViewQuestion(tk.Frame):
+    def __init__(self, parent, question, view_quiz_frame):
+        super().__init__(parent)
+        self.parent = parent
+        self.question = question
+        self.view_quiz_frame = view_quiz_frame
 
+        self.label = ttk.Label(self, text="Question: " + self.question[0], font=("Arial", 15, "bold"), wraplength=1000)
+        self.label.grid(row=2, column=0, columnspan=2, padx=10, pady=10)
 
+        self.options = self.question[1]
+        for i in self.options:
+            self.options_label = ttk.Label(self, text=i, font=("Arial", 15),
+                                   wraplength=1000)
+            print(self.options.index(i) + 3)
+            self.options_label.grid(row=self.options.index(i) + 3, column=0, columnspan=2, padx=10, pady=10)
 
+        self.correct_answer = self.question[2]
+        self.correct_answer_label = ttk.Label(self, text="Correct Answer: " + self.correct_answer, font=("Arial", 13, "bold"))
+        self.correct_answer_label.grid(row=10, column=0, columnspan=2, padx=10, pady=10)
 
+        self.back_button = ttk.Button(self, text="Back", command=self.back_button)
+        self.back_button.grid(row=11, column=1, padx=10, pady=10)
 
-
-
-
-
-
-
-
+    def back_button(self):
+        self.place_forget()
+        self.view_quiz_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
 
 if __name__ == "__main__":
