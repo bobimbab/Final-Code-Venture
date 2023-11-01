@@ -26,7 +26,7 @@ class RegisterFrame(tk.Frame):
         regis_title.grid(row=1, columnspan=2, padx=10, pady=10)
 
         # Label to ask user for Username
-        username_label = tk.Label(master=self, text="Username:")
+        username_label = tk.Label(master=self, text="Username:", font=("Georgia"))
         username_label.grid(row=2, column=0, sticky=tk.E, padx=10, pady=10)
 
         # Variable and entry for username
@@ -35,7 +35,7 @@ class RegisterFrame(tk.Frame):
         self.username_entry.grid(row=2, column=1, sticky=tk.W, padx=10, pady=10)
 
         # Label to ask user for Password
-        password_label = tk.Label(master=self, text="Password:")
+        password_label = tk.Label(master=self, text="Password:", font=("Georgia"))
         password_label.grid(row=3, column=0, sticky=tk.E, padx=10, pady=10)
 
         # Variable and entry to password, password entry will be hidden
@@ -45,7 +45,7 @@ class RegisterFrame(tk.Frame):
         self.password_entry.grid(row=3, column=1, sticky=tk.W, padx=10, pady=10)
 
         # Label to ask user for First Name
-        first_name_label = tk.Label(master=self, text="First Name:")
+        first_name_label = tk.Label(master=self, text="First Name:", font=("Georgia"))
         first_name_label.grid(row=4, column=0, sticky=tk.E, padx=10, pady=10)
 
         # Variable and entry for First Name
@@ -54,7 +54,7 @@ class RegisterFrame(tk.Frame):
         self.first_name_entry.grid(row=4, column=1, sticky=tk.W, padx=10, pady=10)
 
         # Label to ask user for Last Name
-        last_name_label = tk.Label(master=self, text="Last Name:")
+        last_name_label = tk.Label(master=self, text="Last Name:", font=("Georgia"))
         last_name_label.grid(row=5, column=0, sticky=tk.E, padx=10, pady=10)
 
         # Variable and entry for Last Name
@@ -63,7 +63,7 @@ class RegisterFrame(tk.Frame):
         self.last_name_entry.grid(row=5, column=1, sticky=tk.W, padx=10, pady=10)
 
         # Label to ask user for their date of birth
-        dob_label = tk.Label(master=self, text="Date of birth:")
+        dob_label = tk.Label(master=self, text="Date of birth:", font=("Georgia"))
         dob_label.grid(row=6, column=0, sticky=tk.E, padx=10, pady=10)
 
         # Variable and entry to date of birth
@@ -71,7 +71,7 @@ class RegisterFrame(tk.Frame):
         self.dob_entry.grid(row=6, column=1, sticky=tk.W, padx=10, pady=10)
 
         # Label to ask user for their phone number
-        ph_num_label = tk.Label(master=self, text="Phone number:")
+        ph_num_label = tk.Label(master=self, text="Phone number:", font=("Georgia"))
         ph_num_label.grid(row=7, column=0, sticky=tk.E, padx=10, pady=10)
 
         # Variable and entry to phone number
@@ -80,7 +80,7 @@ class RegisterFrame(tk.Frame):
         self.ph_num_entry.grid(row=7, column=1, sticky=tk.W, padx=10, pady=10)
 
         # Label to ask user for their email
-        email_label = tk.Label(master=self, text="Email:")
+        email_label = tk.Label(master=self, text="Email:", font=("Georgia"))
         email_label.grid(row=8, column=0, sticky=tk.E, padx=10, pady=10)
 
         # Variable and entry to email
@@ -89,7 +89,7 @@ class RegisterFrame(tk.Frame):
         self.email_entry.grid(row=8, column=1, sticky=tk.W, padx=10, pady=10)
 
         # Label to ask user for their grade
-        grade_label = tk.Label(master=self, text="Grade:")
+        grade_label = tk.Label(master=self, text="Grade:", font=("Georgia"))
         grade_label.grid(row=9, column=0, sticky=tk.E, padx=10, pady=10)
 
         # Variable and entry to grade
@@ -98,11 +98,12 @@ class RegisterFrame(tk.Frame):
         self.grade_entry.grid(row=9, column=1, sticky=tk.W, padx=10, pady=10)
 
         # Button to register
-        register_button = tk.Button(master=self, text="Register", command=self.authenticate_register)
+        register_button = tk.Button(master=self, text="Register", font=("Georgia"),
+                                    command=self.authenticate_register)
         register_button.grid(row=10,column=0, columnspan=2, padx=10, pady=10)
 
         # Back to login page button
-        back_button = tk.Button(master=self, text="Back", command=self.return_menu)
+        back_button = tk.Button(master=self, text="Back", font=("Georgia"), command=self.return_menu)
         back_button.grid(row=0, column=0, sticky=tk.NW)
 
         # Variable and label to inform user of registration outcome
