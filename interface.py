@@ -13,7 +13,7 @@ class Interface(tk.Tk):
     """
     Class definition for the Interface class
     """
-    def __init__(self, title, width=960, height=540):
+    def __init__(self, title, width=1000, height=700):
         """
         Constructor for the Interface class,
         the main window for the HCMS.
@@ -24,6 +24,12 @@ class Interface(tk.Tk):
         super().__init__()
         self.title(title)
         self.geometry(f"{width}x{height}")
+
+
+# root = Interface("CodeVenture")
+# login = LoginFrame(root)
+# login.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+# root.mainloop()
 
 # TESTING USE
 if __name__ == "__main__":

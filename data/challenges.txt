@@ -1,5 +1,3 @@
-basic syntax: What command to use to display "Hi world"?: print("Hi world")
-variables and types: What is the syntax to declare a variable?: variable_name = value
-operators: What is the arithmetic operator for addition?: +
-loops: How do you define a for loop?: for item in sequence
-functions: How do you define a function in Python?: def function_name()
+introduction to python: What command to use to display "Hi world"?: print("Hi world")
+conditionals and iterations: What type is this "NOoo"?: string
+in and not in operators: Is this True or False print('ah' in 'angry'): False

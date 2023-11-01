@@ -3,6 +3,32 @@ import random
 from animations import AnimatedButton, FadingLabel
 from tkinter import ttk
 from quizzes import Quizzes
+import ast
+
+
+def load_quizzes() -> dict[str, Quizzes]:
+    """
+    Load all quizzes from the quizzes.txt file
+
+    """
+    all_quizzes = {}
+    try:
+        with open("data/quizzes.txt", "r") as file:
+            quizzes = file.readlines()
+            for line in quizzes:
+                quiz = line.strip().split(";")
+                quiz_title = quiz[0]
+                quiz_difficulty = quiz[1]
+                quiz_questions = quiz[2]
+                quiz_options = ast.literal_eval(quiz[3])
+                quiz_answers = quiz[4]
+                if quiz_title not in all_quizzes:
+                    all_quizzes[quiz_title] = Quizzes(quiz_title)
+                all_quizzes[quiz_title].add_question(quiz_difficulty, quiz_questions, quiz_options, quiz_answers)
+        return all_quizzes
+    except FileNotFoundError:
+        print("No quizzes found!")
+        return {}
 
 
 class QuizzesMenuFrame(tk.Frame):
@@ -115,7 +141,6 @@ class ChooseDifficultyFrame(tk.Frame):
         self.place_forget()
         play_quiz_frame = PlayQuizFrame(self.parent, self.selected_quiz,self.quiz_menu)
         play_quiz_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-
 
 class PlayQuizFrame (tk.Frame):
     """
@@ -246,9 +271,3 @@ if __name__ == "__main__":
     quiz_frame = QuizzesMenuFrame(root)
     quiz_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)  # Place the frame in the center
     root.mainloop()
-
-
-
-
-
-

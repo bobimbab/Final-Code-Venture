@@ -1,6 +1,7 @@
 import tkinter as tk
 from authenticator import Authenticator
 from user import User, YoungLearner
+from tkinter import messagebox
 
 class ForgotPwFrame(tk.Frame):
     """
@@ -96,21 +97,41 @@ class ForgotPwFrame(tk.Frame):
         print("Currently in login frame")
 
     def authenticate_info(self):
-        """
-        Frontend function for the authentication procedure.
-        This is invoked when the login button is clicked.
-        :return: None
-        """
+        # Get the values from the input fields
+        email = self.email_entry.get()
+        ph_num = self.ph_num_entry.get()
+        password = self.password_entry.get()
+
+        # Check if any of the fields is empty
+        if not email or not ph_num or not password:
+            messagebox.showerror("Error", "All fields are required")
+            return  # Don't proceed further if any field is empty
+
+        # Continue with the authentication procedure
         authenticator = Authenticator()
-        auth_res = authenticator.authenticate_forgot_pw(self.email_entry.get(), self.ph_num.get())
+        auth_res = authenticator.authenticate_forgot_pw(email, ph_num, password)
 
         if isinstance(auth_res, User):
-
-            if isinstance(auth_res, YoungLearner):  # Check if the user is a YoungLearner
+            if isinstance(auth_res, YoungLearner):
                 self.pw_outcome_text.set("Password changed successfully!")
-
         else:
-            self.pw_outcome_text.set("Fail to change password")
+            self.pw_outcome_text.set("Failed to change password. Invalid details.")
+    # def authenticate_info(self):
+    #     """
+    #     Frontend function for the authentication procedure.
+    #     This is invoked when the login button is clicked.
+    #     :return: None
+    #     """
+    #     authenticator = Authenticator()
+    #     auth_res = authenticator.authenticate_forgot_pw(self.email_entry.get(), self.ph_num.get())
+    #
+    #     if isinstance(auth_res, User):
+    #
+    #         if isinstance(auth_res, YoungLearner):  # Check if the user is a YoungLearner
+    #             self.pw_outcome_text.set("Password changed successfully!")
+    #
+    #     else:
+    #         self.pw_outcome_text.set("Fail to change password")
 
 def main():
     root = tk.Tk()

@@ -93,7 +93,7 @@ class Authenticator:
         # Account does not exist
         return False
 
-    def authenticate_forgot_pw(self, input_email, input_ph_num):
+    def authenticate_forgot_pw(self, input_email, input_ph_num, new_password):
         """
         Logic for authenticating a login procedure
         :param input_email: str - username entered by the user
@@ -105,6 +105,8 @@ class Authenticator:
                 # If username is found
                 if user_obj.get_ph_num() == input_ph_num:
                     # Passwords match and account is active
+                    user_obj.set_password(new_password)
+                    self.save_users()
                     return user_obj
                 else:
                     # Authentication fails

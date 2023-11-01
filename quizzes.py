@@ -46,6 +46,15 @@ class Quizzes:
             print("No quizzes found!")
             return {}
 
+    @classmethod
+    def create_quiz(cls, title: str):
+        """
+        Create a quiz object with the given title
+        :param title:
+        :return:
+        """
+        pass
+
     def get_quiz_title(self):
         return self.title
 
@@ -138,7 +147,6 @@ class Quizzes:
         formatted_questions = "\n".join([f"  - {question[0]}" for question in questions])
         return formatted_questions
 
-
 if __name__ == "__main__":
     # sample data
     quiz = Quizzes("Python Data Types")
@@ -175,11 +183,3 @@ if __name__ == "__main__":
     # print(quiz)
     quiz.set_difficulty(1)
     print(quiz.current_options)
-
-
-
-
-
-
-
-
