@@ -1,6 +1,6 @@
 import tkinter as tk
 import random
-from animations import AnimatedButton, FadingLabel,ConfettiApp
+from animations import AnimatedButton, FadingLabel
 from tkinter import ttk
 from quizzes import Quizzes
 
@@ -225,10 +225,6 @@ class QuizResultsFrame(tk.Frame):
         self.quiz_results.set(f"{self.score} out of {self.selected_quiz.get_number_of_questions}" )
         self.results = tk.Label(self, textvariable=self.quiz_results, font=("Arial", 14))
         self.results.pack(pady=10)
-
-        # Play again button
-        self.play_again_button = tk.Button(self, text="Play Again", font=("Arial", 14), command="")
-        self.play_again_button.pack(pady=10)
 
         # Back button to return to the quiz selection menu
         self.back_button = tk.Button(self, text="Return to Menu", font=("Arial", 14), command=self.return_to_menu)

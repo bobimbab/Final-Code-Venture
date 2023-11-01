@@ -106,7 +106,7 @@ class AddQuizzesFrame(tk.Frame):
             return
 
         self.place_forget()
-        add_question_frame = AddQuestionFrame(self.master, self.quiz_name_entry.get(), self.manage_quiz_frame)
+        add_question_frame = AddQuestionFrame(self.master, self.quiz_name_entry.get().strip(), self.manage_quiz_frame)
         add_question_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
     def go_back(self):
@@ -198,7 +198,7 @@ class AddQuestionFrame(tk.Frame):
         # add lines into the quizzes.txt
         ascii_num = 97
         line = ""
-        line += self.quiz_title + ";" + self.difficulty_box.get() + ";" + self.question_entry.get() + ";["
+        line += self.quiz_title.strip() + ";" + self.difficulty_box.get() + ";" + self.question_entry.get().strip() + ";["
 
         for i in self.option_entries.values():
             if i.get() == "":
@@ -217,7 +217,7 @@ class AddQuestionFrame(tk.Frame):
                 line += ","
 
         line += "];"
-        line += f"{self.correct_answer.get()}) {self.option_entries[self.correct_answer.get()].get()}"
+        line += f"{self.correct_answer.get()}) {self.option_entries[self.correct_answer.get()].get().strip()}"
         print(line)
         self.question_lst.append(line)
         self.question_entry.delete(0, tk.END)
