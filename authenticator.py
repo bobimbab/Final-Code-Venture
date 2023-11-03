@@ -51,30 +51,30 @@ class Authenticator:
         try:
             with open(self.file_path, "w", encoding="utf8") as users_f:
                 for user_obj in self.users:
-                    dob_str = user_obj.get_dob().strftime("%Y-%m-%d")
+                    dob_str = user_obj._dob.strftime("%Y-%m-%d")
                     if user_obj.get_role() == "YL":
                         role = "YL"
                         user_data = ",".join([
-                            user_obj.get_first_name(),
-                            user_obj.get_last_name(),
-                            user_obj.get_username(),
-                            user_obj.get_password(),
+                            user_obj._first_name,
+                            user_obj._last_name,
+                            user_obj._username,
+                            user_obj._password,
                             dob_str,
-                            user_obj.get_email() or "",  # Handle None
-                            user_obj.get_ph_num() or "",  # Handle None
+                            user_obj._email or "",  # Handle None
+                            user_obj._ph_num or "",  # Handle None
                             role,
-                            str(user_obj.get_grade())
+                            str(user_obj._grade)
                         ])
                     else:
                         role = "AD"
                         user_data = ",".join([
-                            user_obj.get_first_name(),
-                            user_obj.get_last_name(),
-                            user_obj.get_username(),
-                            user_obj.get_password(),
+                            user_obj._first_name,
+                            user_obj._last_name,
+                            user_obj._username,
+                            user_obj._password,
                             dob_str,
-                            user_obj.get_email() or "",  # Handle None
-                            user_obj.get_ph_num() or "",  # Handle None
+                            user_obj._email or "",  # Handle None
+                            user_obj._ph_num or "",  # Handle None
                             role
                         ])
                     users_f.write(user_data + "\n")
