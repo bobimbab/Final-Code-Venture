@@ -188,9 +188,9 @@ class AdminFrame(tk.Frame):
         """
         Display user details using a detailframe or another method.
         """
-        self.place_forget()
-        dets_frame = DetailFrame(self.master, self, user)
-        dets_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        
+        self.grid_remove()
+
 
     def get_det_admin(self, user):
         """
