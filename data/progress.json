@@ -8,7 +8,7 @@
     {
         "username": "jimmy",
         "progress": {
-            "introduction to python": {"progress": 0, "completed": false}
+            "introduction to python": {"page": 0, "completed": false}
         }
     }
 ]
