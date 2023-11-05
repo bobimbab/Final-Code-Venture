@@ -1,1 +1,14 @@
-{"username": "johndoe", "progress": {"introduction to python": 0}, "completed": false}
+[
+    {
+        "username": "johndoe",
+        "progress": {
+            "introduction to python": {"page": 5, "completed": false}
+        }
+    },
+    {
+        "username": "jimmy",
+        "progress": {
+            "introduction to python": {"progress": 0, "completed": false}
+        }
+    }
+]
