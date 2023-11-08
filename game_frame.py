@@ -24,7 +24,9 @@ class GameFrame(tk.Frame):
         self.root = root
         self.young_learner_frame = young_learner_frame  # Store a reference to the YoungLearnerFrame
         self.user_obj = user_obj
-        self.game = Game(user_obj._username)
+        print(user_obj.get_username())
+        self.game = Game(user_obj.get_username())
+        print(self.game.username)
         self.viewing_started = False  # Initialize the viewing flag
 
         self.root.title("Game")
@@ -189,14 +191,14 @@ class GameFrame(tk.Frame):
         """
         Display the previous image when the "Previous" button is clicked.
         """
-        self.game.current_image_index -= 1
+        self.game.go_previous_page()
         self.show_image()
 
     def show_next_image(self):
         """
         Display the next image when the "Next" button is clicked.
         """
-        self.game.current_image_index += 1
+        self.game.go_next_page()
         self.show_image()
 
     def submit_answer(self):
@@ -266,10 +268,8 @@ class GameFrame(tk.Frame):
         Return to the YoungLearnerFrame and hide the GameFrame.
         """
         self.place_forget()
-
         # Hide the "Exit" button
         self.exit_button.pack_forget()
-
         # Hide the current frame (GameFrame)
         self.center_frame.pack_forget()
         self.image_frame.pack_forget()
@@ -278,3 +278,4 @@ class GameFrame(tk.Frame):
 
         # Show the YoungLearnerFrame (assuming you have an instance of YoungLearnerFrame available)
         self.young_learner_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+

@@ -11,20 +11,22 @@ class ProgressTrackerFrame(tk.Frame):
                Initialize a ProgressTrackerFrame.
                Parameters:
                    - master (tk.Tk): The parent window.
-                   - username (str): The username of the user.
+                   - username (obj): The username of the user.
                    - young_learner (YoungLearnerFrame): The YoungLearnerFrame instance.
         """
         super().__init__(master)
         self.master = master
 
         self.young_learner = young_learner  # Store a reference to the YoungLearnerFrame instance.
-        self.game = Game(username)  # Create a Game instance with the provided username.
+        print(username.get_username(),"so what")
+        self.game = Game(username.get_username())  # Create a Game instance with the provided username.
 
         # A label to display progress.
         self.progress_label = tk.Label(self, text="")
         self.progress_label.pack()
 
         # Call the method to display the progress.
+        print("show progress")
         self.show_progress()
 
         # Back to learner page
@@ -44,17 +46,26 @@ class ProgressTrackerFrame(tk.Frame):
         """
         Shows the player's game progress.
         """
-
         # Get the progress data from the Game instance
-        progress = self.game.progress
+        all_progress = self.game.get_all_progress()
         message = "Your progress:\n"
 
-        # Check if the game is completed (all modules are completed).
-        if self.game.completion == True:
-            for module in progress:
+        print(all_progress)
+        for module in all_progress:
+            load_completion = all_progress[module]["completed"]
+            load_page = all_progress[module]["page"] + 1
+            if load_completion is True:
                 message += f"{module}: Completed\n"
-        else:
-            # If the game is not completed, iterate through each module's count.
-            for module, count in progress.items():
-                message += f"{module}: {count} pages viewed\n"
+            else:
+                message += f"{module}: {load_page} pages viewed\n"
+
+        # # Check if the game is completed (all modules are completed).
+        # if self.game.completion == True:
+        #     for module in progress:
+        #         message += f"{module}: Completed\n"
+        # else:
+        #     # If the game is not completed, iterate through each module's count.
+        #
+        #     for module, count in progress.items():
+        #         message += f"{module}: {count} pages viewed\n"
         self.progress_label.config(text=message) # Update the progress label text accordingly.

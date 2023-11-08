@@ -18,15 +18,38 @@ class Game:
             username (str): The username of the player.
         """
         self.modules = {}  # Use a dictionary to store modules
-        self.current_module = None
+        self.current_module = None # The current module the player is viewing
         self.current_image_index = 0
         self.questions = {}
         self.progress = {}
-        self.completion = False
+        self.completion = None
         self.username = username
+        self.current_page = 0
         self.load_modules_and_images()
         self.load_challenges_and_answers()
-        self.load_progress()
+        self.load_progress(username)
+
+    def get_all_progress(self) -> dict:
+        return self.progress
+
+    def go_next_page(self):
+        image_paths = self.modules.get(self.current_module)
+        user_current_page = self.progress[self.current_module]["page"]
+        print(self.current_page,"current_page")
+        print(user_current_page,"user_current_page")
+        if self.current_page >= user_current_page and self.has_next_image():
+            print("yes")
+            self.current_page += 1
+            self.current_image_index += 1
+            self.progress[self.current_module]["page"] += 1
+        else:
+            self.current_page += 1
+            self.current_image_index += 1
+
+    def go_previous_page(self):
+        user_current_page = self.progress[self.current_module]["page"]
+        self.current_page -= 1
+        self.current_image_index -= 1
 
     def load_modules_and_images(self):
         """
@@ -59,36 +82,60 @@ class Game:
         """
         Save the player's progress and completion status to 'progress.json'.
         """
+        print(self.username)
+        new_progress = self.progress
+        new_completion = self.completion
+        updated_module = self.current_module
+        print(new_progress,"new progress")
+        print(new_completion,"new completion")
+        print(updated_module,"updated module")
+
+        # we need to now update the progress in the json file
         data_directory = "data"
         progress_file_path = os.path.join(data_directory, "progress.json")
+        user_found = False
+        # so first we need to load the json file
+        with open(progress_file_path,'r') as file:
+            data = json.load(file)
+            for user_data in data:
+                # locate the user
+                if user_data["username"] == self.username:
+                    user_found = True
+                    if self.current_module in user_data["progress"]:
+                        module_progress = user_data["progress"][self.current_module]
+                        module_progress["page"] = new_progress[self.current_module]["page"]
+                        module_progress["completed"] = new_completion
+                    else:
+                        user_data["progress"][self.current_module] = {"page":self.current_image_index,"completed": new_completion}
 
-        progress_data = {
-            "username": self.username,
-            "progress": self.progress,
-            "completed": self.completion
-        }
+        if not user_found:
+            with open(progress_file_path, 'r') as file:
+                data = json.load(file)
+                new_user_data = {
+                    "username": self.username,
+                    "progress": {
+                        "introduction to python": {
+                            "page": 0,
+                            "completed": False
+                        }
+                    }
+                }
+                data.append(new_user_data)
 
-        with open(progress_file_path, 'w') as file:
-            json.dump(progress_data, file)
+        with open(progress_file_path,'w') as file:
+            json.dump(data,file,indent=4)
 
-    def load_progress(self):
-        """
-        Load the player's progress and completion status from 'progress.json'.
-        """
+    def load_progress(self, username):
         data_directory = "data"
         progress_file_path = os.path.join(data_directory, "progress.json")
-
         if os.path.exists(progress_file_path):
             if os.path.getsize(progress_file_path) > 0:  # Check if the file is not empty
                 with open(progress_file_path, 'r') as file:
-                    progress_data = json.load(file)
-                    self.username = progress_data.get("username")
-                    self.progress = progress_data.get("progress")
-                    self.completion = progress_data.get("completed")
-            else:
-                print("Progress file is empty.")
-        else:
-            print("Progress file not found.")
+                    data = json.load(file)
+                    for user_data in data:
+                        if user_data["username"] == username:
+                            for module_name, progress in user_data["progress"].items():
+                                self.progress[module_name] = progress
 
     def update_progress(self):
         """
@@ -107,8 +154,17 @@ class Game:
             module_name (str): The name of the module to set as the current module.
         """
         self.current_module = module_name
-        self.current_image_index = 0
-        self.progress[module_name] = 0
+        if self.current_module in self.progress:
+            print(self.progress)
+            load_page, load_completion = self.progress[self.current_module]["page"],self.progress[self.current_module]["completed"]
+        else:
+            load_page, load_completion = 0, False
+            self.progress[self.current_module] = {"page": load_page, "completed": load_completion}
+
+        self.completion = load_completion
+        self.current_image_index = load_page
+        self.current_page = load_page
+        print(self.progress)
         self.save_progress()  # save the progress
 
     def get_current_image(self):
@@ -122,8 +178,7 @@ class Game:
             image_paths = self.modules.get(self.current_module)
             if image_paths and 0 <= self.current_image_index < len(image_paths):
                 image_path = image_paths[self.current_image_index]
-                self.progress[self.current_module] += 1
-                self.save_progress()  # Add this line to save the progress
+                self.save_progress()
                 return Image.open(image_path)
         return None
 
